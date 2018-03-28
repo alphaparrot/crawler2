@@ -1,7 +1,7 @@
 import os
 import time
 
-def newtask(job):
+def newtask(job,dryrun=False):
   modeldir = job.model+"/"
   workdir  = modeldir+"job"+str(job.home)+"/"
   
@@ -22,4 +22,5 @@ def newtask(job):
   os.system("cp release.py "+workdir)
   
   setjob.prep(job)
-  setjob.submit(job)
+  if not dryrun:
+    setjob.submit(job)

@@ -1,6 +1,7 @@
 import os
 import glob
 import crawlset
+import sys
 
 USER = "paradise"
 
@@ -60,6 +61,11 @@ class Job:
 
 if __name__=="__main__":    
   #Check which resources are in use and compare to our max allotment
+  
+  if "DRYRUN" in sys.argv[:]:
+      dryrun=True
+  else:
+      dryrun=False
   
   f=open("nnodes.crwl","r")
   nnodes=int(f.read().split('\n')[0])
@@ -161,9 +167,12 @@ if __name__=="__main__":
           f.close()
       if goahead:                           #Found a job slot
         newjob = Job(header,task,rid)       #Collect and organize the job parameters
-        crawlset.newtask(newjob)            #Set up the job and submit it
+        crawlset.newtask(newjob,dryrun=dryrun)            #Set up the job and submit it
         np.save(taskmodel+'/job'+newjob.home+'/job.npy',newjob)
-        newjob.getID()
+        if not dryrun:
+            newjob.getID()
+        else:
+            newjob.tag='xxxxx.doug'
         newjob.write()
         running += 1.0/MODELS[taskmodel]    #Note that we are *that* much closer to the limit.
         
