@@ -684,8 +684,8 @@ def _prep_lmdz(job):
               "do \n"+
               "     for il in {%02d..%02d};                        \n"%(lons[0],lons[1]-1)+
               "     do \n"+
-              "          ILAT=`printf '%02d' $jl`           \n"+
-              "          ILON=`printf '%02d' $il`           \n"+
+              "          ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+              "          ILON=`printf '%02d' $(( 10#$il ))`           \n"+
               "          echo $ILAT $ILON              \n"+
               "          TAG=${ILAT}_${ILON}                    \n"+
               "          cd sbdart-$TAG                          \n"+
@@ -785,8 +785,8 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
               "do \n"+
               "     for il in {%2d..%2d};                        \n"%(lons[0],lons[1])+
               "     do \n"+
-              "          ILAT=`printf '%02d' $jl`           \n"+
-              "          ILON=`printf '%02d' $il`           \n"+
+              "          ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+              "          ILON=`printf '%02d' $(( 10#$il ))`           \n"+
               "          TAG=${ILAT}_${ILON}                    \n"+
               "          cd sbdart-$TAG                          \n"+
               "          ./sbdart > ../sbout.$TAG                \n"+

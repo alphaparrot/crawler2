@@ -44,11 +44,13 @@ def prep(job):
                 "python postprocess.py                                            \n"+
                 "cp spectra.nc "+cwd+"/postprocess/output/"+job.name+"_spectra.nc \n"+
                 "cp phasecurve.nc "+cwd+"/postprocess/output/"+job.name+"_phasecurve.nc \n"+
+                "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
                 "python release.py \n")
+    
      
-     rs = open(workdir+"/runpostprocess","w")
-     rs.write(jobscript)
-     rs.close()
+    rs = open(workdir+"/runpostprocess","w")
+    rs.write(jobscript)
+    rs.close()
 
 def submit(job):
     workdir = job.parameters["workdir"]

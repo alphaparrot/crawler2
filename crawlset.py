@@ -13,10 +13,10 @@ def newtask(job,dryrun=False):
     os.system("mkdir "+workdir)
   except:
     pass
-  try:
-    os.system("rm -rf "+workdir+"*")
-  except:
-    pass
+  #try:
+  #  os.system("rm -rf "+workdir+"*")
+  #except:
+  #  pass
   
   #os.system("cp -r "+modeldir+"clean/* "+workdir)
   os.system("cp release.py "+workdir)

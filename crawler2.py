@@ -102,12 +102,16 @@ if __name__=="__main__":
       for i in range(0,len(resources[taskmodel])):
         if int(resources[taskmodel][i])==0:
           rid = i
+          print resources[taskmodel]
           resources[taskmodel][i]="1"
+          print resources[taskmodel]
           goahead = True
           break
       if not goahead:                 #No open slot found for this model
         if running+1.0/MODELS[taskmodel] <= nnodes: #We do have space for one more though
+          print resources[taskmodel]
           resources[taskmodel].append("1")
+          print resources[taskmodel]
           rid = len(resources[taskmodel])-1
           goahead = True
         else:                                       #Nope, pack up and go home
