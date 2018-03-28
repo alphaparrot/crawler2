@@ -16,6 +16,7 @@ class Job:
     self.stat  = self.args[3]
     self.args = self.args[4:]
     self.fields = header.split()[5:]
+    self.top = os.getcwd()
     
     self.parameters = {}
     n=0

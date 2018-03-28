@@ -25,9 +25,14 @@ def prep(job):
     if gtype=="lmdz":
         data = np.load("hopper/"+gcm).item()
         lats = data['latitude']
-        lons = data['longitude']
+        lons = data['longitude'][:-1] #Get rid of redundant longitude
     np.save(workdir+"/latitudes.npy",lats)
     np.save(workdir+"/longitudes.npy",lons)
+    
+    if "lon0" in job.parameters:
+        lon0 = job.parameters["lon0"]
+    else:
+        lon0 = "0"
     
     jobscript =("#!/bin/bash -l                                                  \n"+
                 "#PBS -l nodes=1:ppn=1                                            \n"+
@@ -41,7 +46,7 @@ def prep(job):
                 "cd $PBS_O_WORKDIR                                                \n"+
                 "module load gcc/4.9.1                                            \n"+
                 "module load python/2.7.9                                         \n"+
-                "python postprocess.py                                            \n"+
+                "python postprocess.py "+lon0+"                                   \n"+
                 "cp spectra.nc "+cwd+"/postprocess/output/"+job.name+"_spectra.nc \n"+
                 "cp phasecurve.nc "+cwd+"/postprocess/output/"+job.name+"_phasecurve.nc \n"+
                 "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
