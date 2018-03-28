@@ -20,6 +20,7 @@ def newtask(job,dryrun=False):
   
   #os.system("cp -r "+modeldir+"clean/* "+workdir)
   os.system("cp release.py "+workdir)
+  os.system("cp crawldefs.py "+workdir)
   
   setjob.prep(job)
   if not dryrun:

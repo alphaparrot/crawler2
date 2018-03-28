@@ -1,2 +1,4 @@
-# MODEL PID JOBNAME STATUS type gcm lats lons pCO2 p0 flux grav outhopper
-sbdart 1 testsbdart 0 lmdz snapshot2.npy 23,24 0,1 0.36 1013.25 956.0 10.9 proxb   
+# PID MODEL JOBNAME STATUS type gcm lats lons pCO2 p0 flux grav outhopper
+1 sbdart testsbdart 0 lmdz snapshot2.npy 24,25 32,33 0.36 1013.25 956.0 10.9 proxb   
+# PID MODEL JOBNAME STATUS type gcm workdir
+2 postprocess proximab 0 lmdz snapshot2.npy sbdart/proxb

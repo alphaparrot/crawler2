@@ -2,61 +2,8 @@ import os
 import glob
 import crawlset
 import sys
-
-USER = "paradise"
-
-MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale has 8 threads)
-          "sbdart":8,           #Here we use 'task' to mean a Sunnyvale job, as opposed to the
-          "postprocess":8,      #HPC convention of a task being a thread or process. This way our
-          "lmdz":8}             #code is MPI/OpenMP-agnostic.
-class Job:
-  def __init__(self,header,args,resource):
-    self.args = args.split()
-    self.model = self.args[0]
-    self.pid   = self.args[1]
-    self.name  = self.args[2]
-    self.stat  = self.args[3]
-    self.args = self.args[4:]
-    self.fields = header.split()[5:]
-    
-    self.parameters = {}
-    n=0
-    for n in range(0,len(self.fields)):
-      self.parameters[self.fields[n]] = self.args[n]
-      
-    self.home = resource
-    self.jobname = self.name+".cl"
-    
-  def getID(self):
-    os.system("qstat -u "+USER+" > cjobs.tmp")
-    jf = open("cjobs.tmp","r")
-    jlist = jf.read().split('\n')[5:-1]
-    jf.close()
-    os.system("rm cjobs.tmp")
-    tag = None
-    if len(jlist)>0:
-      for j in jlist:
-        job = j.split()
-        name = job[3]
-        if name==self.jobname:
-          tag = job[0]
-          break
-    self.tag = tag
-    return tag
-
-  def write(self):
-    jf = open(self.model+"/job"+self.home+"/job.crwl","w")
-    jt = self.pid+'\n'+' '.join(self.fields)+'\n'+' '.join(self.args)+'\n'+self.name+'\n'+self.tag
-    jf.write(jt)
-    jf.close()
-
-  def kill(self):
-    tag = self.getID()
-    if tag:
-      os.system("qdel "+tag)
-      return 1
-    else:
-      return 0
+import numpy as np
+from crawldefs import *
 
 
 if __name__=="__main__":    
@@ -71,9 +18,11 @@ if __name__=="__main__":
   nnodes=int(f.read().split('\n')[0])
   f.close()
   resources={}
-  for m in MODELS:
+  for m in MODELS.keys():
     rf=open("running_"+m+".crwl","r")
-    resources[m] = rf.read().split('\n')[:-1]
+    resources[m] = rf.read().split('\n')[0]
+    resources[m] = resources[m].split()
+    #print resources[m]
     rf.close()
     
   running = 0
@@ -168,7 +117,7 @@ if __name__=="__main__":
       if goahead:                           #Found a job slot
         newjob = Job(header,task,rid)       #Collect and organize the job parameters
         crawlset.newtask(newjob,dryrun=dryrun)            #Set up the job and submit it
-        np.save(taskmodel+'/job'+newjob.home+'/job.npy',newjob)
+        np.save(taskmodel+'/job'+str(newjob.home)+'/job.npy',newjob)
         if not dryrun:
             newjob.getID()
         else:
@@ -176,24 +125,27 @@ if __name__=="__main__":
         newjob.write()
         running += 1.0/MODELS[taskmodel]    #Note that we are *that* much closer to the limit.
         
-    folders = []
-    for m in MODELS:
-      fr=open("running_"+m+".crwl","w")
-      fr.write('\n'.join(resources[m]))
-      fr.close()
-      folders+=sorted(glob.glob(m+"/job*/"))
-    
-    #Keep track of the current jobs
-    
-    htext = "Current job array:\n"
-    for f in folders:
-      jf = open(f+"/job.crwl")
-      jc = jf.read().split('\n')
-      jf.close()
-      htext+=f+" "+jc[3]+"\n"
-    cjb = open("currentjobs.crwl","w")
-    cjb.write(htext)
-    cjb.close()
-    
-    os.system("echo 0>inuse.crwl")         #Release ownership of crawler.py
+  folders = []
+  #print MODELS.keys()
+  for m in MODELS.keys():
+    fr=open("running_"+m+".crwl","w")
+    #print resources[m]
+    #print '--'
+    fr.write(' '.join(resources[m])+'\n')
+    fr.close()
+    folders+=sorted(glob.glob(m+"/job*/"))
+  
+  #Keep track of the current jobs
+  
+  htext = "Current job array:\n"
+  for f in folders:
+    jf = open(f+"/job.crwl")
+    jc = jf.read().split('\n')
+    jf.close()
+    htext+=f+" "+jc[3]+"\n"
+  cjb = open("currentjobs.crwl","w")
+  cjb.write(htext)
+  cjb.close()
+  
+  os.system("echo '0'>inuse.crwl")         #Release ownership of crawler.py
      

@@ -270,7 +270,7 @@ def cloudcolumn(dql,cld,lon,lat,workdir,name='usrcld.dat'):
     f.write(dat)
     f.close()
   
-def writecolumn_single(z,p,t,q,o,workdir,name='atms.dat'):
+def writecolumn_single_plasim(z,p,t,q,o,workdir,name='atms.dat'):
     dat = ''
     nlev = len(z)
     dat+=str(nlev)+'\n'
@@ -286,6 +286,23 @@ def writecolumn_single(z,p,t,q,o,workdir,name='atms.dat'):
     f=open(workdir+'/'+name,"w")
     f.write(dat)
     f.close()
+    
+def writecolumn_single_lmdz(z,p,t,q,o,workdir,name='atms.dat'):
+    dat = ''
+    nlev = len(z)
+    dat+=str(nlev)+'\n'
+    for k in range(nlev-1,-1,-1):
+        layer = []
+        layer.append(str(z[k]*1.0e-3))
+        layer.append(str(p[k]*0.01))
+        layer.append(str(t[k]))
+        layer.append(str(q[k]))
+        layer.append(str(o[k]))
+        line = ' '.join(layer)
+        dat+=line+'\n'
+    f=open(workdir+'/'+name,"w")
+    f.write(dat)
+    f.close()    
     
 def cloudcolumn_single(dql,cld,workdir,name='usrcld.dat'):
     dat = ''
@@ -306,7 +323,7 @@ def cloudcolumn_single(dql,cld,workdir,name='usrcld.dat'):
 def cloudcolumn_single_lmdz(dql,dqi,rel,rei,cld,workdir,name='usrcld.dat'):
     dat = ''
     nlev = len(cld)
-    for k in range(nlev-1,-1,-1):
+    for k in range(0,nlev):
         layer = []
         layer.append(str(dql[k])) #Liquid water path (g/m^2)
         layer.append(str(rel[k])) #Water droplet radius (um)
@@ -405,7 +422,7 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665):
   
   print "Writing atms.dat"
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
-  writecolumn_single(zs,pa,ta,rhoh2o*1000.0,np.zeros(10),workdir)
+  writecolumn_single_lmdz(zs,pa,ta,rhoh2o*1000.0,np.zeros(10),workdir)
   
   dsigma = np.zeros(len(lvs))
   dsigma[0] = lvs[0]
@@ -441,7 +458,7 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665):
     cosaz = 0.0
   if np.isinf(cosaz):
     cosaz = 0.0
-  print cosaz
+  #print cosaz
   azm = np.arccos(np.minimum(np.maximum(cosaz,-1.0),1.0)) * 180.0/np.pi
   
   if direction=='W':
@@ -469,7 +486,7 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0):
   #lsm = data['lsm'][-1,lat,lon]
   lsm = 0.0
   if lsm < 0.5: #sea
-    sic = data['pctsrf_sic'][-1,lat,lon]
+    sic = data['pctsrf_sic'][lat,lon]
     if sic == 1.0:
       surf = "snow"
     elif sic == 0.0:
@@ -485,6 +502,9 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0):
   zs = data["altitude"]*1000.0 #meters
   
   ta = data["temp"][:,lat,lon]
+  
+  #altz = data["phisinit"][lat,lon]
+  altz=0.0
   
   #lvs = data['lev']
   #lns = data['lon']
@@ -510,30 +530,33 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0):
   
   rhohum = ((pa*100.0-pvap)*mmair+pvap*mmvap)/(gascon0*ta)
   
-  hus = data['h2o_vap'][:,lat,lon] #kg/kg?
+  hus = np.maximum(data['h2o_vap'][:,lat,lon],0.0) #kg/kg?
   rhoh2o = hus*rhohum
   
   print "Writing atms.dat"
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
-  writecolumn_single(zs,pa,ta,rhoh2o*1000.0,np.zeros(len(zs)),workdir)
+  writecolumn_single_lmdz(zs,pa,ta,rhoh2o*1000.0,np.zeros(len(zs)),workdir)
   
-  #dsigma = np.zeros(len(lvs))
-  #dsigma[0] = lvs[0]
-  #for i in range(1,len(lvs)):
-    #dsigma[i] = lvs[i]-lvs[i-1]
+  #dpress = np.zeros(len(zs))
+  #dpress[0] = ps-pa[0]*100.0
+  #for i in range(1,len(zs)):
+    #dpress[i] = pa[i-1]-pa[i]
+    
+  dpress = abs(np.diff(data['press_inter']))  
+    
   #dsigma = np.diff(data['bps'])
   
-  dpress = np.diff(data['aps'][:,lat,lon])*100.0 #Pa
+  #dpress = np.diff(data['press_inter'][:,lat,lon])*100.0 #Pa
   
   clw = hus*1000 #g/kg
   
-  dql = dpress*clw/grav #g/m^2 #Water mass in cell
+  dql = np.maximum(dpress*clw/grav,0.0) #g/m^2 #Water mass in cell
   
   cld = data['CLF'][:,lat,lon]
   
-  dqi = dpress*data["h2o_ice"]*1000/grav
+  dqi = np.maximum(dpress*data["h2o_ice"][:,lat,lon]*1000/grav,0.0)
   
-  rei = data["H2Oice_reff"][:,lat,lon]/1.0e-4 #um
+  rei = np.minimum(data["H2Oice_reff"][:,lat,lon]*1.0e6,128.0) #um
   
   print "Writing usrcld.dat"
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
@@ -560,7 +583,7 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0):
     cosaz = 0.0
   if np.isinf(cosaz):
     cosaz = 0.0
-  print cosaz
+  #print cosaz
   azm = np.arccos(np.minimum(np.maximum(cosaz,-1.0),1.0)) * 180.0/np.pi
   
   if direction=='W':
@@ -582,7 +605,7 @@ def prep(job):
           print "Model not recognized."
     
 def _prep_lmdz(job):    
-  workdir = "sbdart/job"+job.home
+  workdir = "sbdart/job"+str(job.home)
   if "source" in job.parameters:
     source = job.parameters["source"]
   else:
@@ -611,26 +634,26 @@ def _prep_lmdz(job):
   data = np.load("hopper/"+job.parameters["gcm"]).item()  
   
   if "pCO2" in job.parameters:
-    pCO2 = job.parameters["pCO2"]
+    pCO2 = float(job.parameters["pCO2"])
   else:
     pCO2 = 0.360
   
   if "p0" in job.parameters:
-    p0 = job.parameters["p0"]
+    p0 = float(job.parameters["p0"])
   else:
     p0 = 1011.0
     
   if "flux" in job.parameters:
-    flux = job.parameters["flux"]
+    flux = float(job.parameters["flux"])
   else:
     flux = 1367.0
     
   if "grav" in job.parameters:
-    grav = job.parameters["grav"]
+    grav = float(job.parameters["grav"])
   else:
     grav = 9.80665
     
-  if "outhopper" is in job.parameters:
+  if "outhopper" in job.parameters:
     dest = "../"+job.parameters["outhopper"]
     os.system("mkdir sbdart/"+job.parameters["outhopper"])
   else:
@@ -641,7 +664,7 @@ def _prep_lmdz(job):
     for jlon in range(lons[0],lons[1]):
       print "Lat %02d Lon %02d"%(jlat,jlon)
       os.system("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
-      os.system("cp -r sbdart/"source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
+      os.system("cp -r sbdart/"+source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
   
   jobscript =("#!/bin/bash -l                                                  \n"+
               "#PBS -l nodes=1:ppn=1                                            \n"+
@@ -655,21 +678,22 @@ def _prep_lmdz(job):
               "module unload gcc/4.9.1                                          \n"+
               "module unload python/2.7.9                                       \n"+
               "module load intel/intel-17                                       \n"+
-              "module load openmp/2.0.1-intel-17                               \n"+
+              "module load openmpi/2.0.1-intel-17                               \n"+
               "module load python                                              \n"+
-              "for jl in {%2d..%2d};                                  \n"%(lats[0],lats[1])+
+              "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
               "do \n"+
-              "     for il in {%2d..%2d};                        \n"%(lons[0],lons[1])+
+              "     for il in {%02d..%02d};                        \n"%(lons[0],lons[1]-1)+
               "     do \n"+
               "          ILAT=`printf '%02d' $jl`           \n"+
               "          ILON=`printf '%02d' $il`           \n"+
-              "          TAG=$ILAT_$ILON                    \n"+
+              "          echo $ILAT $ILON              \n"+
+              "          TAG=${ILAT}_${ILON}                    \n"+
               "          cd sbdart-$TAG                          \n"+
               "          ./sbdart > ../sbout.$TAG                \n"+
               "          cd ../                                  \n"+
               "     done                                    \n"+
               "done \n"+
-              './release.sh "'+dest+'"                                \n'+)
+              './release.sh "'+dest+'"                                \n')
   
   rs = open(workdir+"/runsbdart","w")
   rs.write(jobscript)
@@ -679,14 +703,17 @@ def _prep_lmdz(job):
   
   for jlon in range(lons[0],lons[1]):
     for jlat in range(lats[0],lats[1]):
-      csz,azm,surf,sic,tsurf,altz = analyzecell_lmdz(data,jlat,jlon,workdir,grav=grav)
+      csz,azm,surf,sic,tsurf,altz = analyzecell_lmdz(data,jlat,jlon,
+                                                     workdir+"/sbdart-%02d_%02d"%(jlat,jlon),
+                                                     grav=grav)
       latitude = data['latitude'][jlat]
-      write_input_lmdz(workdir,csz,azm,latitude,surf,pCO2,p0,tsurf,altz,flux,clouds=True,abs_sc=True,sic=sic)
+      write_input(workdir+"/sbdart-%02d_%02d"%(jlat,jlon),csz,azm,latitude,surf,pCO2,
+                  p0,tsurf,altz,flux,clouds=True,abs_sc=True,sic=sic)
       print "Prepped lat %02d lon %02d"%(jlat,jlon)
 
   
 def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
-  workdir = "sbdart/job"+job.home
+  workdir = "sbdart/job"+str(job.home)
   if "source" in job.parameters:
     source = job.parameters["source"]
   else:
@@ -715,22 +742,22 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   data = nc.Dataset(job.parameters["gcm"],"r")  
   
   if "pCO2" in job.parameters:
-    pCO2 = job.parameters["pCO2"]
+    pCO2 = float(job.parameters["pCO2"])
   else:
     pCO2 = 0.360
   
   if "p0" in job.parameters:
-    p0 = job.parameters["p0"]
+    p0 = float(job.parameters["p0"])
   else:
     p0 = 1011.0
     
   if "flux" in job.parameters:
-    flux = job.parameters["flux"]
+    flux = float(job.parameters["flux"])
   else:
     flux = 1367.0
     
   if "grav" in job.parameters:
-    grav = job.parameters["grav"]
+    grav = float(job.parameters["grav"])
   else:
     grav = 9.80665
     
@@ -739,7 +766,7 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
     for jlon in range(lons[0],lons[1]):
       print "Lat %02d Lon %02d"%(jlat,jlon)
       os.system("mkdir sbdart/sbdart-%02d_%02d"%(jlat,jlon))
-      os.system("cp -r sbdart/"source+"/* sbdart/sbdart-%02d_%02d/"%(jlat,jlon))
+      os.system("cp -r sbdart/"+source+"/* sbdart/sbdart-%02d_%02d/"%(jlat,jlon))
   
   jobscript =("#!/bin/bash -l                                                  \n"+
               "#PBS -l nodes=1:ppn=1                                            \n"+
@@ -753,14 +780,14 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
               "module unload gcc/4.8.0                                          \n"+
               "module unload openmpi/1.6.4-gcc-4.8.0                            \n"+
               "module load intel/intel-17                                       \n"+
-              "module load openmp/2.0.1-intel-17                               \n"+
+              "module load openmpi/2.0.1-intel-17                               \n"+
               "for jl in {%2d..%2d};                                  \n"%(lats[0],lats[1])+
               "do \n"+
               "     for il in {%2d..%2d};                        \n"%(lons[0],lons[1])+
               "     do \n"+
               "          ILAT=`printf '%02d' $jl`           \n"+
               "          ILON=`printf '%02d' $il`           \n"+
-              "          TAG=$ILAT_$ILON                    \n"+
+              "          TAG=${ILAT}_${ILON}                    \n"+
               "          cd sbdart-$TAG                          \n"+
               "          ./sbdart > ../sbout.$TAG                \n"+
               "          cd ../                                  \n"+
@@ -779,6 +806,6 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       print "Prepped lat %02d lon %02d"%(jlat,jlon)
 
 def submit(job):
-  workdir = "sbdart/job"+job.home
+  workdir = "sbdart/job"+str(job.home)
   
   os.system("cd "+workdir+" && qsub runsbdart && cd ../../")

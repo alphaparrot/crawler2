@@ -1,0 +1,162 @@
+                                        CRAWLER2
+
+                                      Adiv Paradise
+                                   University of Toronto
+
+
+======================================README=====================================
+
+Prerequisites: Python, NumPy.
+
+This program is a "shadow scheduler" for Sunnyvale (though it can easily be 
+adapted for other systems). The intent is to manage your job submissions in
+an automated manner, thereby increasing the number of jobs you run and reducing
+the amount of work you have to do, without gumming up the queue for several months. 
+Once you hit a limit you define, new jobs wait until old jobs finish before being
+*submitted*, so other people can get in line too. This is 'ethical' job 
+scheduling. Crawler2 does not live in virtual memory like most programs; instead it 
+resides in disk memory like any normal file. This is how it is able to circumvent 
+walltime limits--from the cluster's perspective, this program is almost never 
+running! We accomplish this by making sure that everything the program needs to 
+pick up where it left off is written to file in a form and location that is 
+accessible to the program. When the program is executed, it learns where it 
+should leave off from those files, and then picks up as if it had been running 
+the whole time.
+
+Main components:
+
+crawler2.py
+---------------------
+This is the main program, and what you should execute to get the program going.
+It reads the file tasks.crwl, which contains recipes for the various jobs you want
+to run. It checks to see how many jobs are currently running according to the
+various running_*.crwl files, and checks to see how many nodes you want to be
+using according to nnodes.crwl. It will then prepare and submit as many jobs as 
+necessary to get you up to that limit. If there are no more jobs to submit, or 
+you are already at your limit, it will peacefully exit.
+
+
+crawlset.py
+---------------------
+This is simply one side of the interface between crawler2 and your models. You
+should pretty much never have to concern yourself with this file.
+
+
+crawldefs.py (MUST BE MODIFIED)
+---------------------
+This file is integral: it defines the Job object, which stores information about
+a job in way that's convenient for the program to use, and also defines the
+global variables MODELS and USER. You should change these to reflect your 
+Sunnyvale username and the models you want to use. For each model, you'll need
+to specify how many jobs of that kind can run simultaneously on an 8-cpu node.
+For example, if you have a code that is parallelized to run on 8 cores, then
+its value in this dictionary is 1. You can only run one instance at a time per node.
+But if you have a code that runs in serial, with no parallelism, then its value
+is 8, since you can have 8 going at once on a single node.
+
+
+tasks.crwl (IMPORTANT)
+----------------------------
+This is the hippocampus of the program. It is the list of all tasks for the
+program to queue. Each line is either a header or a job. The first five items
+on a given line have a set format that you cannot change, but after that it is
+entirely up to you--the header fields and arguments in the job line will just
+be passed to the model interface you write. 
+
+                    tasks.crwl header format:
+# PID MODEL JOBNAME STATUS arg1 arg2 arg3 etc etc
+    
+    -> # is a marker indicating that this line is a header line.
+
+Below the header line, you can include an arbitrary number of job lines, so
+long as they all have the same number of items as the header (sans the # character).
+When the program reads a job line, it then backtracks up the list until it 
+finds a header line with the right number of arguments. 
+                    
+                    Creating a job line:
+    -> Do not include anything for '#'. The first item should be the PID.
+    -> MODEL is the name of the model you want to run for this job
+    -> JOBNAME is the name of the job which will appear in the queue
+    -> STATUS is the job's completion status. Set it to 0 initially. It will
+          change to 1 when the job is submitted, and 2 when the job is done.
+    -> PID is the ID number for the job. The first one in the list should be
+          1, and then they should increase sequentially from there.
+
+The last line of the file should be blank.
+
+
+nnodes.crwl (IMPORTANT)
+--------------------------
+The number of 8-cpu nodes you'd like to use.
+
+
+inuse.crwl
+--------------------------
+0 or 1, to indicate whether tasks.crwl is currently in use. You should set 
+this to 1 when adding jobs to avoid colliding with an exiting job. When jobs
+exit, they make use of this file to make sure only one instance of crawler2.py
+is running.
+
+
+running_<model>.crwl
+-------------------------
+These simply allow the program to keep track of how many jobs of this type 
+are currently running. You'll need to provide one of these for every model you
+use, but that can be as simple as renaming the ones I've provided: the program
+will add slots to these "resource" files as needed.
+
+
+waitlist.crwl
+--------------------------
+When programs exit, they do some cleanup work and then execute the main program.
+To make sure there are no collisions, they first put themselves in this
+waitlist, and wait until they reach the front of the line before proceeding.
+
+
+release.py
+--------------------------
+This is a crucial component, but you shouldn't need to modify it. You DO however
+need to make sure that at the end of each job, release.py is executed. This 
+tells the main program that this job is no longer running, that it has completed,
+and then if the coast is clear, executes the main program to make sure another 
+job is submitted in its place. This component is why once you run crawler2.py the
+first time, it will keep itself going for as long as there are unfinished jobs
+in tasks.crwl.
+
+
+set<model>.py (CRUCIAL)
+------------------------------
+This is the most important part of the whole apparatus, and it's one you have to
+write. This is the interface to your model. There are two rules: it must have a 
+function called 'prep' that takes a Job object as an argument, and it must have 
+a 'submit' function that also takes a Job object as an argument. The Job object 
+includes the header fields for the job and the arguments for the job, stored in 
+a dictionary, job.parameters. You can access each argument (as a string) via 
+job.parameters[field], where field is one of the options you want to support in 
+the header line. 
+
+The prep function should read all the arguments, and use them to construct the 
+job you want to run, as if it was going to be run immediately: copy the 
+executable/model into a work directory, change input or namelist files, modify 
+boundary conditions, and finally, write the submission script. Remember that at 
+the end of the job, you must execute release.py with "python release.py". 
+
+The submit function should 'cd' into the work directory, submit the job using
+the submission script, and 'cd' back to the main directory. This function is
+separated from the job preparation routine to provide 'dry run' functionality:
+you can run the program so that it prepares jobs but doesn't submit them, so you
+can check to make sure the jobs have been set up correctly. To use this mode,
+run the main program with "python crawler2.py DRYRUN".
+
+Several example interfaces have been provided, which I use for my own codes.
+The SBDART interface is fully-operational in its LMDZ mode, and the Postprocess
+interface is also fully-operational (and much more minimal).
+
+
+One last thing: create a folder for each model. The program will create
+directories in that folder no matter what to store information about current jobs
+running that model, even if you choose to put the work directories elsewhere.
+
+
+
+    
