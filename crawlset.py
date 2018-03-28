@@ -18,8 +18,8 @@ def newtask(job):
   except:
     pass
   
-  os.system("cp -r "+modeldir+"clean/* "+workdir)
-  os.system("cp packup.py "+workdir)
+  #os.system("cp -r "+modeldir+"clean/* "+workdir)
+  os.system("cp release.py "+workdir)
   
   setjob.prep(job)
   setjob.submit(job)
