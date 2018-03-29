@@ -24,7 +24,9 @@ def prep(job):
         lons = data.variables['lon'][:]
     if gtype=="lmdz":
         data = np.load("hopper/"+gcm).item()
-        lats = data['latitude']
+        #Or do we need to use rlatv,rlonu? latitude and longitude give us edges I think. But the
+        #grid seems to be discretized that way too?
+        lats = data['latitude'][1:-1] #Get rid of poles
         lons = data['longitude'][:-1] #Get rid of redundant longitude
     np.save(workdir+"/latitudes.npy",lats)
     np.save(workdir+"/longitudes.npy",lons)

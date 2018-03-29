@@ -3,6 +3,7 @@ import time
 import numpy as np
 from crawldefs import Job
 import glob
+import sys
 
 '''
 With this new system, rather than each routine trying to edit a file, they just
@@ -21,12 +22,13 @@ def joinwaitlist():
     
 def sweep(top):
     usef = open(top+"/inuse.crwl","r")
-    inuse = int(usef.read())[0]
+    inuse = int(usef.read()[0])
     usef.close()
     waitlist = glob.glob(top+"/waitlist/*.npy")
     if inuse==0: #If it's in use, we do nothing and just pass away
         os.system("echo '1'>"+top+"/inuse.crwl")
         for jobf in waitlist:
+            print jobf
             job = np.load(jobf).item()
             sig = job.name
             jid = job.home
@@ -36,30 +38,30 @@ def sweep(top):
             params = job.parameters
             model = job.model
             
-            runf = open("../../running_"+model+".crwl","r")
+            runf = open(top+"/running_"+model+".crwl","r")
             running = runf.read().split('\n')[0]
             runf.close()
             running = running.split()
             running[job.home-1] = '0'
-            running = ' '.join(running[0])+'\n'
-            runf = open("../../running_"+model+".crwl","w")
+            running = ' '.join(running)+'\n'
+            runf = open(top+"/running_"+model+".crwl","w")
             runf.write(running)
             runf.close()
             
-            tasksf=open("../../tasks.crwl","r")
+            tasksf=open(top+"/tasks.crwl","r")
             tasks = tasksf.read().split('\n')
             tasksf.close()
             for i in range(0,len(tasks)-1):
                 if tasks[i]!='':
                     tasks[i] = tasks[i].split()
                     if tasks[i][0]!='#':
-                        if int(tasks[i][0])==pid:
+                        if int(tasks[i][0])==int(pid):
                             tasks[i][3]="2"
                             tasks[i] = ' '.join(tasks[i])
                             break
                     tasks[i] = ' '.join(tasks[i])
             tasks = '\n'.join(tasks)
-            tasksf=open("../../tasks.crwl","w")
+            tasksf=open(top+"/tasks.crwl","w")
             tasksf.write(tasks)
             tasksf.close()
             
@@ -69,6 +71,9 @@ def sweep(top):
             
 
 if __name__=="__main__":
-    joinwaitlist()
-    job = np.load("job.npy").item()
-    sweep(job.top)
+    if "MASTER" in sys.argv[1:]:
+        sweep(os.getcwd()) #ONLY CALL FROM TOP-LEVEL DIRECTORY
+    else:
+        joinwaitlist()
+        job = np.load("job.npy").item()
+        sweep(job.top)
