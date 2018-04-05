@@ -99,7 +99,7 @@ if __name__=="__main__":
       print "Engaging a priority task"
       
       goahead = False
-      newjob = Job(header,task,-1)       #Collect and organize the job parameters
+      newjob = Job(header,' '.join(task),-1)       #Collect and organize the job parameters
       
       for i in range(0,len(resources[taskmodel])):
         if float(resources[taskmodel][i])==0.0:
@@ -207,7 +207,7 @@ if __name__=="__main__":
     if ready:
       
       goahead = False
-      newjob = Job(header,task,-1)       #Collect and organize the job parameters
+      newjob = Job(header,' '.join(task),-1)       #Collect and organize the job parameters
       
       for i in range(0,len(resources[taskmodel])):
         if float(resources[taskmodel][i])==0.0:
