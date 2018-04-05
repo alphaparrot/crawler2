@@ -38,32 +38,51 @@ def sweep(top):
             params = job.parameters
             model = job.model
             
-            runf = open(top+"/running_"+model+".crwl","r")
-            running = runf.read().split('\n')[0]
-            runf.close()
-            running = running.split()
-            running[job.home-1] = '0'
-            running = ' '.join(running)+'\n'
-            runf = open(top+"/running_"+model+".crwl","w")
-            runf.write(running)
-            runf.close()
+            #runf = open(top+"/running_"+model+".crwl","r")
+            #running = runf.read().split('\n')[0]
+            #runf.close()
+            #running = running.split()
+            #running[job.home-1] = '0'
+            #running = ' '.join(running)+'\n'
+            #runf = open(top+"/running_"+model+".crwl","w")
+            #runf.write(running)
+            #runf.close()
             
-            tasksf=open(top+"/tasks.crwl","r")
-            tasks = tasksf.read().split('\n')
-            tasksf.close()
-            for i in range(0,len(tasks)-1):
-                if tasks[i]!='':
-                    tasks[i] = tasks[i].split()
-                    if tasks[i][0]!='#':
-                        if int(tasks[i][0])==int(pid):
-                            tasks[i][3]="2"
-                            tasks[i] = ' '.join(tasks[i])
-                            break
-                    tasks[i] = ' '.join(tasks[i])
-            tasks = '\n'.join(tasks)
-            tasksf=open(top+"/tasks.crwl","w")
-            tasksf.write(tasks)
-            tasksf.close()
+            if int(job.home)<0:
+                tasksf=open(top+"/priority.crwl","r")
+                tasks = tasksf.read().split('\n')
+                tasksf.close()
+                for i in range(0,len(tasks)-1):
+                    if tasks[i]!='':
+                        tasks[i] = tasks[i].split()
+                        if tasks[i][0]!='#':
+                            if int(tasks[i][0])==int(pid):
+                                tasks[i][3]="2"
+                                tasks[i] = ' '.join(tasks[i])
+                                break
+                        tasks[i] = ' '.join(tasks[i])
+                tasks = '\n'.join(tasks)
+                tasksf=open(top+"/priority.crwl","w")
+                tasksf.write(tasks)
+                tasksf.close()
+                
+            else:
+                tasksf=open(top+"/tasks.crwl","r")
+                tasks = tasksf.read().split('\n')
+                tasksf.close()
+                for i in range(0,len(tasks)-1):
+                    if tasks[i]!='':
+                        tasks[i] = tasks[i].split()
+                        if tasks[i][0]!='#':
+                            if int(tasks[i][0])==int(pid):
+                                tasks[i][3]="2"
+                                tasks[i] = ' '.join(tasks[i])
+                                break
+                        tasks[i] = ' '.join(tasks[i])
+                tasks = '\n'.join(tasks)
+                tasksf=open(top+"/tasks.crwl","w")
+                tasksf.write(tasks)
+                tasksf.close()
             
             os.system("rm "+jobf)
         
@@ -76,4 +95,6 @@ if __name__=="__main__":
     else:
         joinwaitlist()
         job = np.load("job.npy").item()
+        os.system("cat "+job.top+"/inuse.crwl>>"+job.top+"/inuse.log")
         sweep(job.top)
+        

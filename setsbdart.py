@@ -4,7 +4,8 @@ import os
 import time
 
 
-def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,tsurf,altz,flux,clouds=True,abs_sc=True,sic=0.0):
+def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,
+                tsurf,altz,flux,albedo=0.35,smooth=False,clouds=True,flat=True,sic=0.0,spec=False):
   template =("&INPUT                                                     \n"+ #0
              " IDATM=          4,                                        \n"+ #1
              " AMIX= -1.0000000000000000     ,                           \n"+ #2
@@ -15,7 +16,7 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,tsurf,altz,flu
              " SZA=  0.0000000000000000     ,                            \n"+ #7
              " CSZA= -1.0000000000000000     ,                           \n"+ #8   --
              " SOLFAC=  1.0000000000000000     ,                         \n"+ #9   --
-             " NF=          3,                                           \n"+ #10
+             " NF=          3,                                           \n"+ #10  -- Star type
              " IDAY=          0,                                         \n"+ #11
              " TIME=  16.000000000000000     ,                           \n"+ #12
              " ALAT= -64.766998291015625     ,                           \n"+ #13
@@ -41,7 +42,7 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,tsurf,altz,flu
              " XHNO3= -1.0000000000000000     ,                          \n"+ #33  --
              " XO4=  1.0000000000000000     ,                            \n"+ #34  --
              " ISALB=          4,                                        \n"+ #35  --
-             " ALBCON=  0.0000000000000000     ,                         \n"+ #36
+             " ALBCON=  0.0000000000000000     ,                         \n"+ #36  --
              " SC= 5*3.4028234663852886E+038  ,                          \n"+ #37  --
              " ZCLOUD= 5*0.0000000000000000       ,                      \n"+ #38
              " TCLOUD= 5*0.0000000000000000       ,                      \n"+ #39
@@ -72,7 +73,7 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,tsurf,altz,flu
              " NGRID=          0,                                        \n"+ #64
              " IDB= 20*0          ,                                      \n"+ #65
              " ZOUT=  0.0000000000000000     ,  100.00000000000000     , \n"+ #66
-             " IOUT=         5,                                          \n"+ #67
+             " IOUT=         5,                                          \n"+ #67   
              " PRNT= 7*F,                                                \n"+ #68
              " TEMIS=  0.0000000000000000     ,                          \n"+ #69
              " NSTR=          0,                                         \n"+ #70
@@ -150,7 +151,10 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,tsurf,altz,flu
     input_text[5] = " WLSUP= 4.23857210000 ,    "
                 #The spectral binning if we do this isn't perfectly aligned with the full range, so
                 #we'll need to devise a binning scheme for putting them all in the right bins.
-  
+#STAR TYPE
+  if spec:
+      input_text[10] = " NF=      -1,    "
+    
 #UZEN
   rlat = latitude*np.pi/180.0
   hours = np.linspace(0,84.375,num=16)*np.pi/180.0
@@ -178,8 +182,6 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,tsurf,altz,flu
   input_text[79] = " BTEMP= %3.3f   ,   "%tsurf
   input_text[9] = " SOLFAC= %.16f   ,   "%(flux/1367.0)
   input_text[15] = " ZPRES= %.16f   ,   "%altz
-  if not abs_sc:
-    input_text[16] = " PBAR= %.16f   ,   "%(0.0)
   if clouds:
     input_text[41] = " NRE = 5*%.16f  ,  "%(0.0)
     
@@ -209,8 +211,23 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,tsurf,altz,flu
   input_text[32] = " XNO=   %.16f   ,  "%xhno3
   input_text[33] = " XHNO3= %.16f   ,  "%xno2 
   
+  if smooth:
+    input_text[23] = " XN2=   %.16f   ,  "%1.0e6 
+    input_text[24] = " XO2=   %.16f   ,  "%0.0
+    input_text[25] = " XCO2=  %.16f   ,  "%0.0
+    input_text[26] = " XCH4=  %.16f   ,  "%0.0
+    input_text[27] = " XN2O=  %.16f   ,  "%0.0
+    input_text[28] = " XCO=   %.16f   ,  "%0.0
+    input_text[29] = " XNO2=  %.16f   ,  "%0.0
+    input_text[30] = " XSO2=  %.16f   ,  "%0.0
+    input_text[31] = " XNH3=  %.16f   ,  "%0.0
+    input_text[32] = " XNO=   %.16f   ,  "%0.0
+    input_text[33] = " XHNO3= %.16f   ,  "%0.0
+      
+  
   if surface == "uniform":
     input_text[35] = " ISALB= 0  , "
+    input_text[36] = " ALBCON= %.16f ,"%albedo
   elif surface == "snow":
     input_text[35] = " ISALB= 1  , "
   elif surface == "clearwater":
@@ -228,7 +245,12 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,tsurf,altz,flu
     input_text[37] = " SC= %.10f,%.10f,0.000,0.000   , "%(sic,1-sic)
   else:
     input_text[35] = " ISALB= -1  , "
-    
+
+  if flat:
+      input_text[35] = " ISALB= 0  , "
+      input_text[10] = " NF=       0,    "
+      input_text[69] = " NOTHRM=   59 , "
+
   inputtext = '\n'.join(input_text)
   
   inp = open(workdir+"/INPUT","w")
@@ -369,7 +391,7 @@ def getalt_single(ta,lev,grav=9.80665,gascon=287.0):
     return zzf  
 
 
-def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665):
+def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False):
   #cszenith,azimuth,surface,pCO2,p0,tsurf,altz
   
   surf = "uniform"
@@ -432,10 +454,12 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665):
   clw = np.mean(data.variables['clw'][:,:,lat,lon],axis=0)
   
   dql = np.zeros(len(lvs))
+  cld = np.zeros(len(lvs))
   
-  dql = dsigma*1000.0*ps*clw/grav #g/m^2 #Cloud liquid water path
+  if not smooth:
+    dql = dsigma*1000.0*ps*clw/grav #g/m^2 #Cloud liquid water path
   
-  cld = np.mean(data.variables['cl'][:,:,lat,lon],axis=0)
+    cld = np.mean(data.variables['cl'][:,:,lat,lon],axis=0)
   
   print "Writing usrcld.dat"
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
@@ -478,7 +502,7 @@ def cosine_zenith(latitude,longitude,sol_dec,sol_lon):
   
   return coszen
 
-def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0):
+def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0,smooth=False):
   #cszenith,azimuth,surface,pCO2,p0,tsurf,altz
   
   surf = "uniform"
@@ -532,6 +556,8 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0):
   
   hus = np.maximum(data['h2o_vap'][:,lat,lon],0.0) #kg/kg?
   rhoh2o = hus*rhohum
+  if smooth:
+      rhoh2o = np.zeros(hus.shape)
   
   print "Writing atms.dat"
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
@@ -550,13 +576,19 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0):
   
   clw = hus*1000 #g/kg
   
-  dql = np.maximum(dpress*clw/grav,0.0) #g/m^2 #Water mass in cell
+  dql = np.zeros(hus.shape)
+  cld = np.zeros(hus.shape)
+  dqi = np.zeros(hus.shape)
+  rei = np.zeros(hus.shape)
   
-  cld = data['CLF'][:,lat,lon]
-  
-  dqi = np.maximum(dpress*data["h2o_ice"][:,lat,lon]*1000/grav,0.0)
-  
-  rei = np.minimum(data["H2Oice_reff"][:,lat,lon]*1.0e6,128.0) #um
+  if not smooth:
+    dql = np.maximum(dpress*clw/grav,0.0) #g/m^2 #Water mass in cell
+    
+    cld = data['CLF'][:,lat,lon]
+    
+    dqi = np.maximum(dpress*data["h2o_ice"][:,lat,lon]*1000/grav,0.0)
+    
+    rei = np.minimum(data["H2Oice_reff"][:,lat,lon]*1.0e6,128.0) #um
   
   print "Writing usrcld.dat"
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
@@ -605,7 +637,7 @@ def prep(job):
           print "Model not recognized."
     
 def _prep_lmdz(job):    
-  workdir = "sbdart/job"+str(job.home)
+  workdir = job.top+"/sbdart/job"+str(job.home)
   if "source" in job.parameters:
     source = job.parameters["source"]
   else:
@@ -653,22 +685,68 @@ def _prep_lmdz(job):
   else:
     grav = 9.80665
     
-  if "outhopper" in job.parameters:
-    dest = "../"+job.parameters["outhopper"]
-    os.system("mkdir sbdart/"+job.parameters["outhopper"])
+  if "domainlatlon" in job.parameters:
+      domain=job.parameters["domainlatlon"].split('/')
+      lat1=domain[0]
+      lat2=domain[1]
+      lon1=domain[2]
+      lon2=domain[3]
   else:
-    dest = "../output"
+      lat1=0
+      lat2=48
+      lon1=0
+      lon2=64
     
+  if "outhopper" in job.parameters:
+    dest = job.top+"/sbdart/"+job.parameters["outhopper"]
+    os.system("mkdir "+job.top+"/sbdart/"+job.parameters["outhopper"])
+  else:
+    dest = job.top+"/sbdart/output"
+    
+  star = False
+    
+  if "starspec" in job.parameters:
+      star = job.parameters["starspec"]
+    
+  smooth=False  
+  if "smooth" in job.parameters:
+      if int(job.parameters["smooth"])==1:
+          smooth=True
+    
+  flat=False
+  if "flat" in job.parameters:
+      if int(job.parameters["flat"])==1:
+          flat=True
+    
+  clouds=True
+  if "clouds" in job.parameters:
+      if int(job.parameters["clouds"])==0:
+          clouds=False
+    
+  uniform=False     
+  unialb = 0.35
+  if "albedo" in job.parameters:
+      uniform=True
+      unialb = float(job.parameters["unialb"])
+      
+  notify = 'a'
+  if "notify" in job.parameters:
+      notify = job.parameters["notify"]
+      
   nlats = len(data['latitude'][:])
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
       print "Lat %02d Lon %02d"%(jlat,jlon)
+      print "mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon)
       os.system("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
-      os.system("cp -r sbdart/"+source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
+      os.system("cp -r "+job.top+"/sbdart/"+source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
+      if star:
+          os.system("cp -r "+job.top+"/sbdart/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
   
   jobscript =("#!/bin/bash -l                                                  \n"+
-              "#PBS -l nodes=1:ppn=1                                            \n"+
-              "#PBS -q workq                                                    \n"+
+              "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
+              "#PBS -q "+str(job.queue)+"                                      \n"+
+              "#PBS -m "+notify+"                                               \n"+
               "#PBS -r n                                                        \n"+
               "#PBS -l walltime=48:00:00                                        \n"+
               "#PBS -N "+job.name+"                                             \n"
@@ -688,32 +766,37 @@ def _prep_lmdz(job):
               "          ILON=`printf '%02d' $(( 10#$il ))`           \n"+
               "          echo $ILAT $ILON              \n"+
               "          TAG=${ILAT}_${ILON}                    \n"+
-              "          cd sbdart-$TAG                          \n"+
-              "          ./sbdart > ../sbout.$TAG                \n"+
-              "          cd ../                                  \n"+
+              "          cd "+workdir+"/sbdart-$TAG                          \n"+
+              "          ./sbdart > "+workdir+"/sbout.$TAG                \n"+
+              "          cd "+workdir+"                                  \n"+
               "     done                                    \n"+
               "done \n"+
-              './release.sh "'+dest+'"                                \n')
+              './release.sh "'+dest+'"                                \n'+
+              "python checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 32 "+job.top+
+              " "+job.parameters["type"]+" "+job.parameters["gcm"]+"          \n")
   
   rs = open(workdir+"/runsbdart","w")
   rs.write(jobscript)
   rs.close()
   
   os.system("cp -r sbdart/release.sh "+workdir+"/")
+  os.system("cp -r sbdart/checkprogress.py "+workdir+"/")
   
   for jlon in range(lons[0],lons[1]):
     for jlat in range(lats[0],lats[1]):
       csz,azm,surf,sic,tsurf,altz = analyzecell_lmdz(data,jlat,jlon,
                                                      workdir+"/sbdart-%02d_%02d"%(jlat,jlon),
-                                                     grav=grav)
+                                                     grav=grav,smooth=smooth)
+      if uniform:
+          surf='uniform'
       latitude = data['latitude'][jlat]
-      write_input(workdir+"/sbdart-%02d_%02d"%(jlat,jlon),csz,azm,latitude,surf,pCO2,
-                  p0,tsurf,altz,flux,clouds=True,abs_sc=True,sic=sic)
+      write_input(workdir+"/sbdart-%02d_%02d"%(jlat,jlon),csz,azm,latitude,surf,pCO2,p0,tsurf,altz,
+                  flux,albedo=unialb,clouds=clouds,flat=flat,sic=sic,spec=star,smooth=smooth)
       print "Prepped lat %02d lon %02d"%(jlat,jlon)
 
   
 def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
-  workdir = "sbdart/job"+str(job.home)
+  workdir = job.top+"/sbdart/job"+str(job.home)
   if "source" in job.parameters:
     source = job.parameters["source"]
   else:
@@ -739,7 +822,7 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   else:
     lons = [0,64]
     
-  data = nc.Dataset(job.parameters["gcm"],"r")  
+  data = nc.Dataset("hopper/"+job.parameters["gcm"],"r")  
   
   if "pCO2" in job.parameters:
     pCO2 = float(job.parameters["pCO2"])
@@ -761,51 +844,115 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   else:
     grav = 9.80665
     
+  if "domainlatlon" in job.parameters:
+      domain=job.parameters["domainlatlon"].split('/')
+      lat1=domain[0]
+      lat2=domain[1]
+      lon1=domain[2]
+      lon2=domain[3]
+  else:
+      lat1=0
+      lat2=48
+      lon1=0
+      lon2=64
+    
+  if "outhopper" in job.parameters:
+    dest = job.top+"/sbdart/"+job.parameters["outhopper"]
+    os.system("mkdir "+job.top+"/sbdart/"+job.parameters["outhopper"])
+  else:
+    dest = job.top+"/sbdart/output"
+    
+  star=False
+  if "starspec" in job.parameters:
+      star = job.parameters["starspec"]
+  
+  smooth=False  
+  if "smooth" in job.parameters:
+      if int(job.parameters["smooth"])==1:
+          smooth=True
+  
+  flat=False
+  if "flat" in job.parameters:
+      if int(job.parameters["flat"])==1:
+          flat=True
+    
+  clouds=True
+  if "clouds" in job.parameters:
+      if int(job.parameters["clouds"])==0:
+          clouds=False
+    
+  notify = 'a'
+  if "notify" in job.parameters:
+      notify = job.parameters["notify"]
+      
+  uniform=False     
+  unialb = 0.35
+  if "albedo" in job.parameters:
+      uniform=True
+      unialb = float(job.parameters["unialb"])
+      
   nlats = len(data.variables['lat'][:])
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
       print "Lat %02d Lon %02d"%(jlat,jlon)
-      os.system("mkdir sbdart/sbdart-%02d_%02d"%(jlat,jlon))
-      os.system("cp -r sbdart/"+source+"/* sbdart/sbdart-%02d_%02d/"%(jlat,jlon))
+      print "mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon)
+      os.system("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
+      os.system("cp -r "+job.top+"/sbdart/"+source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
+      if star:
+          os.system("cp -r "+job.top+"/sbdart/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
   
   jobscript =("#!/bin/bash -l                                                  \n"+
-              "#PBS -l nodes=1:ppn=1                                            \n"+
-              "#PBS -q workq                                                    \n"+
+              "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
+              "#PBS -q "+str(job.queue)+"                                      \n"+
+              "#PBS -m "+notify+"                                               \n"+
               "#PBS -r n                                                        \n"+
               "#PBS -l walltime=48:00:00                                        \n"+
               "#PBS -N "+job.name+"                                             \n"
               "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
               " nodes,ppn,walltime and my_job_name VALUES                       \n"+
               "cd $PBS_O_WORKDIR                                                \n"+
-              "module unload gcc/4.8.0                                          \n"+
-              "module unload openmpi/1.6.4-gcc-4.8.0                            \n"+
+              "module unload gcc/4.9.1                                          \n"+
+              "module unload python/2.7.9                                       \n"+
               "module load intel/intel-17                                       \n"+
               "module load openmpi/2.0.1-intel-17                               \n"+
-              "for jl in {%2d..%2d};                                  \n"%(lats[0],lats[1])+
+              "module load python                                              \n"+
+              "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
               "do \n"+
-              "     for il in {%2d..%2d};                        \n"%(lons[0],lons[1])+
+              "     for il in {%02d..%02d};                        \n"%(lons[0],lons[1]-1)+
               "     do \n"+
               "          ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
               "          ILON=`printf '%02d' $(( 10#$il ))`           \n"+
+              "          echo $ILAT $ILON              \n"+
               "          TAG=${ILAT}_${ILON}                    \n"+
-              "          cd sbdart-$TAG                          \n"+
-              "          ./sbdart > ../sbout.$TAG                \n"+
-              "          cd ../                                  \n"+
+              "          cd "+workdir+"/sbdart-$TAG                          \n"+
+              "          ./sbdart > "+workdir+"/sbout.$TAG                \n"+
+              "          cd "+workdir+"                                  \n"+
               "     done                                    \n"+
-              "done \n")
+              "done \n"+
+              './release.sh "'+dest+'"                                \n'+
+              "python checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+              " "+job.parameters["type"]+" "+job.parameters["gcm"]+"          \n")
   
   rs = open(workdir+"/runsbdart","w")
   rs.write(jobscript)
   rs.close()
   
+  os.system("cp -r sbdart/release.sh "+workdir+"/")
+  os.system("cp -r sbdart/checkprogress.py "+workdir+"/")
+  
   for jlon in range(lons[0],lons[1]):
     for jlat in range(lats[0],lats[1]):
-      csz,azm,surf,sic,tsurf,altz = analyzecell(data,jlat,jlon,workdir,grav=grav)
+      csz,azm,surf,sic,tsurf,altz = analyzecell_plasim(data,jlat,jlon,
+                                                       workdir+"/sbdart-%02d_%02d"%(jlat,jlon),
+                                                       grav=grav,smooth=smooth)
+      if uniform:
+          surf='uniform'
       latitude = data.variables['lat'][jlat]
-      write_input(workdir,csz,azm,latitude,surf,pCO2,p0,tsurf,altz,flux,clouds=True,abs_sc=True,sic=sic)
+      write_input(workdir+"/sbdart-%02d_%02d"%(jlat,jlon),csz,azm,latitude,surf,pCO2,p0,tsurf,altz,
+                  flux,albedo=unialb,clouds=clouds,flat=flat,sic=sic,spec=star,smooth=smooth)
       print "Prepped lat %02d lon %02d"%(jlat,jlon)
 
 def submit(job):
   workdir = "sbdart/job"+str(job.home)
   
-  os.system("cd "+workdir+" && qsub runsbdart && cd ../../")
+  os.system("cd "+workdir+" && qsub runsbdart && cd "+job.top)

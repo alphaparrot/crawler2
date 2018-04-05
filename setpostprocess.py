@@ -36,9 +36,19 @@ def prep(job):
     else:
         lon0 = "0"
     
+    if "NCORES" in job.parameters:
+        ncpu = job.parameters["NCORES"]
+    else:
+        ncpu = '1'
+        
+    if "QUEUE" in job.parameters:
+        queue = job.parameters["QUEUE"]
+    else:
+        queue = "workq"
+    
     jobscript =("#!/bin/bash -l                                                  \n"+
-                "#PBS -l nodes=1:ppn=1                                            \n"+
-                "#PBS -q workq                                                    \n"+
+                "#PBS -l nodes=1:ppn="+ncpu+"                                    \n"+
+                "#PBS -q "+queue+"                                               \n"+
                 "#PBS -r n                                                        \n"+
                 "#PBS -l walltime=48:00:00                                        \n"+
                 "#PBS -m abe                                                      \n"+
@@ -48,10 +58,10 @@ def prep(job):
                 "cd $PBS_O_WORKDIR                                                \n"+
                 "module load gcc/4.9.1                                            \n"+
                 "module load python/2.7.9                                         \n"+
+                "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
                 "python postprocess.py "+lon0+"                                   \n"+
                 "cp spectra.nc "+cwd+"/postprocess/output/"+job.name+"_spectra.nc \n"+
                 "cp phasecurve.nc "+cwd+"/postprocess/output/"+job.name+"_phasecurve.nc \n"+
-                "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
                 "python release.py \n")
     
      
