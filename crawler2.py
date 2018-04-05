@@ -58,7 +58,7 @@ if __name__=="__main__":
               if running+(1.0/MODELS[taskmodel])<=nnodes:  #We might be at 1 cpu less than capacity,
                 mark=i                                     #so a plasim job might put us over the limit.
                 f=open("tasklog.crwl","a")
-                f.write("\nFound job "+task)
+                f.write("\nFound job "+' '.join(task))
                 f.close()
                 break
               else:
@@ -72,7 +72,7 @@ if __name__=="__main__":
         for i in range(mark,-1,-1): #Find header for the task
           if tasks[i][0]=="#":
             header = tasks[i]
-            if (len(header.split())-1)==(len(task.split())): #first header with the right number of args
+            if (len(header.split())-1)==(len(task)): #first header with the right number of args
               break
             else:
               header=False
@@ -169,7 +169,7 @@ if __name__=="__main__":
               if running+(1.0/MODELS[taskmodel])<=nnodes:  #We might be at 1 cpu less than capacity,
                 mark=i                                     #so a plasim job might put us over the limit.
                 f=open("tasklog.crwl","a")
-                f.write("\nFound job "+task)
+                f.write("\nFound job "+' '.join(task))
                 f.close()
                 break
               else:
@@ -183,7 +183,7 @@ if __name__=="__main__":
         for i in range(mark,-1,-1): #Find header for the task
           if tasks[i][0]=="#":
             header = tasks[i]
-            if (len(header.split())-1)==(len(task.split())): #first header with the right number of args
+            if (len(header.split())-1)==(len(task)): #first header with the right number of args
               break
             else:
               header=False
