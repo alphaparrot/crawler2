@@ -5,9 +5,9 @@ import time
 
 
 def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,
-                tsurf,altz,flux,albedo=0.35,smooth=False,clouds=True,flat=True,sic=0.0,spec=False):
+                tsurf,altz,flux,wmin=0.55,albedo=0.35,smooth=False,flat=True,sic=0.0,spec=False):
   template =("&INPUT                                                     \n"+ #0
-             " IDATM=          4,                                        \n"+ #1
+             " IDATM=          0,                                        \n"+ #1
              " AMIX= -1.0000000000000000     ,                           \n"+ #2
              " ISAT=          -4,                                        \n"+ #3
              " WLINF= 10.0000000000000     ,                             \n"+ #4  
@@ -146,6 +146,10 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,
   
   input_text = template.split('\n')
   
+  wc = 0.5*(19.0+wmin)
+  input_text[4] = " WLINF= %2.9f ,   "%wc
+  input_text[5] = " WLSUP= %2.9f ,   "%(0.5*(wc-wmin))
+  
   if cszenith <= 0.0: #There is no incident sunlight, so we only need the thermal range >2.5 microns
     input_text[4] = " WLINF= 10.972857000  ,    "   # as opposed to >0.55 microns. This saves us time.
     input_text[5] = " WLSUP= 4.23857210000 ,    "
@@ -182,8 +186,7 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,
   input_text[79] = " BTEMP= %3.3f   ,   "%tsurf
   input_text[9] = " SOLFAC= %.16f   ,   "%(flux/1367.0)
   input_text[15] = " ZPRES= %.16f   ,   "%altz
-  if clouds:
-    input_text[41] = " NRE = 5*%.16f  ,  "%(0.0)
+  input_text[41] = " NRE = 5*%.16f  ,  "%(0.0)
     
   psurf = p0 + pCO2
   
@@ -249,7 +252,8 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,
   if flat:
       input_text[35] = " ISALB= 0  , "
       input_text[10] = " NF=       0,    "
-      input_text[69] = " NOTHRM=   59 , "
+      input_text[69] = " NOTHRM=   1 , "
+      input_text[36] = " ALBCON= %.16f ,"%1.0 #mirror
 
   inputtext = '\n'.join(input_text)
   
@@ -391,7 +395,7 @@ def getalt_single(ta,lev,grav=9.80665,gascon=287.0):
     return zzf  
 
 
-def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False):
+def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False,clouds=True):
   #cszenith,azimuth,surface,pCO2,p0,tsurf,altz
   
   surf = "uniform"
@@ -430,7 +434,7 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False):
   
   satvap = 610.78*10.0**(7.5*(ta-273.15)/(ta+0.15))
   
-  relhum = np.mean(data.variables['hur'][:,:,lat,lon],axis=0)
+  relhum = np.mean(data.variables['hur'][:,:,lat,lon],axis=0)*0.01
   
   pvap = relhum*satvap
   
@@ -444,7 +448,7 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False):
   
   print "Writing atms.dat"
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
-  writecolumn_single_lmdz(zs,pa,ta,rhoh2o*1000.0,np.zeros(10),workdir)
+  writecolumn_single_lmdz(zs,pa,ta,rhoh2o*1000.0,np.zeros(len(lvs)),workdir)
   
   dsigma = np.zeros(len(lvs))
   dsigma[0] = lvs[0]
@@ -461,7 +465,11 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False):
   
     cld = np.mean(data.variables['cl'][:,:,lat,lon],axis=0)
   
+  if not clouds:
+    cld[:] = 0.0
+    
   print "Writing usrcld.dat"
+  #Need to implement a cloud-free option
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
   cloudcolumn_single(dql,cld,workdir)
   
@@ -502,7 +510,8 @@ def cosine_zenith(latitude,longitude,sol_dec,sol_lon):
   
   return coszen
 
-def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0,smooth=False):
+def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
+                     sol_lon=0.0,smooth=False,clouds=True):
   #cszenith,azimuth,surface,pCO2,p0,tsurf,altz
   
   surf = "uniform"
@@ -510,7 +519,10 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0,s
   #lsm = data['lsm'][-1,lat,lon]
   lsm = 0.0
   if lsm < 0.5: #sea
-    sic = data['pctsrf_sic'][lat,lon]
+    if 'pctsrf_sic' in data.keys():
+      sic = data['pctsrf_sic'][lat,lon]
+    else:
+      sic = min(data['h2o_ice_surf'][lat,lon],1.0)
     if sic == 1.0:
       surf = "snow"
     elif sic == 0.0:
@@ -552,7 +564,7 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0,s
   rvap = 461.495
   rdry = 287.058
   
-  rhohum = ((pa*100.0-pvap)*mmair+pvap*mmvap)/(gascon0*ta)
+  rhohum = ((pa-pvap)*mmair+pvap*mmvap)/(gascon0*ta)
   
   hus = np.maximum(data['h2o_vap'][:,lat,lon],0.0) #kg/kg?
   rhoh2o = hus*rhohum
@@ -589,6 +601,9 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,sol_lon=0.0,s
     dqi = np.maximum(dpress*data["h2o_ice"][:,lat,lon]*1000/grav,0.0)
     
     rei = np.minimum(data["H2Oice_reff"][:,lat,lon]*1.0e6,128.0) #um
+  
+  if not clouds:
+      cld[:] = 0.0
   
   print "Writing usrcld.dat"
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
@@ -627,14 +642,25 @@ def prep(job):
   if "type" not in job.parameters:
       print "Warning: need to specify which GCM produced this data!"
   else:
+      if "ROLE" in job.parameters:
+          if "outhopper" in job.parameters:
+              dest = job.top+"/sbdart/"+job.parameters["outhopper"]
+          else:
+              dest = job.top+"/sbdart/output"
+          os.system("mkdir "+dest)
+          os.system("mkdir "+dest+"/running")
+          os.system("mkdir "+dest+"/finished")
       if job.parameters["type"]=="plasim":
+          os.system("touch "+dest+"/running/token"+job.pid+".crwl")
           _prep_plasim(job)
       elif job.parameters["type"]=="lmdz":
+          os.system("touch "+dest+"/running/token"+job.pid+".crwl")
           _prep_lmdz(job)
       elif job.parameters["type"]=="fms":
           print "FMS-SBDART interface not yet implemented."
       else:
           print "Model not recognized."
+          
     
 def _prep_lmdz(job):    
   workdir = job.top+"/sbdart/job"+str(job.home)
@@ -662,6 +688,19 @@ def _prep_lmdz(job):
       lons.append(lons[0])
   else:
     lons = [0,64]
+  
+  if "outhopper" in job.parameters:
+    dest = job.top+"/sbdart/"+job.parameters["outhopper"]
+    os.system("mkdir "+job.top+"/sbdart/"+job.parameters["outhopper"])
+  else:
+    dest = job.top+"/sbdart/output"
+    
+  token_name = "token"+job.pid+"_%02d-%02d-%02d-%02d.crwl"%(lats[0],lats[1],lons[0],lons[1])
+  
+  os.system("mv "+dest+"/running/token"+job.pid+".crwl "+
+            dest+"/running/"+token_name)
+  
+  
     
   data = np.load("hopper/"+job.parameters["gcm"]).item()  
   
@@ -697,12 +736,6 @@ def _prep_lmdz(job):
       lon1=0
       lon2=64
     
-  if "outhopper" in job.parameters:
-    dest = job.top+"/sbdart/"+job.parameters["outhopper"]
-    os.system("mkdir "+job.top+"/sbdart/"+job.parameters["outhopper"])
-  else:
-    dest = job.top+"/sbdart/output"
-    
   star = False
     
   if "starspec" in job.parameters:
@@ -722,6 +755,10 @@ def _prep_lmdz(job):
   if "clouds" in job.parameters:
       if int(job.parameters["clouds"])==0:
           clouds=False
+    
+  wmin=0.55 #microns
+  if "wmin" in job.parameters:
+      wmin = float(job.parameters["wmin"])
     
   uniform=False     
   unialb = 0.35
@@ -743,37 +780,91 @@ def _prep_lmdz(job):
       if star:
           os.system("cp -r "+job.top+"/sbdart/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
   
-  jobscript =("#!/bin/bash -l                                                  \n"+
-              "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
-              "#PBS -q "+str(job.queue)+"                                      \n"+
-              "#PBS -m "+notify+"                                               \n"+
-              "#PBS -r n                                                        \n"+
-              "#PBS -l walltime=48:00:00                                        \n"+
-              "#PBS -N "+job.name+"                                             \n"
-              "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-              " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-              "cd $PBS_O_WORKDIR                                                \n"+
-              "module unload gcc/4.9.1                                          \n"+
-              "module unload python/2.7.9                                       \n"+
-              "module load intel/intel-17                                       \n"+
-              "module load openmpi/2.0.1-intel-17                               \n"+
-              "module load python                                              \n"+
-              "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
-              "do \n"+
-              "     for il in {%02d..%02d};                        \n"%(lons[0],lons[1]-1)+
-              "     do \n"+
-              "          ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
-              "          ILON=`printf '%02d' $(( 10#$il ))`           \n"+
-              "          echo $ILAT $ILON              \n"+
-              "          TAG=${ILAT}_${ILON}                    \n"+
-              "          cd "+workdir+"/sbdart-$TAG                          \n"+
-              "          ./sbdart > "+workdir+"/sbout.$TAG                \n"+
-              "          cd "+workdir+"                                  \n"+
-              "     done                                    \n"+
-              "done \n"+
-              './release.sh "'+dest+'"                                \n'+
-              "python checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 32 "+job.top+
-              " "+job.parameters["type"]+" "+job.parameters["gcm"]+"          \n")
+  role = "dom"
+  if "ROLE" in job.parameters:
+      role = job.parameters["ROLE"] #"dom" or "sub" for dominant/submissive
+  
+  
+  color=False
+  if "color" in job.parameters:
+      if job.parameters["color"]=="True":
+          color=True
+      else:
+          color=False
+  
+  makemap=False
+  if "map" in job.parameters:
+      if job.parameters["map"]=="True":
+          makemap=True
+      else:
+          makemap=False
+  
+  
+  tag = ''
+  if color:
+      tag+="color "
+  if makemap:
+      tag+="map "  
+  
+  if role == "sub":
+      jobscript =("#!/bin/bash -l                                                  \n"+
+                  "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
+                  "#PBS -q "+str(job.queue)+"                                      \n"+
+                  "#PBS -m "+notify+"                                               \n"+
+                  "#PBS -r n                                                        \n"+
+                  "#PBS -l walltime=48:00:00                                        \n"+
+                  "#PBS -N "+job.name+"                                             \n"
+                  "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
+                  " nodes,ppn,walltime and my_job_name VALUES                       \n"+
+                  "cd $PBS_O_WORKDIR                                                \n"+
+                  "module load gcc/4.9.1                                          \n"+
+                  "module load python/2.7.9                                       \n"+
+                  "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
+                  "do \n"+
+                  "     for il in {%02d..%02d};                        \n"%(lons[0],lons[1]-1)+
+                  "     do \n"+
+                  "          ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+                  "          ILON=`printf '%02d' $(( 10#$il ))`           \n"+
+                  "          echo $ILAT $ILON              \n"+
+                  "          TAG=${ILAT}_${ILON}                    \n"+
+                  "          cd "+workdir+"/sbdart-$TAG                          \n"+
+                  "          ./sbdart > "+workdir+"/sbout.$TAG                \n"+
+                  "          cd "+workdir+"                                  \n"+
+                  "     done                                    \n"+
+                  "done \n"+
+                  "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
+                  './release.sh "'+dest+'"                                \n')
+  else:
+      jobscript =("#!/bin/bash -l                                                  \n"+
+                  "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
+                  "#PBS -q "+str(job.queue)+"                                      \n"+
+                  "#PBS -m "+notify+"                                               \n"+
+                  "#PBS -r n                                                        \n"+
+                  "#PBS -l walltime=48:00:00                                        \n"+
+                  "#PBS -N "+job.name+"                                             \n"
+                  "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
+                  " nodes,ppn,walltime and my_job_name VALUES                       \n"+
+                  "cd $PBS_O_WORKDIR                                                \n"+
+                  "module load gcc/4.9.1                                          \n"+
+                  "module load python/2.7.9                                       \n"+
+                  "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
+                  "do \n"+
+                  "     for il in {%02d..%02d};                        \n"%(lons[0],lons[1]-1)+
+                  "     do \n"+
+                  "          ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+                  "          ILON=`printf '%02d' $(( 10#$il ))`           \n"+
+                  "          echo $ILAT $ILON              \n"+
+                  "          TAG=${ILAT}_${ILON}                    \n"+
+                  "          cd "+workdir+"/sbdart-$TAG                          \n"+
+                  "          ./sbdart > "+workdir+"/sbout.$TAG                \n"+
+                  "          cd "+workdir+"                                  \n"+
+                  "     done                                    \n"+
+                  "done \n"+
+                  "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
+                  './release.sh "'+dest+'"                                \n'+
+                  "python checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 32 "+job.top+
+                  " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
+      
   
   rs = open(workdir+"/runsbdart","w")
   rs.write(jobscript)
@@ -786,12 +877,12 @@ def _prep_lmdz(job):
     for jlat in range(lats[0],lats[1]):
       csz,azm,surf,sic,tsurf,altz = analyzecell_lmdz(data,jlat,jlon,
                                                      workdir+"/sbdart-%02d_%02d"%(jlat,jlon),
-                                                     grav=grav,smooth=smooth)
+                                                     grav=grav,smooth=smooth,clouds=clouds)
       if uniform:
           surf='uniform'
       latitude = data['latitude'][jlat]
       write_input(workdir+"/sbdart-%02d_%02d"%(jlat,jlon),csz,azm,latitude,surf,pCO2,p0,tsurf,altz,
-                  flux,albedo=unialb,clouds=clouds,flat=flat,sic=sic,spec=star,smooth=smooth)
+                  flux,wmin=wmin,albedo=unialb,flat=flat,sic=sic,spec=star,smooth=smooth)
       print "Prepped lat %02d lon %02d"%(jlat,jlon)
 
   
@@ -822,6 +913,17 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   else:
     lons = [0,64]
     
+  if "outhopper" in job.parameters:
+    dest = job.top+"/sbdart/"+job.parameters["outhopper"]
+    os.system("mkdir "+job.top+"/sbdart/"+job.parameters["outhopper"])
+  else:
+    dest = job.top+"/sbdart/output"
+    
+  token_name = "token"+job.pid+"_%02d-%02d-%02d-%02d.crwl"%(lats[0],lats[1],lons[0],lons[1])
+  
+  os.system("mv "+dest+"/running/token"+job.pid+".crwl "+
+            dest+"/running/"+token_name)
+  
   data = nc.Dataset("hopper/"+job.parameters["gcm"],"r")  
   
   if "pCO2" in job.parameters:
@@ -856,11 +958,6 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       lon1=0
       lon2=64
     
-  if "outhopper" in job.parameters:
-    dest = job.top+"/sbdart/"+job.parameters["outhopper"]
-    os.system("mkdir "+job.top+"/sbdart/"+job.parameters["outhopper"])
-  else:
-    dest = job.top+"/sbdart/output"
     
   star=False
   if "starspec" in job.parameters:
@@ -891,6 +988,12 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       uniform=True
       unialb = float(job.parameters["unialb"])
       
+
+  wmin=0.55 #microns
+  if "wmin" in job.parameters:
+      wmin = float(job.parameters["wmin"])
+          
+      
   nlats = len(data.variables['lat'][:])
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
@@ -901,37 +1004,92 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       if star:
           os.system("cp -r "+job.top+"/sbdart/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
   
-  jobscript =("#!/bin/bash -l                                                  \n"+
-              "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
-              "#PBS -q "+str(job.queue)+"                                      \n"+
-              "#PBS -m "+notify+"                                               \n"+
-              "#PBS -r n                                                        \n"+
-              "#PBS -l walltime=48:00:00                                        \n"+
-              "#PBS -N "+job.name+"                                             \n"
-              "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-              " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-              "cd $PBS_O_WORKDIR                                                \n"+
-              "module unload gcc/4.9.1                                          \n"+
-              "module unload python/2.7.9                                       \n"+
-              "module load intel/intel-17                                       \n"+
-              "module load openmpi/2.0.1-intel-17                               \n"+
-              "module load python                                              \n"+
-              "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
-              "do \n"+
-              "     for il in {%02d..%02d};                        \n"%(lons[0],lons[1]-1)+
-              "     do \n"+
-              "          ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
-              "          ILON=`printf '%02d' $(( 10#$il ))`           \n"+
-              "          echo $ILAT $ILON              \n"+
-              "          TAG=${ILAT}_${ILON}                    \n"+
-              "          cd "+workdir+"/sbdart-$TAG                          \n"+
-              "          ./sbdart > "+workdir+"/sbout.$TAG                \n"+
-              "          cd "+workdir+"                                  \n"+
-              "     done                                    \n"+
-              "done \n"+
-              './release.sh "'+dest+'"                                \n'+
-              "python checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
-              " "+job.parameters["type"]+" "+job.parameters["gcm"]+"          \n")
+  
+  role = "dom"
+  if "ROLE" in job.parameters:
+      role = job.parameters["ROLE"] #"dom" or "sub" for dominant/submissive
+  
+   
+  color=False
+  if "color" in job.parameters:
+      if job.parameters["color"]=="True":
+          color=True
+      else:
+          color=False
+  
+  makemap=False
+  if "map" in job.parameters:
+      if job.parameters["map"]=="True":
+          makemap=True
+      else:
+          makemap=False
+  
+  
+  tag = ''
+  if color:
+      tag+="color "
+  if makemap:
+      tag+="map "
+  
+  if role=="sub":
+      jobscript =("#!/bin/bash -l                                                  \n"+
+                  "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
+                  "#PBS -q "+str(job.queue)+"                                      \n"+
+                  "#PBS -m "+notify+"                                               \n"+
+                  "#PBS -r n                                                        \n"+
+                  "#PBS -l walltime=48:00:00                                        \n"+
+                  "#PBS -N "+job.name+"                                             \n"
+                  "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
+                  " nodes,ppn,walltime and my_job_name VALUES                       \n"+
+                  "cd $PBS_O_WORKDIR                                                \n"+
+                  "module load gcc/4.9.1                                          \n"+
+                  "module load python/2.7.9                                       \n"+
+                  "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
+                  "do \n"+
+                  "     for il in {%02d..%02d};                        \n"%(lons[0],lons[1]-1)+
+                  "     do \n"+
+                  "          ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+                  "          ILON=`printf '%02d' $(( 10#$il ))`           \n"+
+                  "          echo $ILAT $ILON              \n"+
+                  "          TAG=${ILAT}_${ILON}                    \n"+
+                  "          cd "+workdir+"/sbdart-$TAG                          \n"+
+                  "          ./sbdart > "+workdir+"/sbout.$TAG                \n"+
+                  "          cd "+workdir+"                                  \n"+
+                  "     done                                    \n"+
+                  "done \n"+
+                  "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
+                  './release.sh "'+dest+'"                                \n')
+      
+  else:
+      jobscript =("#!/bin/bash -l                                                  \n"+
+                  "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
+                  "#PBS -q "+str(job.queue)+"                                      \n"+
+                  "#PBS -m "+notify+"                                               \n"+
+                  "#PBS -r n                                                        \n"+
+                  "#PBS -l walltime=48:00:00                                        \n"+
+                  "#PBS -N "+job.name+"                                             \n"
+                  "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
+                  " nodes,ppn,walltime and my_job_name VALUES                       \n"+
+                  "cd $PBS_O_WORKDIR                                                \n"+
+                  "module load gcc/4.9.1                                          \n"+
+                  "module load python/2.7.9                                       \n"+
+                  "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
+                  "do \n"+
+                  "     for il in {%02d..%02d};                        \n"%(lons[0],lons[1]-1)+
+                  "     do \n"+
+                  "          ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+                  "          ILON=`printf '%02d' $(( 10#$il ))`           \n"+
+                  "          echo $ILAT $ILON              \n"+
+                  "          TAG=${ILAT}_${ILON}                    \n"+
+                  "          cd "+workdir+"/sbdart-$TAG                          \n"+
+                  "          ./sbdart > "+workdir+"/sbout.$TAG                \n"+
+                  "          cd "+workdir+"                                  \n"+
+                  "     done                                    \n"+
+                  "done \n"+
+                  "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
+                  './release.sh "'+dest+'"                                \n'+
+                  "python checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
   
   rs = open(workdir+"/runsbdart","w")
   rs.write(jobscript)
@@ -944,12 +1102,12 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
     for jlat in range(lats[0],lats[1]):
       csz,azm,surf,sic,tsurf,altz = analyzecell_plasim(data,jlat,jlon,
                                                        workdir+"/sbdart-%02d_%02d"%(jlat,jlon),
-                                                       grav=grav,smooth=smooth)
+                                                       grav=grav,smooth=smooth,clouds=clouds)
       if uniform:
           surf='uniform'
       latitude = data.variables['lat'][jlat]
       write_input(workdir+"/sbdart-%02d_%02d"%(jlat,jlon),csz,azm,latitude,surf,pCO2,p0,tsurf,altz,
-                  flux,albedo=unialb,clouds=clouds,flat=flat,sic=sic,spec=star,smooth=smooth)
+                  flux,wmin=wmin,albedo=unialb,flat=flat,sic=sic,spec=star,smooth=smooth)
       print "Prepped lat %02d lon %02d"%(jlat,jlon)
 
 def submit(job):

@@ -41,19 +41,6 @@ import time
 #   source
 #   notify
 
-jobscript1 =("#!/bin/bash -l                                                  \n"+
-            "#PBS -l nodes=1:ppn=8                                            \n"+
-            "#PBS -q workq                                                    \n"+
-            "#PBS -r n                                                        \n"+
-            #"#PBS -m ae                                                       \n"+
-            "#PBS -l walltime=48:00:00                                        \n")
-jobscript2 =("# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-	    " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-            "cd $PBS_O_WORKDIR                                                \n"+
-            "module unload gcc/4.9.1                                          \n"+
-            "module unload python/2.7.9                                       \n"+
-            "module load intel/intel-17                                       \n"+
-            "module load openmpi/2.0.1-intel-17                               \n")
 
 
 def edit_namelist(jid,filename,arg,val): 
@@ -87,10 +74,12 @@ def edit_namelist(jid,filename,arg,val):
 def prep(job):
 
   sig=job.name
-  jid=job.home
+  jid=str(job.home)
   pid=job.pid
   args=job.args
   fields=job.fields
+  
+  workdir = "plasim/job"+jid
   
   if "source" in job.parameters:
     source = job.parameters["source"]
@@ -99,15 +88,11 @@ def prep(job):
 
   
   print "Setting stuff for job "+sig+" in plasim/job"+jid+" which is task number "+pid
-  print "Arguments are:",fields
+  print "Arguments are:",fields[2:]
   
-  f=open("plasim/job"+jid+"/crawljob","w")
-  
-  emailtag = "#PBS -m ae \n"
+  notify = 'ae'
   scriptfile = "run.sh"
   
-  f.write(jobscript1+"#PBS -N "+sig+" \n"+emailtag+jobscript2+"./"+scriptfile+"\n")
-  f.close()
   
   #PlaSim
   
@@ -116,8 +101,20 @@ def prep(job):
   os.system("cp plasim/"+source+"/* plasim/job"+jid+"/")
   os.system("rm plasim/job"+jid+"/plasim_restart")
   os.system("cp plasim/"+scriptfile+" plasim/job"+jid+"/")
+  os.system("cp crawldefs.py plasim/job"+jid+"/")
   
-  for name in job.fields:
+  if "cleanup" in job.parameters:
+    cleanup = job.parameters["cleanup"]
+  else:
+    cleanup = 'release-plasim.py'
+  os.system("cp plasim/"+cleanup+" plasim/job"+jid+"/")
+  
+  tag = 'all'
+  
+  keeprs = False
+  monitor = False
+  
+  for name in job.fields[2:]:
     val = job.parameters[name]
     found=False    
         
@@ -129,17 +126,22 @@ def prep(job):
       edit_namelist(jid,"planet_namelist","GSOL0",val) 
       found=True
       
+    if name=="startemp":
+      edit_namelist(jid,"radmod_namelist","NSTARTEMP","1")
+      edit_namelist(jid,"radmod_namelist","STARBBTEMP",val)
+      found=True
+      
     if name=="pCO2":
       found=True
       gotpress=False
       if "pressure" in fields:
-	p0 = float(job.parameters["pressure"])
-	gotpress=True
+        p0 = float(job.parameters["pressure"])
+        gotpress=True
       if not gotpress:
-	p0 += float(val)
-	p0 *= 1.0e-6
-	edit_namelist(jid,"plasim_namelist","PSURF",str(p0*0.1))
-	
+        p0 += float(val)
+        p0 *= 1.0e-6
+        edit_namelist(jid,"plasim_namelist","PSURF",str(p0*1.0e5))
+    
       pCO2 = float(val)/(p0*1.0e6)*1.0e6 #ppmv
       edit_namelist(jid,"radmod_namelist","CO2",str(pCO2))      
       
@@ -149,6 +151,21 @@ def prep(job):
       p0 = float(val)*1.0e6
       edit_namelist(jid,"plasim_namelist","PSURF",str(p0*0.1))
        
+    if name=="alloutput":
+      found=True
+      if int(job.parameters["alloutput"])==0:
+          tag=''
+      
+    if name=="keeprestart":
+      found=True
+      if int(job.parameters["keeprestart"])==1:
+          keeprs = True
+        
+    if name=="monitor":
+      found=True
+      if int(job.parameters["monitor"])==1:
+          monitor = True
+      
     if name=="year": #In days
       found=True
       edit_namelist(jid,"plasim_namelist","N_DAYS_PER_YEAR",val) 
@@ -181,12 +198,24 @@ def prep(job):
       found=True
       edit_namelist(jid,"planet_namelist","ROTSPD",val)
       
+    if name=="lockedyear": #Year length in days for a tidally-locked planet_namelist, and lon0.
+      found=True
+      val0 = val.split('/')[0]
+      val1 = val.split('/')[1]
+      edit_namelist(jid,"planet_namelist","ROTSPD",str(1.0/float(val0)))
+      #edit_namelist(jid,"planet_namelist","SIDEREAL_DAY","86400.0")
+      #edit_namelist(jid,"planet_namelist","SOLAR_DAY","86400.0")
+      #edit_namelist(jid,"planet_namelist","TROPICAL_YEAR","31536000.0")
+      #edit_namelist(jid,"planet_namelist","SIDEREAL_YEAR","31536000.0")
+      edit_namelist(jid,"radmod_namelist","NFIXED","1")
+      edit_namelist(jid,"radmod_namelist","FIXEDLON",val1)
+      
     if name=="restart":
       found=True
       if val!="none":
-	os.system("cp plasim/job"+jid+"/"+val+" plasim/job"+jid+"/plasim_restart")
+        os.system("cp hopper/"+val+" plasim/job"+jid+"/plasim_restart")
       else:
-	os.system("rm plasim/job"+jid+"/plasim_restart")
+        os.system("rm plasim/job"+jid+"/plasim_restart")
      
     if name=="gravity":
       found=True
@@ -271,22 +300,16 @@ def prep(job):
       
     if name=="script":
       found=True
-      f=open("plasim/job"+jid+"/crawljob","w")
-      f.write(jobscript1+"#PBS -N "+sig+" \n"+emailtag+jobscript2+"./"+val+"\n")
-      f.close()
       scriptfile=val
-      os.system("cp "+val+" plasim/job"+jid+"/")
+      os.system("cp plasim/"+val+" plasim/job"+str(job.home)+"/")
       
     if name=="notify":
       found=True
-      f=open("plasim/job"+jid+"/crawljob","w")
-      emailtag = "#PBS -m "+val+" \n"
-      f.write(jobscript1+"#PBS -N "+sig+" \n"+emailtag+jobscript2+"./"+scriptfile+"\n")
-      f.close()
+      notify = val
       
     if name=="extra":
       found=True
-      os.system("cp -r "+val+" plasim/job"+jid+"/")
+      os.system("cp -r plasim/"+val+" plasim/job"+jid+"/")
       
     if name=="runyears":
       found=True
@@ -294,10 +317,10 @@ def prep(job):
       fnl=f.read().split('\n')
       f.close()
       for l in range(0,len(fnl)-2):
-	line=fnl[l].split("=")
-	if len(line)>0:
-	  if line[0]=="YEARS":
-	    fnl[l] = "YEARS="+val
+        line=fnl[l].split("=")
+        if len(line)>0:
+            if line[0]=="YEARS":
+                fnl[l] = "YEARS="+val
       fnl='\n'.join(fnl)
       f=open("plasim/job"+jid+"/most_plasim_run","w")
       f.write(fnl)
@@ -311,6 +334,9 @@ def prep(job):
     if name=="source":
       found=True #We already took care of it
       
+    if name=='cleanup':
+      found=True #We already took care of it
+      
     if not found: #Catchall for options we didn't include
       found=True
       args = name.split('@')
@@ -319,12 +345,38 @@ def prep(job):
         name=args[0]
         edit_namelist(jid,namelist,name,val)
       else:
-        print "Unknown parameter! Submit unsupported parameters as KEY@NAMELIST in the header!"
+        print "Unknown parameter "+name+"! Submit unsupported parameters as KEY@NAMELIST in the header!"
       
-  print "Arguments set"  
+  print "Arguments set"
+  
+  jobscript =("#!/bin/bash -l                                                  \n"+
+              "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
+              "#PBS -q "+str(job.queue)+"                                      \n"+
+              "#PBS -m "+notify+"                                               \n"+
+              "#PBS -r n                                                        \n"+
+              "#PBS -l walltime=48:00:00                                        \n"+
+              "#PBS -N "+job.name+"                                             \n"
+              "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
+              " nodes,ppn,walltime and my_job_name VALUES                       \n"+
+              "cd $PBS_O_WORKDIR                                                \n"+
+              "module load gcc/4.9.1                                          \n"+
+              "module load python/2.7.9                                       \n"+
+              "module load intel/intel-17                                       \n"+
+              "module load openmpi/2.0.1-intel-17                               \n"+
+              "./"+scriptfile+" "+str(job.ncores)+"                             \n")
+  if keeprs:
+      jobscript+= "cp plasim_restart ../output/"+job.name+"_restart            \n"
+  if monitor:
+      jobscript+= "python monitor_balance.py                                   \n"
+      
+  jobscript += 'python '+cleanup+' '+job.name+' '+tag+'                           \n')
+  
+  rs = open(workdir+"/runplasim","w")
+  rs.write(jobscript)
+  rs.close()
   
 def submit(job):
-  os.system("cd plasim/job"+job.home+" && qsub crawljob && cd ../../")
+  os.system("cd plasim/job"+str(job.home)+" && qsub runplasim && cd "+job.top)
   time.sleep(1.0)
   tag = job.getID()
   job.write()

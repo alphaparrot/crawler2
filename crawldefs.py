@@ -25,21 +25,34 @@ def getjobs():
         os.system("qstat -f "+t+" > jinfo.tmp")
         jf = open("jinfo.tmp","r")
         jinfo = jf.read().split('\n')[1:-2]
+        while '' in jinfo:
+            jinfo.remove('')
         jf.close()
         os.system("rm jinfo.tmp")
         ncpus = 1
         for l in jinfo:
-            if l.split()[0]=="init_work_dir":
-                workdir = l.split()[2]
-            if l.split()[0]=="Resource_List.ncpus":
-                ncpus = int(l.split()[2])
-        job = np.load(workdir+"/job.npy").item()
+            if len(l.split())>0:
+                if l.split()[0]=="init_work_dir":
+                    workdir = l.split()[2]
+                #if l.split()[0]=="Resource_List.ncpus":
+                    #ncpus = int(l.split()[2])
+                if l.split()[0]=="Resource_List.nodes":
+                    ncpus = int(l.split()[2].split("=")[1])
+        try:
+            job = np.load(workdir+"/job.npy").item()
+        except:
+            for nl in range(0,len(jinfo)):
+                l = jinfo[nl]
+                if len(l.split())>0:
+                    if l.split()[0]=="init_work_dir":
+                        workdir = l.split()[2] + jinfo[nl+1].split()[0]
+            job = np.load(workdir+"/job.npy").item()
         jid = job.home
         if jid>=len(resources[job.model]):
             tmp = np.zeros(jid+100)
             tmp[:len(resources[job.model])] = resources[job.model][:]
             resources[job.model] = tmp
-        resources[job.model][jid] = float(ncpus)/MODELS[job.model]
+        resources[job.model][jid] = float(ncpus)/8.0#MODELS[job.model]
     
     return resources
 

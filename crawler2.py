@@ -9,13 +9,17 @@ from crawldefs import *
 if __name__=="__main__":    
   #Check which resources are in use and compare to our max allotment
   
+  f=open(".home","r")
+  top = f.read().split('\n')[0]
+  f.close()
+  
   if "DRYRUN" in sys.argv[:]:
       dryrun=True
   else:
       dryrun=False
   
   f=open("nnodes.crwl","r")
-  nnodes=float(f.read().split('\n')[0])
+  nnodes=float(f.read().split('\n')[0])+1.0 #Chances are this is being called by one of the current jobs!
   f.close()
   #resources={}
   #for m in MODELS.keys():
@@ -55,7 +59,7 @@ if __name__=="__main__":
               queued=True
               qpid=int(task[0])
               taskmodel = task[1]
-              if running+(1.0/MODELS[taskmodel])<=nnodes:  #We might be at 1 cpu less than capacity,
+              if running+(1.0/8.0)<=nnodes: #MODELS[taskmodel] #We might be at 1 cpu less than capacity,
                 mark=i                                     #so a plasim job might put us over the limit.
                 f=open("tasklog.crwl","a")
                 f.write("\nFound job "+' '.join(task))
@@ -87,8 +91,8 @@ if __name__=="__main__":
           f.close()          
       else:                           #We didn't find an available task
         f=open("tasklog.crwl","a")
-        f.write("\nNo open jobs in task queue; all done!")
-        print "No jobs in priority queue"
+        f.write("\nNo open jobs in priority queue; all done!")
+        print "No open jobs in priority queue"
         f.close()
         #running=nnodes
         priority = False
@@ -105,19 +109,19 @@ if __name__=="__main__":
         if float(resources[taskmodel][i])==0.0:
           rid = i
           print resources[taskmodel]
-          resources[taskmodel][i]=newjob.ncores/float(MODELS[taskmodel])
+          resources[taskmodel][i]=newjob.ncores/8.0#float(MODELS[taskmodel])
           print resources[taskmodel]
           newjob.home = rid
           goahead = True
           break
       if not goahead:                 #No open slot found for this model
-        if running+float(newjob.ncores)/MODELS[taskmodel] <= nnodes: #We do have space for one more though
+        if running+float(newjob.ncores)/8.0 <= nnodes: #MODELS[taskmodel] #We do have space for one more though
           print resources[taskmodel]
           tmp = np.zeros(len(resources[taskmodel])+100)
           tmp[:len(resources[taskmodel])] = resources[taskmodel][:]
           n0 = len(resources[taskmodel])
           resources[taskmodel] = tmp
-          resources[taskmodel][n0] = newjob.ncores/float(MODELS[taskmodel])
+          resources[taskmodel][n0] = newjob.ncores/8.0#float(MODELS[taskmodel])
           print resources[taskmodel]
           rid = n0
           newjob.home = rid
@@ -144,7 +148,7 @@ if __name__=="__main__":
         f=open("tasklog.crwl","a")
         f.write("\nQueued job "+newjob.name+" in "+newjob.queue+" for "+str(newjob.ncores)+" cores.")
         f.close()
-        running += float(newjob.ncores)/MODELS[taskmodel]    #Note that we are *that* much closer to the limit.
+        running += float(newjob.ncores)/8.0#MODELS[taskmodel]    #Note that we are *that* much closer to the limit.
   
   
   print "Moving on to normal tasks"
@@ -166,7 +170,7 @@ if __name__=="__main__":
             if int(task[3])==0:
               queued=int(task[0])
               taskmodel = task[1]
-              if running+(1.0/MODELS[taskmodel])<=nnodes:  #We might be at 1 cpu less than capacity,
+              if running+(1.0/8.0)<=nnodes:  #MODELS[taskmodel] #We might be at 1 cpu less than capacity,
                 mark=i                                     #so a plasim job might put us over the limit.
                 f=open("tasklog.crwl","a")
                 f.write("\nFound job "+' '.join(task))
@@ -213,19 +217,21 @@ if __name__=="__main__":
         if float(resources[taskmodel][i])==0.0:
           rid = i
           print resources[taskmodel]
-          resources[taskmodel][i]=newjob.ncores/float(MODELS[taskmodel])
+          print newjob.ncores,MODELS[taskmodel]
+          resources[taskmodel][i]=newjob.ncores/8.0#float(MODELS[taskmodel])
           print resources[taskmodel]
           newjob.home = rid
           goahead = True
           break
       if not goahead:                 #No open slot found for this model
-        if running+float(newjob.ncores)/MODELS[taskmodel] <= nnodes: #We do have space for one more though
+        if running+float(newjob.ncores)/8.0 <= nnodes: #MODELS[taskmodel] #We do have space for one more though
           print resources[taskmodel]
+          print newjob.ncores,MODELS[taskmodel]
           tmp = np.zeros(len(resources[taskmodel])+100)
           tmp[:len(resources[taskmodel])] = resources[taskmodel][:]
           n0 = len(resources[taskmodel])
           resources[taskmodel] = tmp
-          resources[taskmodel][n0] = newjob.ncores/float(MODELS[taskmodel])
+          resources[taskmodel][n0] = newjob.ncores/8.0#float(MODELS[taskmodel])
           print resources[taskmodel]
           rid = n0
           newjob.home = rid
@@ -248,8 +254,14 @@ if __name__=="__main__":
         else:
             newjob.tag='xxxxx.doug'
         newjob.write()
-        running += float(newjob.ncores)/MODELS[taskmodel]    #Note that we are *that* much closer to the limit.
-        
+        running += float(newjob.ncores)/8.0#MODELS[taskmodel]    #Note that we are *that* much closer to the limit.
+      
+    resources = getjobs()  
+    
+    running = 0
+    for r in resources.keys():
+      running += np.sum(resources[r]) 
+      
   #folders = []
   ##print MODELS.keys()
   #for m in MODELS.keys():
@@ -271,6 +283,9 @@ if __name__=="__main__":
   #cjb = open("currentjobs.crwl","w")
   #cjb.write(htext)
   #cjb.close()
+  os.system("echo 'Relinquishing control'>>tasklog.crwl")
+  f=open(top+"/inuse.crwl","w")        #Release ownership of crawler.py
+  f.write('0')
+  f.close()
   
-  os.system("echo '0'>inuse.crwl")         #Release ownership of crawler.py
-     
+  os.system("echo 'Main status is now $(cat "+top+"/inuse.crwl)'>>tasklog.crwl")

@@ -26,6 +26,8 @@ def sweep(top):
     usef.close()
     waitlist = glob.glob(top+"/waitlist/*.npy")
     if inuse==0: #If it's in use, we do nothing and just pass away
+        name = np.load("job.npy").item().name
+        os.system("echo 'Job "+name+" assuming control'>>"+top+"/inuse.log")
         os.system("echo '1'>"+top+"/inuse.crwl")
         for jobf in waitlist:
             print jobf
@@ -48,7 +50,7 @@ def sweep(top):
             #runf.write(running)
             #runf.close()
             
-            if int(job.home)<0:
+            if int(pid)<0:
                 tasksf=open(top+"/priority.crwl","r")
                 tasks = tasksf.read().split('\n')
                 tasksf.close()
@@ -86,11 +88,12 @@ def sweep(top):
             
             os.system("rm "+jobf)
         
+        os.system("echo 'Job "+name+" attempting to run crawler2'>>"+top+"/inuse.log")
         os.system("cd "+top+" && python crawler2.py")    
             
 
 if __name__=="__main__":
-    if "MASTER" in sys.argv[1:]:
+    if "MASTER" in sys.argv[:]:
         sweep(os.getcwd()) #ONLY CALL FROM TOP-LEVEL DIRECTORY
     else:
         joinwaitlist()

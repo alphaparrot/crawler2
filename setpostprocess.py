@@ -14,7 +14,7 @@ def prep(job):
     
     cwd = os.getcwd()
     
-    os.system("cp postprocess/clean/postprocess.py "+workdir+'/')
+    os.system("cp postprocess/clean/* "+workdir+'/')
     os.system("cp release.py "+workdir+'/')
     os.system("cp crawldefs.py "+workdir+"/")
     
@@ -45,24 +45,70 @@ def prep(job):
         queue = job.parameters["QUEUE"]
     else:
         queue = "workq"
+        
+    part2 = False
+    if "part2" in job.parameters:
+        if job.parameters["part2"]=="0":
+            part2=False
+        else:
+            part2=True
     
-    jobscript =("#!/bin/bash -l                                                  \n"+
-                "#PBS -l nodes=1:ppn="+ncpu+"                                    \n"+
-                "#PBS -q "+queue+"                                               \n"+
-                "#PBS -r n                                                        \n"+
-                "#PBS -l walltime=48:00:00                                        \n"+
-                "#PBS -m abe                                                      \n"+
-                "#PBS -N "+job.name+"                                             \n"
-                "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-                " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-                "cd $PBS_O_WORKDIR                                                \n"+
-                "module load gcc/4.9.1                                            \n"+
-                "module load python/2.7.9                                         \n"+
-                "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
-                "python postprocess.py "+lon0+"                                   \n"+
-                "cp spectra.nc "+cwd+"/postprocess/output/"+job.name+"_spectra.nc \n"+
-                "cp phasecurve.nc "+cwd+"/postprocess/output/"+job.name+"_phasecurve.nc \n"+
-                "python release.py \n")
+    color=False
+    if "color" in job.parameters:
+        if job.parameters["color"]=="True":
+            color=True
+        else:
+            color=False
+    
+    makemap=False
+    if "map" in job.parameters:
+        if job.parameters["map"]=="True":
+            makemap=True
+        else:
+            makemap=False
+    
+    tag = ''
+    if color:
+        tag+="color "
+    if makemap:
+        tag+="map "
+            
+    if not part2:
+        jobscript =("#!/bin/bash -l                                                  \n"+
+                    "#PBS -l nodes=1:ppn="+ncpu+"                                    \n"+
+                    "#PBS -q "+queue+"                                               \n"+
+                    "#PBS -r n                                                        \n"+
+                    "#PBS -l walltime=48:00:00                                        \n"+
+                    "#PBS -m abe                                                      \n"+
+                    "#PBS -N "+job.name+"                                             \n"
+                    "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
+                    " nodes,ppn,walltime and my_job_name VALUES                       \n"+
+                    "cd $PBS_O_WORKDIR                                                \n"+
+                    "module load gcc/4.9.1                                            \n"+
+                    "module load python/2.7.9                                         \n"+
+                    "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
+                    "python postprocess.py "+lon0+" "+tag+"                           \n"+
+                    "cp spectra.nc "+cwd+"/postprocess/output/"+job.name+"_spectra.nc \n"+
+                    "cp phasecurve.nc "+cwd+"/postprocess/output/"+job.name+"_phasecurve.nc \n"+
+                    "python release.py \n")
+    else:
+        jobscript =("#!/bin/bash -l                                                  \n"+
+                    "#PBS -l nodes=1:ppn="+ncpu+"                                    \n"+
+                    "#PBS -q "+queue+"                                               \n"+
+                    "#PBS -r n                                                        \n"+
+                    "#PBS -l walltime=48:00:00                                        \n"+
+                    "#PBS -m abe                                                      \n"+
+                    "#PBS -N "+job.name+"                                             \n"
+                    "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
+                    " nodes,ppn,walltime and my_job_name VALUES                       \n"+
+                    "cd $PBS_O_WORKDIR                                                \n"+
+                    "module load gcc/4.9.1                                            \n"+
+                    "module load python/2.7.9                                         \n"+
+                    "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
+                    "python postspectra.py "+tag+"                                    \n"+
+                    "cp phasecurve.nc "+cwd+"/postprocess/output/"+job.name+"_phasecurve.nc \n"+
+                    "python release.py \n")
+        
     
      
     rs = open(workdir+"/runpostprocess","w")
