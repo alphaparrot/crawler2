@@ -4,7 +4,7 @@ import sys
 import netCDF4 as nc
 import glob
 
-gplasim = False
+gplasim = True
 
 #This version lets the model relax.
 
@@ -41,7 +41,7 @@ def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05):
     #Key is the netCDF variable to evaluate, mean toggles whether to track the average or total,
     #radius is the planet radius in meters, and baseline is the number of years over which to measure
     #slope. Default is to track surface temperature. Threshhold is the maximum slope we'll allow.
-  files = sorted(glob.glob(".nc"))
+  files = sorted(glob.glob("*.nc"))
   if len(files) < baseline+2:
     return False
   else:
@@ -71,15 +71,18 @@ def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05):
       return False
   
 def hasnans():
-    files = sorted(glob.glob(".nc"))
+    files = sorted(glob.glob("*.nc"))
+    print "NetCDF  files:",files
+    if type(files)!=type([1,2,3]):
+        files = [files,]
     ncd = nc.Dataset(files[-1],"r") #Should be most recent
     if np.isnan(np.amax(ncd.variables['ts'][-1,:])):
         return True
     return False
 
-def energybalanced(threshhold = 1.0e-4,baseline=13):
-    files = sorted(glob.glob(".nc"))
-    if len(files) < baseline+2:
+def energybalanced(threshhold = 1.0e-4,baseline=50): #Takes an average of 200 years
+    files = sorted(glob.glob("*.nc"))
+    if len(files) < baseline: #Run for minimum of baseline years
         return False
     else:
         sbalance = []
@@ -88,32 +91,48 @@ def energybalanced(threshhold = 1.0e-4,baseline=13):
             ncd = nc.Dataset(files[n],"r")
             ntr = ncd.variables['ntr'][:]
             hfns = ncd.variables['hfns'][:]
+            lat = ncd.variables['lat'][:]
+            lon = ncd.variables['lon'][:]
             ncd.close()
             topt = np.zeros(12)
             bott = np.zeros(12)
             for m in range(0,12):
-                topt[m] = spatialmath(ntr[m,:,:])
-                bott[m] = spatialmath(hfns[m,:,:])
+                topt[m] = spatialmath(lat,lon,ntr[m,:,:])
+                bott[m] = spatialmath(lat,lon,hfns[m,:,:])
             sbalance.append(np.mean(bott))
             toabalance.append(np.mean(topt))
-        savg = np.mean(sbalance[-3:])
-        tavg = np.mean(toabalance[-3:])
-        if savg<threshhold and tavg<threshhold:
-            return True
+        savgs = []
+        tavgs = []
+        for n in range(9,len(sbalance)):
+            savgs.append(abs(np.mean(sbalance[n-9:n+1]))) #10-year average energy balance
+            tavgs.append(abs(np.mean(toabalance[n-9:n+1])))
+        sslopes = []
+        tslopes = []
+        for n in range(4,len(savgs)): #5-baseline slopes in distance from energy balance
+            sslopes.append(np.polyfit(np.arange(5)+1,savgs[n-4:n+1],1)[0])
+            tslopes.append(np.polyfit(np.arange(5)+1,tavgs[n-4:n+1],1)[0])
+        savgslope = abs(np.mean(sslopes[-30:])) #30-year average of 5-year slopes  
+        tavgslope = abs(np.mean(tslopes[-30:]))
+        os.system("echo '%02.8f  %02.8f'>>slopes.log"%(savgslope,tavgslope))
+        print "%02.8f %02.8f"%(savgslope,tavgslope)
+        if savgslope<threshhold and tavgslope<threshhold: #Both TOA and Surface are changing at average 
+            return True                                  # of <0.1 mW/m^2/yr on 45-year baselines
         else:
             return False
         
 def getbalance():
-    files = sorted(glob.glob(".nc"))
+    files = sorted(glob.glob("*.nc"))
     ncd = nc.Dataset(files[-1],"r")
     ntr = ncd.variables['ntr'][:]
     hfns = ncd.variables['hfns'][:]
+    lat = ncd.variables['lat'][:]
+    lon = ncd.variables['lon'][:]
     ncd.close()
     topt = np.zeros(12)
     bott = np.zeros(12)
     for m in range(0,12):
-        topt[m] = spatialmath(ntr[m,:,:])
-        bott[m] = spatialmath(hfns[m,:,:])
+        topt[m] = spatialmath(lat,lon,ntr[m,:,:])
+        bott[m] = spatialmath(lat,lon,hfns[m,:,:])
     return (np.mean(bott),np.mean(topt))
     
         
@@ -125,13 +144,14 @@ if __name__=="__main__":
     wf.close()
   EXP="MOST"
   NCPU=int(sys.argv[1])
-  os.system("rm -f plasim_restart") #Uncomment for a fresh run when you haven't cleaned up beforehand
+  #os.system("rm -f plasim_restart") #Uncomment for a fresh run when you haven't cleaned up beforehand
   os.system("rm -f Abort_Message")
   os.system("echo 'SURFACE      TOA'>balance.log")
+  os.system("echo 'SURFACE      TOA'>slopes.log")
   year=0
-  minyears=13
+  minyears=50
   relaxed=False
-  while year < minyears or not energybalanced():
+  while year < minyears or not energybalanced(threshhold=4.0e-4):
     year+=1
     dataname=EXP+".%04d"%year
     diagname=EXP+"_DIAG.%04d"%year

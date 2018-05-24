@@ -9,6 +9,7 @@ MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale 
           "lmdz":8}             #code is MPI/OpenMP-agnostic.
 
 def getjobs():
+    print "Checking jobs"
     os.system("qstat -u paradise > cjobs.tmp")
     cjf = open("cjobs.tmp","r")
     joblist = cjf.read().split('\n')[5:-1]
@@ -20,8 +21,10 @@ def getjobs():
     tags = []
     for j in joblist:
         job = j.split()
-        tags.append(job[0])
+        if job[3][5:]!="lmdz-":
+            tags.append(job[0])
     for t in tags:
+        print "Looking up "+t
         os.system("qstat -f "+t+" > jinfo.tmp")
         jf = open("jinfo.tmp","r")
         jinfo = jf.read().split('\n')[1:-2]
@@ -38,6 +41,7 @@ def getjobs():
                     #ncpus = int(l.split()[2])
                 if l.split()[0]=="Resource_List.nodes":
                     ncpus = int(l.split()[2].split("=")[1])
+        ourjob=True
         try:
             job = np.load(workdir+"/job.npy").item()
         except:
@@ -46,13 +50,17 @@ def getjobs():
                 if len(l.split())>0:
                     if l.split()[0]=="init_work_dir":
                         workdir = l.split()[2] + jinfo[nl+1].split()[0]
-            job = np.load(workdir+"/job.npy").item()
-        jid = job.home
-        if jid>=len(resources[job.model]):
-            tmp = np.zeros(jid+100)
-            tmp[:len(resources[job.model])] = resources[job.model][:]
-            resources[job.model] = tmp
-        resources[job.model][jid] = float(ncpus)/8.0#MODELS[job.model]
+            try:
+                job = np.load(workdir+"/job.npy").item()
+            except:
+                ourjob=False
+        if ourjob:
+            jid = job.home
+            if jid>=len(resources[job.model]):
+                tmp = np.zeros(jid+100)
+                tmp[:len(resources[job.model])] = resources[job.model][:]
+                resources[job.model] = tmp
+            resources[job.model][jid] = float(ncpus)/8.0#MODELS[job.model]
     
     return resources
 

@@ -103,6 +103,7 @@ if __name__=="__main__":
       print "Engaging a priority task"
       
       goahead = False
+      print "Creating a Job with header\n",header,"\n and arguments \n",' '.join(task) 
       newjob = Job(header,' '.join(task),-1)       #Collect and organize the job parameters
       
       for i in range(0,len(resources[taskmodel])):
@@ -153,6 +154,7 @@ if __name__=="__main__":
   
   print "Moving on to normal tasks"
   print running,nnodes
+  capacityflag = False
   while running < nnodes: #We are using less than our full allocation, and the priority list is empty.
     
     #Get next task
@@ -205,12 +207,15 @@ if __name__=="__main__":
         f.write("\nNo open jobs in task queue; all done!")
         f.close()
         running=nnodes
+        print "No open jobs in task queue; all done!"
+        capacityflag = True
         break
 
     #Engage next task
     if ready:
       
       goahead = False
+      print "Creating a Job with header\n",header,"\n and arguments \n",' '.join(task) 
       newjob = Job(header,' '.join(task),-1)       #Collect and organize the job parameters
       
       for i in range(0,len(resources[taskmodel])):
@@ -238,6 +243,7 @@ if __name__=="__main__":
           goahead = True
         else:                                       #Nope, pack up and go home
           print "At capacity."
+          capacityflag = True
       if goahead:                           #Found a job slot
         task[3] = '1'
         task = ' '.join(task)
@@ -261,7 +267,10 @@ if __name__=="__main__":
     running = 0
     for r in resources.keys():
       running += np.sum(resources[r]) 
-      
+    
+    if capacityflag:
+        running = nnodes
+    
   #folders = []
   ##print MODELS.keys()
   #for m in MODELS.keys():

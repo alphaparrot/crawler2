@@ -253,6 +253,37 @@ def prep(job):
       found=True
       edit_namelist(jid,"carbonmod_namelist","NCARBON",val) 
       
+    if name=="filtertype":
+      found=True
+      if source == "gibbs":
+        edit_namelist(jid,"plasim_namelist","NSPFILTER",val)
+        
+    if name=="filtervars":
+      found=True
+      if source == "gibbs":
+        vals = val.split(',')
+        if "q" in vals:
+          edit_namelist(jid,"plasim_namelist","FILTERQ","1")
+        else:
+          edit_namelist(jid,"plasim_namelist","FILTERQ","0")
+        if "d" in vals:
+          edit_namelist(jid,"plasim_namelist","FILTERD","1")
+        else:
+          edit_namelist(jid,"plasim_namelist","FILTERD","0")
+        if "z" in vals:
+          edit_namelist(jid,"plasim_namelist","FILTERZ","1")
+        else:
+          edit_namelist(jid,"plasim_namelist","FILTERZ","0")
+        if "t" in vals:
+          edit_namelist(jid,"plasim_namelist","FILTERT","1")
+        else:
+          edit_namelist(jid,"plasim_namelist","FILTERT","0")
+          
+    if name=="filterpower":
+      found=True
+      if source=="gibbs":
+        edit_namelist(jid,"plasim_namelist","NFILTEREXP",val)
+      
     if name=="nsupply":
       found=True
       edit_namelist(jid,"carbonmod_namelist","NSUPPLY",val) 
@@ -369,7 +400,9 @@ def prep(job):
   if monitor:
       jobscript+= "python monitor_balance.py                                   \n"
       
-  jobscript += 'python '+cleanup+' '+job.name+' '+tag+'                           \n')
+  jobscript += ("[ -e balance.log ] && cp balance.log ../output/"+job.name+"_balance.log    \n"+
+                "[ -e slopes.log ] && cp slopes.log ../output/"+job.name+"_slopes.log    \n"+ 
+                'python '+cleanup+' '+job.name+' '+tag+'                           \n')
   
   rs = open(workdir+"/runplasim","w")
   rs.write(jobscript)

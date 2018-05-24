@@ -38,19 +38,21 @@ def spatialmath(lt,ln,variable,mean=True,radius=6.371e6):
 
 
 def energybalance():
-    files = sorted(glob.glob(".nc"))
+    files = sorted(glob.glob("*.nc"))
     sbalance = np.zeros(len(files))
     toabalance = np.zeros(len(files))
     for n in range(0,len(files)):
         ncd = nc.Dataset(files[n],"r")
         ntr = ncd.variables['ntr'][:]
         hfns = ncd.variables['hfns'][:]
+        lat = ncd.variables['lat'][:]
+        lon = ncd.variables['lon'][:]
         ncd.close()
         topt = np.zeros(12)
         bott = np.zeros(12)
         for m in range(0,12):
-            topt[m] = spatialmath(ntr[m,:,:])
-            bott[m] = spatialmath(hfns[m,:,:])
+            topt[m] = spatialmath(lat,lon,ntr[m,:,:])
+            bott[m] = spatialmath(lat,lon,hfns[m,:,:])
         sbalance[n] = np.mean(bott)
         toabalance[n] = np.mean(topt)
     return (sbalance,toabalance)
