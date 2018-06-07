@@ -9,9 +9,19 @@ from crawldefs import *
 if __name__=="__main__":    
   #Check which resources are in use and compare to our max allotment
   
-  f=open(".home","r")
-  top = f.read().split('\n')[0]
-  f.close()
+  os.system("mkdir hopper")
+  os.system("mkdir waitlist")
+  
+  try:
+    f=open(".home","r")
+    top = f.read().split('\n')[0]
+    f.close()
+  except:
+    os.system("echo $(pwd)>.home")
+    f=open(".home","r")
+    top = f.read().split('\n')[0]
+    f.close()
+    
   
   if "DRYRUN" in sys.argv[:]:
       dryrun=True

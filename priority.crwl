@@ -1,4 +1,4 @@
 
 # PID MODEL JOBNAME STATUS NCORES QUEUE pCO2 pressure flux script extra notify alloutput keeprestart
--1 plasim earth3 0 16 greenq 363.96 1.021 1367.0 super-equil.sh super_relax.py ae 0 1
--2 plasim earth4 0 16 greenq 363.96 1.021 1000.0 super-equil.sh super_relax.py ae 0 1
+-1 plasim earth3 2 16 greenq 363.96 1.021 1367.0 super-equil.sh super_relax.py ae 0 1
+-2 plasim earth4 2 16 greenq 363.96 1.021 1000.0 super-equil.sh super_relax.py ae 0 1
