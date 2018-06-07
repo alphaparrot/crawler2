@@ -10,7 +10,7 @@ MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale 
 
 def getjobs():
     print "Checking jobs"
-    os.system("qstat -u paradise > cjobs.tmp")
+    os.system("qstat -u "+USER+" > cjobs.tmp")
     cjf = open("cjobs.tmp","r")
     joblist = cjf.read().split('\n')[5:-1]
     cjf.close()
