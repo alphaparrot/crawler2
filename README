@@ -86,7 +86,7 @@ finds a header line with the right number of arguments.
     -> QUEUE: this one will have to be handled by your set<model>.py routine,
           but is intended to identify which submission queue this job will use.
 
-The last line of the file should be blank.
+The last line of the file should be blank. 
 
 
 priority.crwl (IMPORTANT)
