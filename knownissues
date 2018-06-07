@@ -11,7 +11,15 @@
            the waitlist.crwl access attempts, creating a waitlist
            folder and a second executable to handle batch cleanup,
            or building cleanup into the triage module.
-           Status: BELIEVED FIXED
+           Status: MOSTLY FIXED
+                   (Implemented waitlist folder with unique tokens,
+                    and codes which submit a very large number of 
+                    jobs (SBDART) are encouraged to implement a 
+                    master-slave hierarchy where only some jobs are
+                    expected to try to execute the main program.
+                    However, sometimes this nonetheless seems to 
+                    occur when huge numbers of jobs are running. This
+                    is not an issue with larger codes like PlaSim.)
 
 28/3/2018: For whatever reason, sometimes running_<model>.crwl files
            get wiped, resulting in collisions within job folders as
@@ -22,4 +30,11 @@
            actually checks running jobs and reads their job.crwl or
            job.npy files to see which model allocation they belong to.
            This would probably also be part of the triage module.
-           Status: MAYBE FIXED?
+           Status: FIXED
+                   (running_<model>.crwl files removed; now program
+                    directly checks which jobs are running/queued, and
+                    determines which folders they're using from 
+                    system-provided information. There should now be
+                    no possibility of collision).
+           
+           

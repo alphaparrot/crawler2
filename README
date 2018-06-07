@@ -64,7 +64,7 @@ entirely up to you--the header fields and arguments in the job line will just
 be passed to the model interface you write. 
 
                     tasks.crwl header format:
-# PID MODEL JOBNAME STATUS arg1 arg2 arg3 etc etc
+# PID MODEL JOBNAME STATUS NCORES QUEUE arg1 arg2 arg3 etc etc
     
     -> # is a marker indicating that this line is a header line.
 
@@ -81,13 +81,30 @@ finds a header line with the right number of arguments.
           change to 1 when the job is submitted, and 2 when the job is done.
     -> PID is the ID number for the job. The first one in the list should be
           1, and then they should increase sequentially from there.
+    -> NCORES is the number of CPUs your job will use. The program uses this
+          to determine how much of your desired allocation this job will use.
+    -> QUEUE: this one will have to be handled by your set<model>.py routine,
+          but is intended to identify which submission queue this job will use.
 
 The last line of the file should be blank.
 
 
+priority.crwl (IMPORTANT)
+----------------------------
+This is almost identical to tasks.crwl, with two major differences: first,
+PIDs should be negative, starting with -1. Second, the purpose of this file
+is to queue up jobs that you want done as soon as possible, perhaps because
+you examined output from runs in tasks.crwl and need immediate follow-up. Any 
+open jobs in priority.crwl will be queued before any new jobs from tasks.crwl. 
+You should *not* use priority.crwl as the main list of jobs to queue, because
+that will leave you with no way to inject jobs with a higher priority than
+the main queue.
+
+
 nnodes.crwl (IMPORTANT)
 --------------------------
-The number of 8-cpu nodes you'd like to use.
+The number of 8-cpu nodes you'd like to use. Note that most nodes actually 
+have more than 8 cpus these days.
 
 
 inuse.crwl
@@ -98,19 +115,15 @@ exit, they make use of this file to make sure only one instance of crawler2.py
 is running.
 
 
-running_<model>.crwl
--------------------------
-These simply allow the program to keep track of how many jobs of this type 
-are currently running. You'll need to provide one of these for every model you
-use, but that can be as simple as renaming the ones I've provided: the program
-will add slots to these "resource" files as needed.
-
-
-waitlist.crwl
+waitlist (folder)
 --------------------------
 When programs exit, they do some cleanup work and then execute the main program.
-To make sure there are no collisions, they first put themselves in this
-waitlist, and wait until they reach the front of the line before proceeding.
+If the main program is already in use (inuse.crwl is set to 1), they place a 
+unique token in this folder, and then quietly exit. If it is not in use, they
+will claim ownership (set inuse.crwl to 1), and (in theory) unpack all tokens 
+in this folder, extracting the unique job information necessary to identify the
+job in tasks.crwl or priority.crwl. They will then set the job statuses to 2
+to indicate they have completed, and clear the token from the folder.
 
 
 release.py
@@ -119,9 +132,18 @@ This is a crucial component, but you shouldn't need to modify it. You DO however
 need to make sure that at the end of each job, release.py is executed. This 
 tells the main program that this job is no longer running, that it has completed,
 and then if the coast is clear, executes the main program to make sure another 
-job is submitted in its place. This component is why once you run crawler2.py the
-first time, it will keep itself going for as long as there are unfinished jobs
-in tasks.crwl.
+job is submitted in its place. If not, it will place a unique token in the waitlist.
+This component is why once you run crawler2.py the first time, it will keep itself 
+going for as long as there are unfinished jobs in tasks.crwl or priority.crwl.
+
+
+hopper (folder)
+--------------------------
+This is a useful general-purpose folder, whose use is not required, but recommended.
+You can put useful input or boundary condition files here, and tell your codes to
+fetch those files as parameters in tasks.crwl. You can also use this to implement
+software pipelines, where one model produces output, which is placed in the hopper,
+and which is then used as input to another code (such as a postprocessor).
 
 
 set<model>.py (CRUCIAL)
@@ -149,13 +171,20 @@ can check to make sure the jobs have been set up correctly. To use this mode,
 run the main program with "python crawler2.py DRYRUN".
 
 Several example interfaces have been provided, which I use for my own codes.
-The SBDART interface is fully-operational in its LMDZ mode, and the Postprocess
-interface is also fully-operational (and much more minimal).
+The SBDART interface is fully-operational in its LMDZ and PlaSim modes, and 
+the Postprocess interface is also fully-operational (and much more minimal).
+The PlaSim interface is the most fully-functional and complex interface yet.
 
-
-One last thing: create a folder for each model. The program will create
-directories in that folder no matter what to store information about current jobs
-running that model, even if you choose to put the work directories elsewhere.
+One last thing: create a folder for each model, named <model>. Within that folder, 
+you should include a folder with any files you need to run your code, and which your 
+set<model>.py routine will access to construct each run. A good practice is to 
+call this folder "clean"--that clearly indicates that it contains a clean version
+of the code, and allows you to create alternative folders for modified codes. 
+setplasim.py is an example of an interface that supports multiple source folders.
+The program will create run directories in that folder no matter what to store 
+information about current jobs running that model, even if you choose to put 
+the work directories elsewhere (as with the Postprocess interface). Model outputs
+will go in <model>/output.
 
 
 

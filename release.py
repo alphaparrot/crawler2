@@ -98,6 +98,6 @@ if __name__=="__main__":
     else:
         joinwaitlist()
         job = np.load("job.npy").item()
-        os.system("cat "+job.top+"/inuse.crwl>>"+job.top+"/inuse.log")
+        #os.system("cat "+job.top+"/inuse.crwl>>"+job.top+"/inuse.log")
         sweep(job.top)
         

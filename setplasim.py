@@ -283,6 +283,11 @@ def prep(job):
       found=True
       if source=="gibbs":
         edit_namelist(jid,"plasim_namelist","NFILTEREXP",val)
+        
+    if name=="filterkappa":
+      found=True
+      if source=="gibbs":
+        edit_namelist(jid,"plasim_namelist","FILTERKAPPA",val)
       
     if name=="nsupply":
       found=True
@@ -333,6 +338,10 @@ def prep(job):
       found=True
       scriptfile=val
       os.system("cp plasim/"+val+" plasim/job"+str(job.home)+"/")
+      
+    if name=="postprocessor":
+      found=True
+      os.system("cp plasim/"+source+"/"+val+" plasim/job"+str(job.home)+"/example.nl")
       
     if name=="notify":
       found=True

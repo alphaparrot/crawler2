@@ -49,7 +49,10 @@ def getjobs():
                 l = jinfo[nl]
                 if len(l.split())>0:
                     if l.split()[0]=="init_work_dir":
-                        workdir = l.split()[2] + jinfo[nl+1].split()[0]
+                        try:
+                            workdir = l.split()[2] + jinfo[nl+1].split()[0]
+                        except:
+                            workdir = l.split()[2]
             try:
                 job = np.load(workdir+"/job.npy").item()
             except:
