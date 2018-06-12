@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import netCDF4 as nc
+from crawldefs import _SUB
 
 #This is really a minimal working example. The user has no choice in which fields to provide.
 #Any missed fields, and the script will crash. It is however unusual in that the 'workdir' is
@@ -118,4 +119,4 @@ def prep(job):
 def submit(job):
     workdir = job.parameters["workdir"]
   
-    os.system("cd "+workdir+" && qsub runpostprocess && cd ../../")
+    os.system("cd "+workdir+" && "+_SUB+" runpostprocess && cd ../../")

@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import time
+from crawldefs import _SUB
 
 # Options:
 #   noutput
@@ -289,6 +290,16 @@ def prep(job):
       if source=="gibbs":
         edit_namelist(jid,"plasim_namelist","FILTERKAPPA",val)
       
+    if name=="filtertime":
+      found=True
+      if source=="gibbs":
+        edit_namelist(jid,"plasim_namelist","FILTERTIME",val)
+        
+    if name=="filterLHN0":
+      found=True
+      if source=="gibbs":
+        edit_namelist(jid,"plasim_namelist","LANDHOSKN0",val)
+        
     if name=="nsupply":
       found=True
       edit_namelist(jid,"carbonmod_namelist","NSUPPLY",val) 
@@ -418,7 +429,7 @@ def prep(job):
   rs.close()
   
 def submit(job):
-  os.system("cd plasim/job"+str(job.home)+" && qsub runplasim && cd "+job.top)
+  os.system("cd plasim/job"+str(job.home)+" && "+_SUB+" runplasim && cd "+job.top)
   time.sleep(1.0)
   tag = job.getID()
   job.write()
