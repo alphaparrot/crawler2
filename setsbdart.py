@@ -2,7 +2,7 @@ import numpy as np
 import netCDF4 as nc
 import os
 import time
-from crawldefs import _SUB
+from crawldefs import _SUB, _BATCHSCRIPT, BATCHSCRIPT
 
 def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,
                 tsurf,altz,flux,wmin=0.55,albedo=0.35,smooth=False,flat=True,sic=0.0,spec=False):
@@ -807,16 +807,7 @@ def _prep_lmdz(job):
       tag+="map "  
   
   if role == "sub":
-      jobscript =("#!/bin/bash -l                                                  \n"+
-                  "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
-                  "#PBS -q "+str(job.queue)+"                                      \n"+
-                  "#PBS -m "+notify+"                                               \n"+
-                  "#PBS -r n                                                        \n"+
-                  "#PBS -l walltime=48:00:00                                        \n"+
-                  "#PBS -N "+job.name+"                                             \n"
-                  "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-                  " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-                  "cd $PBS_O_WORKDIR                                                \n"+
+      jobscript =(BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
@@ -835,16 +826,7 @@ def _prep_lmdz(job):
                   "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
                   './release.sh "'+dest+'"                                \n')
   else:
-      jobscript =("#!/bin/bash -l                                                  \n"+
-                  "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
-                  "#PBS -q "+str(job.queue)+"                                      \n"+
-                  "#PBS -m "+notify+"                                               \n"+
-                  "#PBS -r n                                                        \n"+
-                  "#PBS -l walltime=48:00:00                                        \n"+
-                  "#PBS -N "+job.name+"                                             \n"
-                  "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-                  " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-                  "cd $PBS_O_WORKDIR                                                \n"+
+      jobscript =(BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
@@ -1032,16 +1014,7 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       tag+="map "
   
   if role=="sub":
-      jobscript =("#!/bin/bash -l                                                  \n"+
-                  "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
-                  "#PBS -q "+str(job.queue)+"                                      \n"+
-                  "#PBS -m "+notify+"                                               \n"+
-                  "#PBS -r n                                                        \n"+
-                  "#PBS -l walltime=48:00:00                                        \n"+
-                  "#PBS -N "+job.name+"                                             \n"
-                  "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-                  " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-                  "cd $PBS_O_WORKDIR                                                \n"+
+      jobscript =(BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
@@ -1061,16 +1034,7 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   './release.sh "'+dest+'"                                \n')
       
   else:
-      jobscript =("#!/bin/bash -l                                                  \n"+
-                  "#PBS -l nodes=1:ppn="+str(job.ncores)+"                          \n"+
-                  "#PBS -q "+str(job.queue)+"                                      \n"+
-                  "#PBS -m "+notify+"                                               \n"+
-                  "#PBS -r n                                                        \n"+
-                  "#PBS -l walltime=48:00:00                                        \n"+
-                  "#PBS -N "+job.name+"                                             \n"
-                  "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-                  " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-                  "cd $PBS_O_WORKDIR                                                \n"+
+      jobscript =(BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+

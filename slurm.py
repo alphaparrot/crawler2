@@ -7,8 +7,34 @@ _SUB = "sbatch"
 
 USER = "t-98b023"
 
-MODELS = {"rossby-block":1}     #tasks per node (1 workq node on Sunnyvale has 8 threads)
-                                #Here we use 'task' to mean a Sunnyvale job, as opposed to the
+EMAIL = "rcc.user@gmail.com"
+
+ACCOUNT = "rossby"
+
+def BATCHSCRIPT(job,notify):
+    return _BATCHSCRIPT%(job.name,job.name,job.name,job.ncores,16,job.queue,
+                         notify,job.top+"plasim/job"+str(job.home))
+
+_BATCHSCRIPT = ("#!/bin/bash                                                  \n"+
+                "#SBATCH --job-name=%s                                        \n"+
+                "#SBATCH --output=%j_%s.out                                   \n"+
+                "#SBATCH --error=%j_%s.err                                    \n"+
+                "#SBATCH --ntasks=%d                                          \n"+
+                "##SBATCH --ntasks-per-node=%d                                \n"+
+                "#SBATCH --mem-per-cpu=2000M                                  \n"+
+                "#SBATCH --account=%s                                         \n"%ACCOUNT+
+                "#SBATCH --partition=%s                                       \n"+
+                "#SBATCH --time=36:00:00                                      \n"+
+                "#SBATCH --mail-type=%s                                       \n"+
+                "#SBATCH --mail-user=%s                                       \n"%EMAIL+
+                "#make sure newFitModel.m code is in the following location   \n"+
+                "cd %s                                                        \n")
+
+#job.queue could for example be 'broadw1'
+
+
+MODELS = {"rossby-block":8,     #tasks per node (1 workq node on Sunnyvale has 8 threads)
+          "plasim":1}           #Here we use 'task' to mean a Sunnyvale job, as opposed to the
                                 #HPC convention of a task being a thread or process. This way our
                                 #code is MPI/OpenMP-agnostic.
 

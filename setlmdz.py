@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import time
-from crawldefs import _SUB
+from crawldefs import _SUB, _BATCHSCRIPT, BATCHSCRIPT
 
 def edit_def(jid,filename,arg,val):
     f=open("lmdz/job"+jid+"/"+filename,"r")
@@ -124,16 +124,7 @@ def prep(job):
         
     print "Arguments and boundary conditions set."
     
-    jobscript = ("#!/bin/bash -l               \n"+
-              "#PBS -l nodes=1:ppn=1                         \n"+
-              "#PBS -q workq                                      \n"+
-              "#PBS -m "+notify+"                                               \n"+
-              "#PBS -r n                                                        \n"+
-              "#PBS -l walltime=48:00:00                                        \n"+
-              "#PBS -N "+job.name+"                                             \n"
-              "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-              " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-              "cd $PBS_O_WORKDIR                                                \n"+
+    jobscript = (BATCHSCRIPT(job,notify)+
               "module load gcc/4.9.1                                          \n"+
               "module load python/2.7.9                                       \n"+
               "./"+scriptfile+"                              \n")

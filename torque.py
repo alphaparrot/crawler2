@@ -7,6 +7,21 @@ _SUB = "qsub"
 
 USER = "paradise"
 
+_BATCHSCRIPT = ("#!/bin/bash -l                                                  \n"+
+              "#PBS -l nodes=%d:ppn=%d                                         \n"+
+              "#PBS -q %s                                                      \n"+
+              "#PBS -m %s                                                      \n"+
+              "#PBS -r n                                                        \n"+
+              "#PBS -l walltime=48:00:00                                        \n"+
+              "#PBS -N %s                                                       \n"
+              "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
+              " nodes,ppn,walltime and my_job_name VALUES                       \n"+
+              "cd $PBS_O_WORKDIR                                                \n")
+
+def BATCHSCRIPT(job,notify):
+    return _BATCHSCRIPT%(1,job.ncores,job.queue,notify,job.name)
+    
+
 MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale has 8 threads)
           "sbdart":8,           #Here we use 'task' to mean a Sunnyvale job, as opposed to the
           "postprocess":8,      #HPC convention of a task being a thread or process. This way our

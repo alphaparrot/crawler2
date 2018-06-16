@@ -1,7 +1,7 @@
 import numpy as np
 import os
 import netCDF4 as nc
-from crawldefs import _SUB
+from crawldefs import _SUB, _BATCHSCRIPT, BATCHSCRIPT
 
 #This is really a minimal working example. The user has no choice in which fields to provide.
 #Any missed fields, and the script will crash. It is however unusual in that the 'workdir' is
@@ -75,16 +75,7 @@ def prep(job):
         tag+="map "
             
     if not part2:
-        jobscript =("#!/bin/bash -l                                                  \n"+
-                    "#PBS -l nodes=1:ppn="+ncpu+"                                    \n"+
-                    "#PBS -q "+queue+"                                               \n"+
-                    "#PBS -r n                                                        \n"+
-                    "#PBS -l walltime=48:00:00                                        \n"+
-                    "#PBS -m abe                                                      \n"+
-                    "#PBS -N "+job.name+"                                             \n"
-                    "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-                    " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-                    "cd $PBS_O_WORKDIR                                                \n"+
+        jobscript =(BATCHSCRIPT(job,notify)+
                     "module load gcc/4.9.1                                            \n"+
                     "module load python/2.7.9                                         \n"+
                     "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
@@ -93,16 +84,7 @@ def prep(job):
                     "cp phasecurve.nc "+cwd+"/postprocess/output/"+job.name+"_phasecurve.nc \n"+
                     "python release.py \n")
     else:
-        jobscript =("#!/bin/bash -l                                                  \n"+
-                    "#PBS -l nodes=1:ppn="+ncpu+"                                    \n"+
-                    "#PBS -q "+queue+"                                               \n"+
-                    "#PBS -r n                                                        \n"+
-                    "#PBS -l walltime=48:00:00                                        \n"+
-                    "#PBS -m abe                                                      \n"+
-                    "#PBS -N "+job.name+"                                             \n"
-                    "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
-                    " nodes,ppn,walltime and my_job_name VALUES                       \n"+
-                    "cd $PBS_O_WORKDIR                                                \n"+
+        jobscript =(BATCHSCRIPT(job,notify)+
                     "module load gcc/4.9.1                                            \n"+
                     "module load python/2.7.9                                         \n"+
                     "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
