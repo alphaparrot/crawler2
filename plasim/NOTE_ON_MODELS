@@ -2,3 +2,6 @@ Many of the models in this folder only work in pairs--i.e. the main model is
 a Python file, but the job script is only going to call a bash file or 
 executable. In order to get around this, use e.g. equilibriate.sh as the 'script'
 argument in tasks.crwl, and relax.py as an 'extra' argument in tasks.crwl.
+What this does is simply tells crawler that it's going to need to copy the 'extra' 
+file into the job folder, and that the submission script should run the 'script'
+file.
