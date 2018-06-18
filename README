@@ -55,6 +55,22 @@ But if you have a code that runs in serial, with no parallelism, then its value
 is 8, since you can have 8 going at once on a single node.
 
 
+torque.py/slurm.py/etc (Will probably have to be modified)
+----------------------------------------------------------
+These modules tell crawler how to manage jobs on your cluster. I've included
+modules for the PBS TORQUE system in place on the CITA Sunnyvale cluster, as 
+well as one for the Slurm system in place on the University of Chicago's 
+Midway2 cluster. However, implementations may vary, so you should take a 
+careful look and make sure that job items will be read correctly. In particular,
+how one queries job info (qstat -f <ID>) may vary, including the format <ID>
+needs to be in. This is likely to be the component that gives you the most 
+headaches. If you use any of my example set<model>.py files, you will 
+almost certainly need to change which modules get loaded on the cluster.
+
+Once you modify or write your own <scheduler.py> file, have crawldefs.py
+import everything from it ("from <scheduler> import *").
+
+
 tasks.crwl (IMPORTANT)
 ----------------------------
 This is the hippocampus of the program. It is the list of all tasks for the
@@ -183,8 +199,10 @@ of the code, and allows you to create alternative folders for modified codes.
 setplasim.py is an example of an interface that supports multiple source folders.
 The program will create run directories in that folder no matter what to store 
 information about current jobs running that model, even if you choose to put 
-the work directories elsewhere (as with the Postprocess interface). Model outputs
-will go in <model>/output.
+the work directories elsewhere (as with the Postprocess interface). You should also
+create a folder called <model>output, in case your specialized code doesn't create
+it automatically. Model outputs will go in <model>/output.
+
 
 
 
