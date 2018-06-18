@@ -9,6 +9,7 @@ from crawldefs import *
 if __name__=="__main__":    
   #Check which resources are in use and compare to our max allotment
   
+  #Create auxiliary folders if they don't exist
   os.system("mkdir hopper")
   os.system("mkdir waitlist")
   

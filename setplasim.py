@@ -400,7 +400,7 @@ def prep(job):
       
   print "Arguments set"
   
-  jobscript =(BATCHSCRIPT%(job,notify)+
+  jobscript =(BATCHSCRIPT(job,notify)+
               "module load gcc/4.9.1                                          \n"+
               "module load python/2.7.9                                       \n"+
               "module load intel/intel-17                                       \n"+
