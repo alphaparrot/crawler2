@@ -38,6 +38,7 @@ def getjobs():
     for m in MODELS.keys():
         resources[m] = np.zeros(256)
     tags = []
+    #This part may need changing depending on how job tags are handled.
     for j in joblist:
         job = j.split()
         if job[3][5:]!="lmdz-":
