@@ -4,6 +4,7 @@ import crawlset
 import sys
 import numpy as np
 from crawldefs import *
+from batch_system import *
 
 
 if __name__=="__main__":    

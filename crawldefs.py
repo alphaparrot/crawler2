@@ -1,9 +1,6 @@
 import os
 import numpy as np
-
-#Select a batch submission system (ONLY UNCOMMENT ONE)
-from torque import *
-#from slurm import *
+from identity import *
 
 class Job:
   def __init__(self,header,args,resource):
@@ -59,3 +56,5 @@ class Job:
       return 1
     else:
       return 0
+ 
+ 

@@ -1,11 +1,11 @@
 # PBS TORQUE plug-in
 
+import os
 import numpy as np
 from crawldefs import Job
+from identity import *
 
-_SUB = "qsub"
-
-USER = "paradise"
+SUB = "qsub"
 
 _BATCHSCRIPT = ("#!/bin/bash -l                                                  \n"+
               "#PBS -l nodes=%d:ppn=%d                                         \n"+
@@ -41,8 +41,9 @@ def getjobs():
     #This part may need changing depending on how job tags are handled.
     for j in joblist:
         job = j.split()
-        if job[3][5:]!="lmdz-":
-            tags.append(job[0])
+        #if job[3][5:]!="lmdz-":
+            #tags.append(job[0])
+        tags.append(job[0])
     for t in tags:
         print "Looking up "+t
         os.system("qstat -f "+t+" > jinfo.tmp")

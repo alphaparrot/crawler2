@@ -2,7 +2,7 @@ import numpy as np
 import netCDF4 as nc
 import os
 import time
-from crawldefs import _SUB, _BATCHSCRIPT, BATCHSCRIPT
+from batch_system import SUB, BATCHSCRIPT
 
 def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,
                 tsurf,altz,flux,wmin=0.55,albedo=0.35,smooth=False,flat=True,sic=0.0,spec=False):
@@ -1077,4 +1077,4 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
 def submit(job):
   workdir = "sbdart/job"+str(job.home)
   
-  os.system("cd "+workdir+" && "+_SUB+" runsbdart && cd "+job.top)
+  os.system("cd "+workdir+" && "+SUB+" runsbdart && cd "+job.top)

@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import time
-from crawldefs import _SUB, _BATCHSCRIPT, BATCHSCRIPT
+from batch_system import SUB, BATCHSCRIPT
 
 # Options:
 #   noutput
@@ -421,7 +421,7 @@ def prep(job):
   rs.close()
   
 def submit(job):
-  os.system("cd plasim/job"+str(job.home)+" && "+_SUB+" runplasim && cd "+job.top)
+  os.system("cd plasim/job"+str(job.home)+" && "+SUB+" runplasim && cd "+job.top)
   time.sleep(1.0)
   tag = job.getID()
   job.write()

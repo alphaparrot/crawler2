@@ -42,7 +42,23 @@ This is simply one side of the interface between crawler2 and your models. You
 should pretty much never have to concern yourself with this file.
 
 
-crawldefs.py (MUST BE MODIFIED)
+identity.py (IMPORTANT)
+---------------------
+This holds on to just a few variables, which the program will use to tell the
+scheduler who you are. This is kept in a separate file for module inheritance
+purposes. You should modify this file to have the appropriate username. For 
+PBS Torque, only the username matters, but for Slurm you'll need to change the
+email address and account as well.
+
+
+batch_system.py (IMPORTANT)
+--------------------
+Also an extremely simple file: this just importants the correct scheduler module.
+Several other modules (including the program hooks) import this, which is why it
+exists--so that you only need to change the importation line in one place.
+
+
+crawldefs.py
 ---------------------
 This file is integral: it defines the Job object, which stores information about
 a job in way that's convenient for the program to use, and also defines the
@@ -67,7 +83,7 @@ needs to be in. This is likely to be the component that gives you the most
 headaches. If you use any of my example set<model>.py files, you will 
 almost certainly need to change which modules get loaded on the cluster.
 
-Once you modify or write your own <scheduler.py> file, have crawldefs.py
+Once you modify or write your own <scheduler.py> file, have batch_system.py
 import everything from it ("from <scheduler> import *").
 
 

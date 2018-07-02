@@ -1,15 +1,13 @@
 # SLURM plug-in
 
+import os
 import numpy as np
 from crawldefs import Job
+from identity import *
 
-_SUB = "sbatch"
+SUB = "sbatch"
 
 USER = "t-98b023"
-
-EMAIL = "rcc.user@gmail.com"
-
-ACCOUNT = "rossby"
 
 def BATCHSCRIPT(job,notify):
     return _BATCHSCRIPT%(job.name,job.name,job.name,job.ncores,16,job.queue,

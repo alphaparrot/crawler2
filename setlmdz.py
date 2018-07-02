@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import time
-from crawldefs import _SUB, _BATCHSCRIPT, BATCHSCRIPT
+from batch_system import SUB, BATCHSCRIPT
 
 def edit_def(jid,filename,arg,val):
     f=open("lmdz/job"+jid+"/"+filename,"r")
@@ -23,6 +23,27 @@ def edit_def(jid,filename,arg,val):
     f.close()
     return
 
+def edit_gases(jid,gasnames,gasfracs):
+    gastext = ("# gases \n"+
+               "%d      \n"%len(gasnames))
+    for g in gasnames:
+        gastext += g+"\n"
+    
+    for f in gasfracs:
+        gastext += str(f)+"\n"
+        
+    gastext += "\n"
+    
+    gastext += ("# First line is number of gases              \n"+
+                "# Followed by gas names (always 3 characters)\n"+
+                "# and then mixing ratios.                    \n"+
+                "# mixing ratio -1 means the gas is variable. \n")
+    
+    f=open("lmdz/job"+jid+"/gases.def","w")
+    f.write(gastext)
+    f.close()
+
+    
 def prep(job):
     
     sig = job.name
@@ -41,15 +62,14 @@ def prep(job):
     print "Setting stuff for job "+sig+" in lmdz/job"+jid+" which is task number "+pid
     print "Arguments are:",fields    
   
-    emailtag = "#PBS -m ae \n"
-    scriptfile = "run.sh"
+    scriptfile = "lmdz_loop.sh"
   
     os.system("cp "+job.top+"/lmdz/"+template+"/* "+workdir+"/")
     os.system("cp "+job.top+"/lmdz/"+scriptfile+" "+workdir+"/")
     
     recompile = False
     
-    paramdict = np.load(job.top+"/lmdz/"+template+"/compiledfields.npy")
+    paramdict = np.load(job.top+"/lmdz/"+template+"/compiledfields.npy").item()
     
     daylen = paramdict["daylen"]
     preff = paramdict["preff"]
@@ -57,12 +77,21 @@ def prep(job):
     gravity = paramdict["gravity"]
     surface = paramdict["surface"]
     
+    co2 = 360.0
+    if "co2" in job.parameters:
+        co2 = float(job.parameters["co2"])
+    
+    nruns = 20
+    
     if "daylen" in job.parameters:
         daylen = float(job.parameters["daylen"])
         recompile = True
     
     if "preff" in job.parameters:
         preff = float(job.parameters["preff"])
+        fco2 = co2*0.1/preff
+        fn2 = 1.0-fco2
+        edit_gases(jid,["N2_","CO2","H2O"],[fn2,fco2,-1])
         recompile = True
         
     if "radius" in job.parameters:
@@ -122,19 +151,22 @@ def prep(job):
     if "notify" in job.parameters:
         notify = job.parameters["notify"]
         
+    if "nruns" in job.parameters:
+        nruns = int(job.parameters["nruns"])
+        
     print "Arguments and boundary conditions set."
     
     jobscript = (BATCHSCRIPT(job,notify)+
               "module load gcc/4.9.1                                          \n"+
               "module load python/2.7.9                                       \n"+
-              "./"+scriptfile+"                              \n")
+              "./"+scriptfile+" "+job.name+" "+str(nruns)+"                        \n")
     
     rs = open(workdir+"/runlmdz","w")
     rs.write(jobscript)
     rs.close()
     
 def submit(job):
-    os.system("cd "+job.top+"/lmdz/job"+str(job.home)+" && "+_SUB+" runlmdz && cd "+job.top)
+    os.system("cd "+job.top+"/lmdz/job"+str(job.home)+" && "+SUB+" runlmdz && cd "+job.top)
     time.sleep(1.0)
     tag = job.getID()
     job.write()
