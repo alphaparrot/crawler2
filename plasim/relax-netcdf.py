@@ -71,7 +71,7 @@ def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05):
       return False
   
 def hasnans():
-    files = sorted(glob.glob(".nc"))
+    files = sorted(glob.glob("*.nc"))
     ncd = nc.Dataset(files[-1],"r") #Should be most recent
     if np.isnan(np.amax(ncd.variables['ts'][-1,:])):
         return True

@@ -112,7 +112,7 @@ def getsurftemp():
     return tavg
   
 def hasnans():
-    files = sorted(glob.glob(".nc"))
+    files = sorted(glob.glob("*.nc"))
     ncd = nc.Dataset(files[-1],"r") #Should be most recent
     if np.isnan(np.amax(ncd.variables['ts'][-1,:])):
         return True
@@ -129,7 +129,7 @@ if __name__=="__main__":
   os.system("rm -f Abort_Message")
   
   os.system("cp planet_namelist planet_namelist_wait")
-  edit_namelist("planet_namelist","GSOL0","800.0") #Turn the Sun dim enough to freeze over
+  edit_namelist("planet_namelist","GSOL0","500.0") #Turn the Sun dim enough to freeze over
   yearsfrozen = 0
   cyear = 0
   while getsurftemp()>255.0 and yearsfrozen<10:
