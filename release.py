@@ -4,6 +4,7 @@ import numpy as np
 from crawldefs import Job
 import glob
 import sys
+from sets import Set
 
 '''
 With this new system, rather than each routine trying to edit a file, they just
@@ -69,6 +70,7 @@ def sweep(top):
                 tasksf.close()
                 
             else:
+                os.system("cp "+top+"/tasks.crwl "+top+"/tasks.crwl_bkup")
                 tasksf=open(top+"/tasks.crwl","r")
                 tasks = tasksf.read().split('\n')
                 tasksf.close()
@@ -82,9 +84,19 @@ def sweep(top):
                                 break
                         tasks[i] = ' '.join(tasks[i])
                 tasks = '\n'.join(tasks)
-                tasksf=open(top+"/tasks.crwl","w")
-                tasksf.write(tasks)
-                tasksf.close()
+                if Set(tasks).issubset(Set(" \n")):
+                    os.system("echo 'Something is horribly wrong!'>>"+top+"/crashlog.crwl")
+                else:
+                    tasksf=open(top+"/tasks.crwl","w")
+                    tasksf.write(tasks)
+                    tasksf.close()
+                time.sleep(1.0)
+                f=open(top+"/tasks.crwl","r")
+                test=f.read()
+                f.close()
+                if Set(test).issubset(Set(" \n")): #File is somehow empty
+                    os.system("cp "+top+"/tasks.crwl_bkup "+top+"/tasks.crwl")
+                
             
             os.system("rm "+jobf)
         

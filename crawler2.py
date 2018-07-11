@@ -5,6 +5,7 @@ import sys
 import numpy as np
 from crawldefs import *
 from batch_system import *
+from sets import Set
 
 
 if __name__=="__main__":    
@@ -261,9 +262,10 @@ if __name__=="__main__":
         task = ' '.join(task)
         tasks[mark] = task
         tasks='\n'.join(tasks)
-        f=open("tasks.crwl","w")
-        f.write(tasks)
-        f.close()
+        if not Set(task).issubset(Set(" \n")): #Make sure we have something to write!
+            f=open("tasks.crwl","w")
+            f.write(tasks)
+            f.close()
         
         crawlset.newtask(newjob,dryrun=dryrun)            #Set up the job and submit it
         np.save(taskmodel+'/job'+str(newjob.home)+'/job.npy',newjob)
@@ -309,4 +311,4 @@ if __name__=="__main__":
   f.write('0')
   f.close()
   
-  os.system("echo 'Main status is now $(cat "+top+"/inuse.crwl)'>>tasklog.crwl")
+  os.system("echo 'Main status is now '$(cat "+top+"/inuse.crwl)>>tasklog.crwl")

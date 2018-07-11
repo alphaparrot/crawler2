@@ -6,7 +6,35 @@ import glob
 
 gplasim = False
 
-#This version lets the model relax.
+#This version lets the model relax, ignores initial restart files, and freezes the model before
+#commencing the experiment.
+
+def edit_namelist(filename,arg,val): 
+  f=open(filename,"r")
+  fnl=f.read().split('\n')
+  f.close()
+  found=False
+  for l in range(1,len(fnl)-2):
+    fnl[l]=fnl[l].split(' ')
+    if '=' in fnl[l]:
+      mode='EQ'
+    else:
+      mode='CM'
+    if arg in fnl[l]:
+      fnl[l]=['',arg,'','=','',str(val),'']
+      found=True
+    elif (arg+'=') in fnl[l]:
+      fnl[l]=['',arg+'=','',str(val),'',',']
+      found=True
+    fnl[l]=' '.join(fnl[l])
+  if not found:
+    if mode=='EQ':
+      fnl.insert(-3,' '+arg+' = '+val+' ')
+    else:
+      fnl.insert(-3,' '+arg+'= '+val+' ,')
+  f=open(filename,"w")
+  f.write('\n'.join(fnl))
+  f.close() 
 
 def spatialmath(lt,ln,variable,mean=True,radius=6.371e6):
     lt1 = np.zeros(len(lt)+1)
@@ -70,6 +98,19 @@ def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05):
     else:
       return False
   
+def getsurftemp():
+    files = sorted(glob.glob(".nc"))
+    if len(files)==0:
+        return 1.0e10
+    nfile = files[-1]
+    ncd = nc.Dataset(nfile,"r")
+    ts = np.mean(ncd.variables['ts'][:],axis=0) #Annual average
+    lt = ncd.variables['lat'][:]
+    ln = ncd.variables['lon'][:]
+    tavg = spatialmath(lt,ln,ts)
+    ncd.close()
+    return tavg
+  
 def hasnans():
     files = sorted(glob.glob(".nc"))
     ncd = nc.Dataset(files[-1],"r") #Should be most recent
@@ -84,17 +125,19 @@ if __name__=="__main__":
     wf.close()
   EXP="MOST"
   NCPU=int(sys.argv[1])
-  #os.system("rm -f plasim_restart") #Uncomment for a fresh run when you haven't cleaned up beforehand
+  os.system("rm -f plasim_restart") #Uncomment for a fresh run when you haven't cleaned up beforehand
   os.system("rm -f Abort_Message")
-  year=0
-  minyears=13
-  relaxed=False
-  while year < minyears or not relaxed:
-    year+=1
-    dataname=EXP+".%04d"%year
-    diagname=EXP+"_DIAG.%04d"%year
-    restname=EXP+"_REST.%03d"%year
-    snowname=EXP+"_SNOW_%1d"%(year%5)
+  
+  os.system("cp planet_namelist planet_namelist_wait")
+  edit_namelist("planet_namelist","GSOL0","800.0") #Turn the Sun dim enough to freeze over
+  yearsfrozen = 0
+  cyear = 0
+  while getsurftemp()>255.0 and yearsfrozen<10:
+    cyear += 1
+    dataname=EXP+".%04d"%cyear
+    diagname=EXP+"_DIAG.%04d"%cyear
+    restname=EXP+"_REST.%03d"%cyear
+    snowname=EXP+"_SNOW_%1d"%(cyear%5)
     os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l10_p"+str(NCPU)+".x")
     os.system("[ -e restart_dsnow ] && rm restart_dsnow")
     os.system("[ -e restart_xsnow ] && rm restart_xsnow")
@@ -105,7 +148,36 @@ if __name__=="__main__":
     os.system("[ -e plasim_status ] && mv plasim_status "+restname)
     os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
     os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
-    os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%year)
+    os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%cyear)
+    os.system("[ -e "+dataname+".nc ] && rm "+dataname)
+    if hasnans():
+        break
+    if getsurftemp()<=255.0:
+        yearsfrozen+=1
+    
+  os.system("cp planet_namelist_wait planet_namelist") #Turn the Sun back up
+  
+  year=0
+  minyears=13
+  relaxed=False
+  while year < minyears or not relaxed:
+    year+=1
+    cyear += 1
+    dataname=EXP+".%04d"%cyear
+    diagname=EXP+"_DIAG.%04d"%cyear
+    restname=EXP+"_REST.%03d"%cyear
+    snowname=EXP+"_SNOW_%1d"%(cyear%5)
+    os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l10_p"+str(NCPU)+".x")
+    os.system("[ -e restart_dsnow ] && rm restart_dsnow")
+    os.system("[ -e restart_xsnow ] && rm restart_xsnow")
+    os.system("[ -e Abort_Message ] && exit 1")
+    os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
+    os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
+    os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
+    os.system("[ -e plasim_status ] && mv plasim_status "+restname)
+    os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
+    os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
+    os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%cyear)
     os.system("[ -e "+dataname+".nc ] && rm "+dataname)
     if hasnans():
         break

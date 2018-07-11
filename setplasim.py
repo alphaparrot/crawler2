@@ -103,6 +103,7 @@ def prep(job):
   os.system("rm plasim/job"+jid+"/plasim_restart")
   os.system("cp plasim/"+scriptfile+" plasim/job"+jid+"/")
   os.system("cp crawldefs.py plasim/job"+jid+"/")
+  os.system("cp identity.py plasim/job"+jid+"/")
   
   if "cleanup" in job.parameters:
     cleanup = job.parameters["cleanup"]
@@ -254,6 +255,10 @@ def prep(job):
       found=True
       edit_namelist(jid,"carbonmod_namelist","NCARBON",val) 
       
+    if name=="co2evolve":
+      found=True
+      edit_namelist(jid,"carbonmod_namelist","NCO2EVOLVE",val)
+      
     if name=="filtertype":
       found=True
       if source == "gibbs":
@@ -314,7 +319,17 @@ def prep(job):
       
     if name=="snowmax":
       found=True
-      edit_namelist(jid,"landmod_namelist","DSMAX",val) 
+      edit_namelist(jid,"landmod_namelist","DSMAX",val)
+      
+    if name=="soilalbedo":
+      found=True
+      os.system("rm plasim/job"+str(job.home)+"/*0172.sra")
+      edit_namelist(jid,"landmod_namelist","ALBLAND",val)
+      edit_namelist(jid,"landmod_namelist","NEWSURF","2") #Ignore surface files
+      
+    if name=="wetsoil":
+      found=True
+      edit_namelist(jid,"landmod_namelist","NWETSOIL",val)
       
     if name=="soilh2o":
       found=True
