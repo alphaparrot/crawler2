@@ -159,6 +159,9 @@ def prep(job):
     jobscript = (BATCHSCRIPT(job,notify)+
               "module load gcc/4.9.1                                          \n"+
               "module load python/2.7.9                                       \n"+
+              "mkdir /mnt/node_scratch/paradise/lmdz_"+job.name+"/             \n"+
+              "cp -a * /mnt/node_scratch/paradise/lmdz_"+job.name+"/           \n"+
+              "cd /mnt/node_scratch/paradise/lmdz_"+job.name+"/                \n"+
               "./"+scriptfile+" "+job.name+" "+str(nruns)+"                        \n")
     
     rs = open(workdir+"/runlmdz","w")

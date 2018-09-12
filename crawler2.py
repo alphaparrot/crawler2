@@ -275,12 +275,14 @@ if __name__=="__main__":
             newjob.tag='xxxxx.doug'
         newjob.write()
         running += float(newjob.ncores)/8.0#MODELS[taskmodel]    #Note that we are *that* much closer to the limit.
-      
-    resources = getjobs()  
     
-    running = 0
-    for r in resources.keys():
-      running += np.sum(resources[r]) 
+    if not dryrun:
+        resources = getjobs()  
+    
+        running = 0
+        for r in resources.keys():
+            running += np.sum(resources[r]) 
+    
     
     if capacityflag:
         running = nnodes

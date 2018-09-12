@@ -17,7 +17,7 @@ def prep(job):
     
     notify = 'ae'
     
-    os.system("cp postprocess/clean/* "+workdir+'/')
+    os.system("cp postprocess_earth/clean/* "+workdir+'/')
     os.system("cp release.py "+workdir+'/')
     os.system("cp crawldefs.py "+workdir+"/")
     os.system("cp identity.py "+workdir+"/")
@@ -85,40 +85,40 @@ def prep(job):
                     "module load gcc/4.9.1                                            \n"+
                     "module load python/2.7.9                                         \n"+
                     "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
-                    "mkdir /mnt/node_scratch/paradise/postprocess/                    \n"+
-                    "mkdir /mnt/node_scratch/paradise/postprocess/job"+str(job.home)+"/  \n"+
-                    "cp -a * /mnt/node_scratch/paradise/postprocess/job"+str(job.home)+"/  \n"+
-                    "cd /mnt/node_scratch/paradise/postprocess/job"+str(job.home)+"/  \n"+
+                    "mkdir /mnt/node_scratch/paradise/postprocess_earth/                    \n"+
+                    "mkdir /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "cp -a * /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "cd /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "python postprocess.py "+lon0+" "+tag+"                           \n"+
-                    "cp -a /mnt/node_scratch/paradise/postprocess/job"+str(job.home)+"/* $PBS_O_WORKDIR/ \n"+
+                    "cp -a /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/* $PBS_O_WORKDIR/ \n"+
                     "rm -rf *                                                         \n"+
                     "cd $PBS_O_WORKDIR                                                \n"+
-                    "cp spectra.nc "+cwd+"/postprocess/output/"+job.name+"_spectra.nc \n"+
-                    "cp phasecurve.nc "+cwd+"/postprocess/output/"+job.name+"_phasecurve.nc \n"+
+                    "cp spectra.nc "+cwd+"/postprocess_earth/output/"+job.name+"_spectra.nc \n"+
+                    "cp phasecurve.nc "+cwd+"/postprocess_earth/output/"+job.name+"_phasecurve.nc \n"+
                     "python release.py \n")
     else:
         jobscript =(BATCHSCRIPT(job,notify)+
                     "module load gcc/4.9.1                                            \n"+
                     "module load python/2.7.9                                         \n"+
-                    "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
-                    "mkdir /mnt/node_scratch/paradise/postprocess/                    \n"+
-                    "mkdir /mnt/node_scratch/paradise/postprocess/job"+str(job.home)+"/  \n"+
-                    "cp -a * /mnt/node_scratch/paradise/postprocess/job"+str(job.home)+"/  \n"+
-                    "cd /mnt/node_scratch/paradise/postprocess/job"+str(job.home)+"/  \n"+
+                    "mv "+cwd+"/postprocess_earth/job"+str(job.home)+"/job.npy ./           \n"+
+                    "mkdir /mnt/node_scratch/paradise/postprocess_earth/                    \n"+
+                    "mkdir /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "cp -a * /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "cd /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "python postspectra.py "+tag+"                                    \n"+
-                    "cp -a /mnt/node_scratch/paradise/postprocess/job"+str(job.home)+"/* $PBS_O_WORKDIR/ \n"+
+                    "cp -a /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/* $PBS_O_WORKDIR/ \n"+
                     "rm -rf *                                                         \n"+
                     "cd $PBS_O_WORKDIR                                                \n"+
-                    "cp phasecurve.nc "+cwd+"/postprocess/output/"+job.name+"_phasecurve.nc \n"+
+                    "cp phasecurve.nc "+cwd+"/postprocess_earth/output/"+job.name+"_phasecurve.nc \n"+
                     "python release.py \n")
         
     
      
-    rs = open(workdir+"/runpostprocess","w")
+    rs = open(workdir+"/runpostprocess_earth","w")
     rs.write(jobscript)
     rs.close()
 
 def submit(job):
     workdir = job.parameters["workdir"]
   
-    os.system("cd "+workdir+" && "+SUB+" runpostprocess && cd ../../")
+    os.system("cd "+workdir+" && "+SUB+" runpostprocess_earth && cd ../../")

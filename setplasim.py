@@ -99,6 +99,7 @@ def prep(job):
   
   p0 = 1010670.0
   
+  os.system("rm plasim/job"+jid+"/*.sh")
   os.system("cp plasim/"+source+"/* plasim/job"+jid+"/")
   os.system("rm plasim/job"+jid+"/plasim_restart")
   os.system("cp plasim/"+scriptfile+" plasim/job"+jid+"/")
@@ -242,6 +243,11 @@ def prep(job):
     if name=="nfixorb":
       found=True
       edit_namelist(jid,"planet_namelist","NFIXORB",val) 
+      
+    if name=="oroscale":
+      found=True
+      edit_namelist(jid,"landmod_namelist","OROSCALE",val)
+      edit_namelist(jid,"glacier_namelist","NGLACIER",'1') 
        
     if name=="nglacier":
       found=True
@@ -250,6 +256,19 @@ def prep(job):
     if name=="glacelim":
       found=True
       edit_namelist(jid,"glacier_namelist","GLACELIM",val) 
+      
+    if name=="icesheets":
+      found=True
+      os.system("rm plasim/job"+jid+"/*174.sra "+
+                   "plasim/job"+jid+"/*1740.sra "+
+                   "plasim/job"+jid+"/*210.sra "+
+                   "plasim/job"+jid+"/*232.sra")
+      edit_namelist(jid,"glacier_namelist","ICESHEETH",val)
+    
+    if name=="lowerANTGRN":
+      found=True
+      if int(val)==1:
+        os.system("cp plasim/glacsra/*.sra plasim/job"+jid+"/")
     
     if name=="ncarbon":
       found=True
@@ -323,9 +342,9 @@ def prep(job):
       
     if name=="soilalbedo":
       found=True
-      os.system("rm plasim/job"+str(job.home)+"/*0172.sra")
+      os.system("rm plasim/job"+str(job.home)+"/*0174.sra")
       edit_namelist(jid,"landmod_namelist","ALBLAND",val)
-      edit_namelist(jid,"landmod_namelist","NEWSURF","2") #Ignore surface files
+      #edit_namelist(jid,"landmod_namelist","NEWSURF","2") #Ignore surface files
       
     if name=="wetsoil":
       found=True
@@ -339,6 +358,32 @@ def prep(job):
       found=True
       edit_namelist(jid,"plasim_namelist","NAQUA",val)
       os.system("rm plasim/job"+jid+"/*.sra")
+      
+    if name=="ndesert":
+      found=True
+      edit_namelist(jid,"plasim_namelist","NDESERT",val)
+      edit_namelist(jid,"landmod_namelist","NWATCINI","1")
+      edit_namelist(jid,"landmod_namelist","DWATCINI","0.0")
+      os.system("rm plasim/job"+jid+"/*.sra")
+      
+    if name=="drycore":
+      found=True
+      if int(val)==1:
+        #edit_namelist(jid,"plasim_namelist","NQSPEC","0") #Turn off water advection
+        edit_namelist(jid,"fluxmod_namelist","NEVAP","0") #Turn off evaporation
+      
+    if name=="soilheat": # 0.001 J/m^3/K = 1 J/kg/K. Ocean = 4180 J/kg/K = 4.18e6 J/m^3/K
+      found=True
+      edit_namelist(jid,"landmod_namelist","SOILCAP",val)
+      
+    if name=="soildepth":
+      found=True
+      depth = np.array([0.4,0.8,1.6,3.2,6.4]) #meters
+      depth *= float(val)
+      strvals = []
+      for d in depth:
+          strvals.append(str(d))
+      edit_namelist(jid,"landmod_namelist","DSOILZ",",".join(strvals))
       
     if name=="nwpd":
       found=True
@@ -421,7 +466,13 @@ def prep(job):
               "module load python/2.7.9                                       \n"+
               "module load intel/intel-17                                       \n"+
               "module load openmpi/2.0.1-intel-17                               \n"+
-              "./"+scriptfile+" "+str(job.ncores)+"                             \n")
+              "mkdir /mnt/node_scratch/paradise/job"+jid+"            \n"+
+              "cp -a * /mnt/node_scratch/paradise/job"+jid+"/         \n"+
+              "cd /mnt/node_scratch/paradise/job"+jid+"/              \n"+
+              "./"+scriptfile+" "+str(job.ncores)+"                             \n"+
+              "cp -a * $PBS_O_WORKDIR/                                          \n"+
+              "rm -rf *                                                         \n"+
+              "cd $PBS_O_WORKDIR                                                \n")
   if keeprs:
       jobscript+= "cp plasim_restart ../output/"+job.name+"_restart            \n"
   if monitor:

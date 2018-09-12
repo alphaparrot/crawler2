@@ -8,10 +8,10 @@ from batch_system import SUB, BATCHSCRIPT
 #will pick up the saved job info, build the job, and then submit it to the queue.
 
 def prep(job):
-  workdir = job.top+"/sbdart/job"+str(job.home)
+  workdir = job.top+"/sbdart_earth/job"+str(job.home)
   os.system("mkdir "+workdir)
   np.save(workdir+"/jobdat.npy",job)
-  os.system("cp sbdart/buildsbdart.py "+workdir+"/")
+  os.system("cp sbdart_earth/buildsbdart.py "+workdir+"/")
   os.system("cp crawldefs.py "+workdir+"/")
   os.system("cp identity.py "+workdir+"/")
   os.system("cp batch_system.py "+workdir+"/")
@@ -23,12 +23,12 @@ def prep(job):
               "module load python/2.7.9                                       \n"+
               "python buildsbdart.py   \n")
   
-  rs = open(workdir+"/runsbdart","w")
+  rs = open(workdir+"/runsbdart_earth","w")
   rs.write(jobscript)
   rs.close()
           
  
 def submit(job):
-  workdir = "sbdart/job"+str(job.home)
+  workdir = "sbdart_earth/job"+str(job.home)
   
-  os.system("cd "+workdir+" && "+SUB+" runsbdart && cd "+job.top)
+  os.system("cd "+workdir+" && "+SUB+" runsbdart_earth && cd "+job.top)

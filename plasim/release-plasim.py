@@ -21,12 +21,13 @@ if __name__=="__main__":
             os.system("cp "+f+" ../output/"+name+"/"+name+"_"+f)
         os.system("cp *DIAG* ../output/"+name+"/")
         
-    outputfiles = sorted(glob.glob("*.pso"))
+    psofiles = sorted(glob.glob("*.pso"))
     if "all" not in sys.argv[:]:
         newest = -1
-        for f in outputfiles:
+        lastfile = ''
+        for f in psofiles:
             age = os.path.getmtime(f)
-            if age>newest and os.path.getsize(f)>1.0e6:
+            if age>newest:
                 newest=age
                 lastfile = f
         name = sys.argv[1]
@@ -34,7 +35,7 @@ if __name__=="__main__":
     else:
         name = sys.argv[1]
         os.system("mkdir ../output/"+name)
-        for f in outputfiles:
+        for f in psofiles:
             os.system("cp "+f+" ../output/"+name+"/"+name+"_"+f)
         os.system("cp *DIAG* ../output/"+name+"/")
         

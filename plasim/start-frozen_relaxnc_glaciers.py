@@ -3,11 +3,30 @@ import os
 import sys
 import netCDF4 as nc
 import glob
+import struct
 
 gplasim = True
 
 #This version lets the model relax, ignores initial restart files, and freezes the model before
-#commencing the experiment.
+#commencing the experiment, then allowing glaciers to adjust.
+
+
+def getmaxdsnow(filename1,filename2):
+  f1=open(filename1,'rb')
+  r1=f1.read()
+  f1.close()
+  
+  f2=open(filename2,'rb')
+  r2=f2.read()
+  f2.close()
+  
+  dd1=np.array(struct.unpack('2048d',r1[4:-4])).reshape((32,64))
+  dd2=np.array(struct.unpack('2048d',r2[4:-4])).reshape((32,64))
+  
+  dsnow = dd2-dd1
+  maxdsnow = np.amax(np.abs(dsnow))
+  
+  return maxdsnow
 
 def edit_namelist(filename,arg,val): 
   f=open(filename,"r")
@@ -65,11 +84,11 @@ def spatialmath(lt,ln,variable,mean=True,radius=6.371e6):
     
     return outvar
 
-def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05):
+def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05,prefix="*"):
     #Key is the netCDF variable to evaluate, mean toggles whether to track the average or total,
     #radius is the planet radius in meters, and baseline is the number of years over which to measure
     #slope. Default is to track surface temperature. Threshhold is the maximum slope we'll allow.
-  files = sorted(glob.glob("*.nc"))
+  files = sorted(glob.glob(prefix+".nc"))
   if len(files) < baseline+2:
     return False
   else:
@@ -143,78 +162,12 @@ if __name__=="__main__":
   os.system("cp planet_namelist planet_namelist_wait")
   
   sol0 = getsol()
-  sol = sol0-25.0
   
-  edit_namelist("planet_namelist","GSOL0","%4.1f"%(sol)) #Turn the Sun dim enough to freeze over
+  edit_namelist("planet_namelist","GSOL0","400.0") #Turn the Sun dim enough to freeze over
   yearsfrozen = 0
   cyear = 0
   while getsurftemp()>255.0 or yearsfrozen<30:
-    for nspool in range(0,3):
-      os.system("echo 'cooldown year "+str(cyear)+"'>>cooldown.log")
-      cyear += 1
-      dataname=EXP+".%04d"%cyear
-      diagname=EXP+"_DIAG.%04d"%cyear
-      restname=EXP+"_REST.%03d"%cyear
-      snowname=EXP+"_SNOW_%1d"%(cyear%5)
-      os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l10_p"+str(NCPU)+".x")
-      os.system("[ -e restart_dsnow ] && rm restart_dsnow")
-      os.system("[ -e restart_xsnow ] && rm restart_xsnow")
-      os.system("[ -e Abort_Message ] && exit 1")
-      os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
-      os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
-      os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
-      os.system("[ -e plasim_status ] && mv plasim_status "+restname)
-      os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
-      os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
-      os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%cyear)
-      os.system("[ -e "+dataname+".nc ] && rm "+dataname)
-      os.system("cp weathering.pso $PBS_O_WORKDIR/")
-      os.system("cp "+diagname+" $PBS_O_WORKDIR/")
-      if hasnans():
-          break
-      if getsurftemp()<=230.0:
-          yearsfrozen+=1
-    sol-=25.0
-    edit_namelist("planet_namelist","GSOL0","%4.1f"%(sol)) #Turn the Sun dim enough to freeze over
-    
-  sol += 25.0
-  
-  while sol<sol0 and not hasnans():   #Ramp back up to target insolation.
-      edit_namelist("planet_namelist","GSOL0",str(sol))
-      for nt in range(0,3):
-         cyear += 1
-         dataname=EXP+".%04d"%cyear
-         diagname=EXP+"_DIAG.%04d"%cyear
-         restname=EXP+"_REST.%03d"%cyear
-         snowname=EXP+"_SNOW_%1d"%(cyear%5)
-         os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l10_p"+str(NCPU)+".x")
-         os.system("[ -e restart_dsnow ] && rm restart_dsnow")
-         os.system("[ -e restart_xsnow ] && rm restart_xsnow")
-         os.system("[ -e Abort_Message ] && exit 1")
-         os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
-         os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
-         os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
-         os.system("[ -e plasim_status ] && mv plasim_status "+restname)
-         os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
-         os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
-         os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%cyear)
-         os.system("[ -e "+dataname+".nc ] && rm "+dataname)
-         os.system("cp weathering.pso $PBS_O_WORKDIR/")
-         os.system("cp "+diagname+" $PBS_O_WORKDIR/")
-         if hasnans():
-             break
-      sol+=25.0
-  
-  
-  os.system("cp planet_namelist_wait planet_namelist") #Turn the Sun back up
-  
-  year=0
-  minyears=25
-  maxyears=150
-  relaxed=False
-  while (year < minyears or not relaxed) and (year < maxyears):
-    os.system("echo 'relaxation year "+str(year)+"'>>cooldown.log")
-    year+=1
+    os.system("echo 'cooldown year "+str(cyear)+"'>>cooldown.log")
     cyear += 1
     dataname=EXP+".%04d"%cyear
     diagname=EXP+"_DIAG.%04d"%cyear
@@ -236,5 +189,93 @@ if __name__=="__main__":
     os.system("cp "+diagname+" $PBS_O_WORKDIR/")
     if hasnans():
         break
-    relaxed=isflat(baseline=minyears)
+    if getsurftemp()<=230.0:
+        yearsfrozen+=1
     
+  sol = 500.0
+  while sol<sol0 and not hasnans():   #Ramp back up to target insolation.
+      edit_namelist("planet_namelist","GSOL0",str(sol))
+      for nt in range(0,2):
+         cyear += 1
+         dataname=EXP+".%04d"%cyear
+         diagname=EXP+"_DIAG.%04d"%cyear
+         restname=EXP+"_REST.%03d"%cyear
+         snowname=EXP+"_SNOW_%1d"%(cyear%5)
+         os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l10_p"+str(NCPU)+".x")
+         os.system("[ -e restart_dsnow ] && rm restart_dsnow")
+         os.system("[ -e restart_xsnow ] && rm restart_xsnow")
+         os.system("[ -e Abort_Message ] && exit 1")
+         os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
+         os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
+         os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
+         os.system("[ -e plasim_status ] && mv plasim_status "+restname)
+         os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
+         os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
+         os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%cyear)
+         os.system("[ -e "+dataname+".nc ] && rm "+dataname)
+         os.system("cp weathering.pso $PBS_O_WORKDIR/")
+         os.system("cp "+diagname+" $PBS_O_WORKDIR/")
+         if hasnans():
+             break
+      sol+=100.0
+    
+  os.system("cp planet_namelist_wait planet_namelist") #Turn the Sun back up
+  
+  
+  ntgl = 0
+  glacrelaxed = False
+  while ntgl < 50 and not glacrelaxed: #No more than 50 iterations
+    year=0
+    minyears=25
+    maxyears = 125
+    relaxed=False
+    while (year < minyears or not relaxed) and (year < maxyears):
+      os.system("echo 'relaxation year "+str(year)+"'>>cooldown.log")
+      year+=1
+      cyear += 1
+      dataname=EXP+".%04d"%cyear
+      diagname=EXP+"_DIAG.%04d"%cyear
+      restname=EXP+"_REST.%03d"%cyear
+      snowname=EXP+"_SNOW_%1d"%(cyear%5)
+      os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l10_p"+str(NCPU)+".x")
+      os.system("[ -e restart_dsnow ] && rm restart_dsnow")
+      os.system("[ -e restart_xsnow ] && rm restart_xsnow")
+      os.system("[ -e Abort_Message ] && exit 1")
+      os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
+      os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
+      os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
+      os.system("[ -e plasim_status ] && mv plasim_status "+restname)
+      os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
+      os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
+      os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%cyear)
+      os.system("[ -e "+dataname+".nc ] && rm "+dataname)
+      os.system("cp weathering.pso $PBS_O_WORKDIR/")
+      os.system("cp "+diagname+" $PBS_O_WORKDIR/")
+      if hasnans():
+          break
+      relaxed=isflat(baseline=minyears,prefix=EXP+".*")
+    os.system("cp "+dataname+".nc "+EXP+"_OUTGLAC.%04d.nc"%ntgl)
+    os.system("cp "+snowname+" "+EXP+"_SNOW.%04d"%ntgl)
+    sfile1 = EXP+"_SNOW_0"
+    sfile2 = EXP+"_SNOW_1"
+    sfile3 = EXP+"_SNOW_2"
+    sfile4 = EXP+"_SNOW_3"
+    sfile5 = EXP+"_SNOW_4"
+    os.system("cp newdsnow newdsnow_old")
+    os.system("cp newxsnow newxsnow_old")
+    deltat = 500.0
+    os.system("./newsnow.x "+sfile1+" "+sfile2+" "+sfile3+" "+sfile4+" "+sfile5+" "+str(deltat))
+    maxdsnow = getmaxdsnow("newdsnow_old","newdsnow")
+    if maxdsnow>127.5: #Cap elevation changes to 150 meters. 2 km elevation changes may break PlaSim
+      fraction=127.5/maxdsnow
+      deltat*=fraction
+      os.system("cp newdsnow_old newdsnow")
+      os.system("cp newxsnow_old newxsnow")
+      os.system("./newsnow.x "+sfile1+" "+sfile2+" "+sfile3+" "+sfile4+" "+sfile5+" "+str(deltat))
+    f=open('cyclelog.txt','a')
+    f.write("Advanced "+str(deltat)+" years. Maximum snow change was "+str(maxdsnow)+".\n")
+    f.close()
+    os.system("mv newdsnow restart_dsnow")
+    os.system("mv newxsnow restart_xsnow")
+    glacrelaxed = isflat(baseline=5,key='icez',threshhold=100.0,prefix=EXP+"_OUTGLAC.*") #less than 10m average annual change over 5 cycles
+    ntgl+=1
