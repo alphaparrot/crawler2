@@ -687,7 +687,7 @@ def getalt_single(ta,lev,grav=9.80665,gascon=287.0):
     
     return zzf  
 
-def analyzecell_plasim_earth(views,data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
+def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
                      sol_lon=0.0,smooth=False,clouds=True):
   #cszenith,azimuth,surface,pCO2,p0,tsurf,altz
   

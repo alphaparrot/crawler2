@@ -687,7 +687,7 @@ def getalt_single(ta,lev,grav=9.80665,gascon=287.0):
     
     return zzf  
 
-def analyzecell_plasim_earth(views,data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
+def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
                      sol_lon=0.0,smooth=False,clouds=True):
   #cszenith,azimuth,surface,pCO2,p0,tsurf,altz
   
@@ -1528,23 +1528,23 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   
   views = [28.125,118.125,196.875,275.625]
   
+  vws = ['Z','N','E','S','W']
   for jlon in range(lons[0],lons[1]):
     for jlat in range(lats[0],lats[1]):
       for nang in range(0,4):
-        csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,jlat,jlon,
-                                                         workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),
-                                                         sol_lon = views[nang],
-                                                         grav=grav,smooth=smooth,clouds=clouds)
-        if uniform:
-            surf='uniform'
-        latitude = data.variables['lat'][jlat]
-        longitude = data.variables['lon'][jlon]
-        vws = ['Z','N','E','S','W']
         for vv in range(0,5):
+            csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,jlat,jlon,
+                                                             workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
+                                                             sol_lon = views[nang],
+                                                             grav=grav,smooth=smooth,clouds=clouds)
+            if uniform:
+                surf='uniform'
+            latitude = data.variables['lat'][jlat]
+            longitude = data.variables['lon'][jlon]
             write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
                               vv,csz,azm,latitude,longitude,surf,pCO2,p0,tsurf,altz,flux,
                               wmin=wmin,albedo=unialb,flat=flat,sic=sic,spec=star,smooth=smooth)
-        print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[vv])
+            print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[vv])
       
 def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   workdir = job.top+"/sbdart_earth/job"+str(job.home)
