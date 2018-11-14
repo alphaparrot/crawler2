@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python relax-netcdf.py $1
+python relax-netcdf.py $1 $2

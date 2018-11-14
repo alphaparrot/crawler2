@@ -84,6 +84,7 @@ if __name__=="__main__":
     wf.close()
   EXP="MOST"
   NCPU=int(sys.argv[1])
+  nlevs=int(sys.argv[2])
   #os.system("rm -f plasim_restart") #Uncomment for a fresh run when you haven't cleaned up beforehand
   os.system("rm -f Abort_Message")
   year=0
@@ -92,21 +93,26 @@ if __name__=="__main__":
   while year < minyears or not relaxed:
     year+=1
     dataname=EXP+".%04d"%year
+    snapname=EXP+"_SNAP.%04d"%year
     diagname=EXP+"_DIAG.%04d"%year
     restname=EXP+"_REST.%03d"%year
     snowname=EXP+"_SNOW_%1d"%(year%5)
-    os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l10_p"+str(NCPU)+".x")
+    os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l%d_p"%nlevs+str(NCPU)+".x")
     os.system("[ -e restart_dsnow ] && rm restart_dsnow")
     os.system("[ -e restart_xsnow ] && rm restart_xsnow")
     os.system("[ -e Abort_Message ] && exit 1")
     os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
+    os.system("[ -e plasim_snapshot ] && mv plasim_snapshot "+snapname)
     os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
     os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
     os.system("[ -e plasim_status ] && mv plasim_status "+restname)
     os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
     os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
+    os.system("[ -e "+snapname+" ] && ./burn7.x -n <snapshot.nl>snapout "+snapname+" "+snapname+".nc")
     os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%year)
     os.system("[ -e "+dataname+".nc ] && rm "+dataname)
+    os.system("[ -e "+snapname+".nc ] && rm "+snapname)
+    os.system("[ -e "+snapname+".nc ] && mv "+snapname+".nc snapshots/")
     if hasnans():
         break
     relaxed=isflat(baseline=minyears)

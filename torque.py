@@ -27,7 +27,8 @@ MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale 
           "sbdart_earth":8,     #HPC convention of a task being a thread or process. This way our
           "postprocess":8,      #code is MPI/OpenMP-agnostic.
           "postprocess_earth":8,
-          "lmdz":8}             
+          "lmdz":8,
+          "mitgcm":6}             
 
 def getjobs():
     print "Checking jobs"

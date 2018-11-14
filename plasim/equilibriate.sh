@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python relax.py $1
+python relax.py $1 $2

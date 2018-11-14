@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python super_relax.py $1
+python super_relax.py $1 $2

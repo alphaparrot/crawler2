@@ -4,7 +4,7 @@ import os
 import time
 from batch_system import SUB, BATCHSCRIPT
 
-def write_input_earth(workdir,nview,cszenith,azimuth,latitude,longitude,surface,pCO2,p0,
+def write_input_earth(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,surface,pCO2,p0,
                 tsurf,altz,flux,wmin=0.55,albedo=0.35,smooth=False,flat=True,sic=0.0,spec=False):
   template =("&INPUT                                                     \n"+ #0
              " IDATM=          0,                                        \n"+ #1
@@ -165,14 +165,18 @@ def write_input_earth(workdir,nview,cszenith,azimuth,latitude,longitude,surface,
 #are mixed. 
 
   rlat = latitude
-  #rlat = abs(np.array([rlat,90.0-rlat,rlat,rlat+90.0,rlat]))
-  lcoeff = np.array([1,-1,1,1,1])
-  loff = np.array([0,90,0,90,0])
-  rlat = lcoeff[nview]*rlat + loff[nview]
+  #rlat = abs(np.array([rlat,rlat,rlat,90.0-rlat,rlat+90.0]))
+  #lcoeff = np.array([1,1,1,-1,1])
+  loff = np.array([0,0,0,90,-90])
+  rdec = loff[nview]*np.pi/180.0
+  #rlat = lcoeff[nview]*rlat + loff[nview]
   #hours = np.linspace(0,84.375,num=16)*np.pi/180.0
   # cos(p)cos(l) = cos(z)
-  # 12pm, N, E, S, W
-  hours = longitude + np.array([0,0,90,0,-90])[nview]
+  
+  faces = [28.125,118.125,196.875,275.625]
+  
+  # 12pm, E, W, N, S
+  hours = longitude - faces[ntime] + np.array([0,-90,90,0,0])[nview]
   if hours<0:
       hours+=360
   elif hours>360:
@@ -183,13 +187,13 @@ def write_input_earth(workdir,nview,cszenith,azimuth,latitude,longitude,surface,
   rlat*=(np.pi/180.0)
   hours*=(np.pi/180.0)
   
-  cuz = np.cos(rlat)*np.cos(hours)
+  cuz = np.sin(rlat)*np.sin(rdec)+np.cos(rdec)*np.cos(rlat)*np.cos(hours)
   uz = np.arccos(cuz)*180.0/np.pi
   suz = np.sin(uz*np.pi/180.0)
   
 #Azimuths
   # if longitude = pi, and lat = 0, cos(phi) is NaN.
-  cosazs = -cuz*np.sin(rlat) / (suz*np.cos(rlat))
+  cosazs = (np.sin(rdec)-cuz*np.sin(rlat)) / (suz*np.cos(rlat))
   # -cos(z)sin(p)/(sin(z)cos(p)) = -tan(p)/tan(z)
   #cosazs[np.isnan(cosazs)] = 0.0
   if np.isnan(cosazs):
@@ -687,15 +691,16 @@ def getalt_single(ta,lev,grav=9.80665,gascon=287.0):
     
     return zzf  
 
-def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
-                     sol_lon=0.0,smooth=False,clouds=True):
+def analyzecell_plasim_earth(data,views,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
+                     sol_lon=0.0,smooth=False,clouds=True,istep=-1):
   #cszenith,azimuth,surface,pCO2,p0,tsurf,altz
   
   surf = "uniform"
   
   lsm = data.variables['lsm'][-1,lat,lon]
   if lsm < 0.5: #sea
-    sic = np.mean(data.variables['sic'][:,lat,lon])
+    #sic = np.mean(data.variables['sic'][:,lat,lon])
+    sic = data.variables['sic'][istep,lat,lon]
     if sic == 1.0:
       surf = "snow"
     elif sic == 0.0:
@@ -703,18 +708,21 @@ def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
     else:
       surf = "seamix"
   else:
-    if (np.mean(data.variables['snd'][:,lat,lon])+np.mean(data.variables['glac'][:,lat,lon]))>=0.7:
+    #if (np.mean(data.variables['snd'][:,lat,lon])+np.mean(data.variables['glac'][:,lat,lon]))>=0.7:
+    if (data.variables['snd'][istep,lat,lon]+data.variables['glac'][istep,lat,lon])>=0.7:
         surf = "snow"
     else:
         surf = "sand"
     sic = 0.0
     #We could put in an actual algorithm to get albedo given soil wetness, or combine sand, veg, etc
     
-  tsurf = np.mean(data.variables['ts'][:,lat,lon])
+  #tsurf = np.mean(data.variables['ts'][:,lat,lon])
+  tsurf = data.variables['ts'][istep,lat,lon]
   
   altz = max(data.variables["sg"][-1,lat,lon]*1.0e-3,0.0) / grav #kilometers
   
-  ta = np.mean(data.variables["ta"][:,:,lat,lon],axis=0)
+  #ta = np.mean(data.variables["ta"][:,:,lat,lon],axis=0)
+  ta = data.variables["ta"][istep,:,lat,lon]
   
   lvs = data.variables['lev']
   #lns = data.variables['lon']
@@ -722,7 +730,8 @@ def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   
   zs = getalt_single(ta,lvs,grav=grav,gascon=287.0)
   
-  ps = np.mean(data.variables['ps'][:,lat,lon])
+  #ps = np.mean(data.variables['ps'][:,lat,lon])
+  ps = data.variables['ps'][istep,lat,lon]
   pa = ps * lvs
   
   gascon0 = 8.3144598
@@ -731,7 +740,8 @@ def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   
   satvap = 610.78*10.0**(7.5*(ta-273.15)/(ta+0.15))
   
-  relhum = np.mean(data.variables['hur'][:,:,lat,lon],axis=0)*0.01
+  #relhum = np.mean(data.variables['hur'][:,:,lat,lon],axis=0)*0.01
+  relhum = data.variables['hur'][istep,:,lat,lon]*0.01
   
   pvap = relhum*satvap
   
@@ -740,12 +750,13 @@ def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   
   rhohum = ((pa*100.0-pvap)*mmair+pvap*mmvap)/(gascon0*ta)
   
-  hus = np.mean(data.variables['hus'][:,:,lat,lon],axis=0)
+  #hus = np.mean(data.variables['hus'][:,:,lat,lon],axis=0)
+  hus = data.variables['hus'][istep,:,lat,lon]
   rhoh2o = hus*rhohum
   
   print "Writing atms.dat"
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
-  for vw in ['Z','N','E','S','W']:
+  for vw in views:
     writecolumn_single_plasim(zs,pa,ta,rhoh2o*1000.0,np.zeros(len(lvs)),workdir+"_%s"%vw)
   
   dsigma = np.zeros(len(lvs))
@@ -753,15 +764,17 @@ def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   for i in range(1,len(lvs)):
     dsigma[i] = lvs[i]-lvs[i-1]
     
-  clw = np.mean(data.variables['clw'][:,:,lat,lon],axis=0)
+  #clw = np.mean(data.variables['clw'][:,:,lat,lon],axis=0)
+  clw = data.variables['clw'][istep,:,lat,lon]
   
   dql = np.zeros(len(lvs))
   cld = np.zeros(len(lvs))
   
   if not smooth:
-    dql = dsigma*1000.0*ps*clw/grav #g/m^2 #Cloud liquid water path
+    dql = dsigma*1000.0*ps*hus/grav #g/m^2 #Cloud liquid water path #was clw not hus
   
-    cld = np.mean(data.variables['cl'][:,:,lat,lon],axis=0)
+    #cld = np.mean(data.variables['cl'][:,:,lat,lon],axis=0)
+    cld = data.variables['cl'][istep,:,lat,lon]
   
   if not clouds:
     cld[:] = 0.0
@@ -769,7 +782,7 @@ def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   print "Writing usrcld.dat"
   #Need to implement a cloud-free option
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
-  for vw in ['Z','N','E','S','W']:
+  for vw in views:
     cloudcolumn_single(dql,cld,workdir+"_%s"%vw)
   
   latitude = data.variables['lat'][lat]
@@ -877,6 +890,7 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False,clouds=Tru
   
   if not clouds:
     cld[:] = 0.0
+    dql[:] = 0.0
     
   print "Writing usrcld.dat"
   #Need to implement a cloud-free option
@@ -1310,7 +1324,7 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   else:
     source = "clean"
     
-  ntimes = '{0..3}'
+  ntimes = '{0,1,2,3}'
   lviews = '{Z,E,W,N,S}'
   
   if "angles" in job.parameters:
@@ -1318,6 +1332,23 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
     
   if "views" in job.parameters:
       lviews = job.parameters["views"]
+      
+  vws = lviews[1:-1].split(',')
+  if vws[-1]=='':
+      vws = vws[:-1]
+  itimes = ntimes[1:-1].split(',')
+  if itimes[-1]=='':
+      itimes = itimes[:-1]
+  itimes = np.array(itimes).astype(int)
+      
+  
+  viewdict = {'Z':0,
+              'E':1,
+              'W':2,
+              'N':3,
+              'S':4}    
+      
+  print "Setting up for times ",itimes,"and views",vws
     
   if "lats" in job.parameters:
     lats = job.parameters["lats"].split(',')
@@ -1408,6 +1439,10 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   if "notify" in job.parameters:
       notify = job.parameters["notify"]
       
+  istep=12
+  if "istep" in job.parameters:
+      istep = int(job.parameters["istep"])
+      
   uniform=False     
   unialb = 0.35
   if "albedo" in job.parameters:
@@ -1423,8 +1458,8 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   nlats = len(data.variables['lat'][:])
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
-      for nang in range(0,4):
-        for vw in ['Z','N','E','S','W']:
+      for nang in itimes:
+        for vw in vws:
             print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
             print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
             os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
@@ -1528,23 +1563,25 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   
   views = [28.125,118.125,196.875,275.625]
   
-  vws = ['Z','N','E','S','W']
   for jlon in range(lons[0],lons[1]):
     for jlat in range(lats[0],lats[1]):
-      for nang in range(0,4):
-        for vv in range(0,5):
-            csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,jlat,jlon,
-                                                             workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
-                                                             sol_lon = views[nang],
-                                                             grav=grav,smooth=smooth,clouds=clouds)
-            if uniform:
-                surf='uniform'
-            latitude = data.variables['lat'][jlat]
-            longitude = data.variables['lon'][jlon]
+      for nang in itimes:
+        csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,vws,jlat,jlon,
+                                                         workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),
+                                                         sol_lon = views[nang],
+                                                         grav=grav,smooth=smooth,clouds=clouds,
+                                                         istep=istep)
+        if uniform:
+            surf='uniform'
+        latitude = data.variables['lat'][jlat]
+        longitude = data.variables['lon'][jlon]
+        #vws = ['Z','N','E','S','W']
+        for vv in range(0,len(vws)):
+            nv = viewdict[vws[vv]]
             write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
-                              vv,csz,azm,latitude,longitude,surf,pCO2,p0,tsurf,altz,flux,
+                              nv,nang,csz,azm,latitude,longitude,surf,pCO2,p0,tsurf,altz,flux,
                               wmin=wmin,albedo=unialb,flat=flat,sic=sic,spec=star,smooth=smooth)
-            print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[vv])
+        print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[vv])
       
 def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   workdir = job.top+"/sbdart_earth/job"+str(job.home)

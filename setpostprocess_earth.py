@@ -10,10 +10,13 @@ from batch_system import SUB, BATCHSCRIPT
 
 def prep(job):
     workdir = job.parameters["workdir"]
+
     gtype = job.parameters["type"]
     gcm = job.parameters["gcm"]
     
     cwd = os.getcwd()
+    
+    homedir = cwd+"/postprocess_earth/job"+str(job.home)
     
     notify = 'ae'
     
@@ -35,10 +38,15 @@ def prep(job):
     np.save(workdir+"/latitudes.npy",lats)
     np.save(workdir+"/longitudes.npy",lons)
     
-    if "lon0" in job.parameters:
-        lon0 = job.parameters["lon0"]
+    if "times" in job.parameters:
+        times = job.parameters["times"]
     else:
-        lon0 = "0"
+        times="0"
+        
+    if "angles" in job.parameters:
+        angles = job.parameters["angles"]
+    else:
+        angles="Z"
     
     if "NCORES" in job.parameters:
         ncpu = job.parameters["NCORES"]
@@ -84,41 +92,46 @@ def prep(job):
         jobscript =(BATCHSCRIPT(job,notify)+
                     "module load gcc/4.9.1                                            \n"+
                     "module load python/2.7.9                                         \n"+
-                    "mv "+cwd+"/postprocess/job"+str(job.home)+"/job.npy ./           \n"+
+                    "cd "+workdir+"                      \n"+
+                    "cp "+cwd+"/postprocess_earth/job"+str(job.home)+"/job.npy ./           \n"+
                     "mkdir /mnt/node_scratch/paradise/postprocess_earth/                    \n"+
                     "mkdir /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "cp -a * /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "cd /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
-                    "python postprocess.py "+lon0+" "+tag+"                           \n"+
-                    "cp -a /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/* $PBS_O_WORKDIR/ \n"+
+                    "python postprocess_earth.py "+times+" "+angles+" "+tag+"                           \n"+
+                    "cp -a /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/* "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
-                    "cd $PBS_O_WORKDIR                                                \n"+
+                    "cd "+workdir+"                                                \n"+
                     "cp spectra.nc "+cwd+"/postprocess_earth/output/"+job.name+"_spectra.nc \n"+
-                    "cp phasecurve.nc "+cwd+"/postprocess_earth/output/"+job.name+"_phasecurve.nc \n"+
+                    "cp phases.nc "+cwd+"/postprocess_earth/output/"+job.name+"_phases.nc \n"+
                     "python release.py \n")
     else:
+        tag+="phases "
         jobscript =(BATCHSCRIPT(job,notify)+
                     "module load gcc/4.9.1                                            \n"+
                     "module load python/2.7.9                                         \n"+
-                    "mv "+cwd+"/postprocess_earth/job"+str(job.home)+"/job.npy ./           \n"+
+                    "cd "+workdir+"                      \n"+
+                    "cp "+cwd+"/postprocess_earth/job"+str(job.home)+"/job.npy ./           \n"+
                     "mkdir /mnt/node_scratch/paradise/postprocess_earth/                    \n"+
                     "mkdir /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "cp -a * /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "cd /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
-                    "python postspectra.py "+tag+"                                    \n"+
-                    "cp -a /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/* $PBS_O_WORKDIR/ \n"+
+                    "python postprocess_earth.py "+times+" "+angles+" "+tag+"                                    \n"+
+                    "cp -a /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/* "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
-                    "cd $PBS_O_WORKDIR                                                \n"+
-                    "cp phasecurve.nc "+cwd+"/postprocess_earth/output/"+job.name+"_phasecurve.nc \n"+
+                    "cd "+workdir+"                                                \n"+
+                    "cp phases.nc "+cwd+"/postprocess_earth/output/"+job.name+"_phases.nc \n"+
                     "python release.py \n")
         
     
      
-    rs = open(workdir+"/runpostprocess_earth","w")
+    rs = open(homedir+"/runpostprocess_earth","w")
     rs.write(jobscript)
     rs.close()
 
 def submit(job):
     workdir = job.parameters["workdir"]
+    cwd = os.getcwd()
+    homedir = cwd+"/postprocess_earth/job"+str(job.home)
   
-    os.system("cd "+workdir+" && "+SUB+" runpostprocess_earth && cd ../../")
+    os.system("cd "+homedir+" && "+SUB+" runpostprocess_earth && cd ../../")

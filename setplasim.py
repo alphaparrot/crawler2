@@ -116,6 +116,10 @@ def prep(job):
   
   keeprs = False
   monitor = False
+  yearini = 0
+  weathrestart = False
+  nlevs = 10
+  nsn = False
   
   for name in job.fields[2:]:
     val = job.parameters[name]
@@ -196,6 +200,14 @@ def prep(job):
       day = float(val)*3600.0
       val = str(day)
       edit_namelist(jid,"planet_namelist","SOLAR_DAY",val)
+      
+    if name=="nlevs":
+      found=True
+      nlevs = int(val)
+      
+    if name=="vtype":
+      found=True
+      edit_namelist(jid,"plasim_namelist","NEQSIG",val)
      
     if name=="rotspd":
       found=True
@@ -219,6 +231,16 @@ def prep(job):
         os.system("cp hopper/"+val+" plasim/job"+jid+"/plasim_restart")
       else:
         os.system("rm plasim/job"+jid+"/plasim_restart")
+        
+    if name=="hweathering":
+      found=True
+      os.system("cp hopper/"+val+" plasim/job"+jid+"/")
+      wfile = val
+      weathrestart = True
+      
+    if name=="year_init":
+      found=True
+      yearini = int(val)
      
     if name=="gravity":
       found=True
@@ -401,9 +423,23 @@ def prep(job):
       found=True
       edit_namelist(jid,"plasim_namelist","N_RUN_STEPS",val)
       
+    if name=="o3":
+      found=True
+      edit_namelist(jid,"radmod_namelist","NO3",val)
+      
+    if name=="vlog_top":
+      found=True
+      edit_namelist(jid,"plasim_namelist","NEQSIG","2")
+      edit_namelist(jid,"plasim_namelist","PTOP",str(float(val)*100.0))
+      
     if name=="timestep":
       found=True
       edit_namelist(jid,"plasim_namelist","MPSTEP",val)
+      edit_namelist(jid,"plasim_namelist","NSTPW",str(7200/int(float(val))))
+      
+    if name=="rayleigh":
+      found=True
+      edit_namelist(jid,"radmod_namelist","NEWRSC",val)
       
     if name=="script":
       found=True
@@ -417,6 +453,12 @@ def prep(job):
     if name=="notify":
       found=True
       notify = val
+      
+    if name=="snapshots":
+      found=True
+      edit_namelist(jid,"plasim_namelist","NSNAPSHOT","1")
+      edit_namelist(jid,"plasim_namelist","NSTPS",val)
+      nsn = True
       
     if name=="extra":
       found=True
@@ -460,16 +502,22 @@ def prep(job):
       
   print "Arguments set"
   
+  histargs = ''
+  if weathrestart:
+      histargs = wfile+" "+str(yearini)
+  
   # You may have to change this part
   jobscript =(BATCHSCRIPT(job,notify)+
               "module load gcc/4.9.1                                          \n"+
               "module load python/2.7.9                                       \n"+
               "module load intel/intel-17                                       \n"+
               "module load openmpi/2.0.1-intel-17                               \n"+
-              "mkdir /mnt/node_scratch/paradise/job"+jid+"            \n"+
-              "cp -a * /mnt/node_scratch/paradise/job"+jid+"/         \n"+
+              "mkdir /mnt/node_scratch/paradise/job"+jid+"            \n")
+  if nsn:
+      jobscript+="mkdir /mnt/node_scratch/paradise/job"+jid+"/snapshots         \n"
+  jobscript +=("cp -a * /mnt/node_scratch/paradise/job"+jid+"/         \n"+
               "cd /mnt/node_scratch/paradise/job"+jid+"/              \n"+
-              "./"+scriptfile+" "+str(job.ncores)+"                             \n"+
+              "./"+scriptfile+" "+str(job.ncores)+" "+str(nlevs)+" "+histargs+"   \n"+
               "cp -a * $PBS_O_WORKDIR/                                          \n"+
               "rm -rf *                                                         \n"+
               "cd $PBS_O_WORKDIR                                                \n")

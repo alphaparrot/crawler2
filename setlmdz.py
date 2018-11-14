@@ -83,22 +83,22 @@ def prep(job):
     
     nruns = 20
     
-    if "daylen" in job.parameters:
+    if "daylen" in job.parameters: #seconds
         daylen = float(job.parameters["daylen"])
         recompile = True
     
-    if "preff" in job.parameters:
+    if "preff" in job.parameters: #Pa
         preff = float(job.parameters["preff"])
         fco2 = co2*0.1/preff
         fn2 = 1.0-fco2
         edit_gases(jid,["N2_","CO2","H2O"],[fn2,fco2,-1])
         recompile = True
         
-    if "radius" in job.parameters:
+    if "radius" in job.parameters: #in R_earth
         radius = float(job.parameters["radius"])
         recompile = True
         
-    if "gravity" in job.parameters:
+    if "gravity" in job.parameters: #in m/s^2
         gravity = float(job.parameters["gravity"])
         recompile = True
     
