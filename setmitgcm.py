@@ -52,10 +52,11 @@ def prep(job):
   
   source+="/l%02d"%NLEV
   
-  os.system("cp "+source+"/* "+workdir+"/")
+  os.system("cp "+job.top+"/mitgcm/"+source+"/* "+workdir+"/")
+  os.system("cp "+job.top+"/mitgcm/release.sh "+workdir+"/")
   
   if "p0" in job.parameters: #in Pa
-    p0 = float(job.parameters["p0"])
+    p0 = float(job.parameters["p0"])*101100.0
     if "linearpressure" in job.parameters:
         if int(job.parameters['linearpressure'])==1:
             dps = np.zeros(NLEV)+p0*0.1
@@ -67,7 +68,7 @@ def prep(job):
             dps = -np.diff(np.geomspace(ptop,p0,num=NLEV+1)[::-1])
     if not edit_data(workdir+"/data","PARM01","atm_Po",p0):
         print "WARNING: Unable to set atm_Po in data/&PARM01!"
-    if not edit_data(workdir+"/data","PARM04","delR",dps,format='list'):
+    if not edit_data(workdir+"/data","PARM04","delR",dps,form='list'):
         print "WARNING: Unable to set delR in data/&PARM04!"
     
   if "flux" in job.parameters: #in W/m^2

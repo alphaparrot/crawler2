@@ -96,12 +96,19 @@ def prep(job):
                     "cp "+cwd+"/postprocess_earth/job"+str(job.home)+"/job.npy ./           \n"+
                     "mkdir /mnt/node_scratch/paradise/postprocess_earth/                    \n"+
                     "mkdir /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
-                    "cp -a * /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "tar cvzf stuff.tar.gz *                                         \n"+
+                    "rsync -avzhur stuff.tar.gz /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "rm -rf stuff.tar.gz            \n"+
                     "cd /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "tar xvzf stuff.tar.gz                \n"+
+                    "rm -rf stuff.tar.gz                   \n"+
                     "python postprocess_earth.py "+times+" "+angles+" "+tag+"                           \n"+
-                    "cp -a /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/* "+workdir+"/ \n"+
+                    "tar cvzf stuff.tar.gz *                 \n"+
+                    "rsync -avzhur stuff.tar.gz "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
                     "cd "+workdir+"                                                \n"+
+                    "tar xvzf stuff.tar.gz                                \n"+
+                    "rm stuff.tar.gz          \n"+
                     "cp spectra.nc "+cwd+"/postprocess_earth/output/"+job.name+"_spectra.nc \n"+
                     "cp phases.nc "+cwd+"/postprocess_earth/output/"+job.name+"_phases.nc \n"+
                     "python release.py \n")
@@ -114,12 +121,19 @@ def prep(job):
                     "cp "+cwd+"/postprocess_earth/job"+str(job.home)+"/job.npy ./           \n"+
                     "mkdir /mnt/node_scratch/paradise/postprocess_earth/                    \n"+
                     "mkdir /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
-                    "cp -a * /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "tar cvzf stuff.tar.gz *                                         \n"+
+                    "rsync -avzhur stuff.tar.gz /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "rm -rf stuff.tar.gz            \n"+
                     "cd /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "tar xvzf stuff.tar.gz                \n"+
+                    "rm -rf stuff.tar.gz                   \n"+
                     "python postprocess_earth.py "+times+" "+angles+" "+tag+"                                    \n"+
-                    "cp -a /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/* "+workdir+"/ \n"+
+                    "tar cvzf stuff.tar.gz *                 \n"+
+                    "rsync -avzhur stuff.tar.gz "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
                     "cd "+workdir+"                                                \n"+
+                    "tar xvzf stuff.tar.gz                                \n"+
+                    "rm stuff.tar.gz          \n"+
                     "cp phases.nc "+cwd+"/postprocess_earth/output/"+job.name+"_phases.nc \n"+
                     "python release.py \n")
         

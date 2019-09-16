@@ -17,7 +17,7 @@ def prep(job):
   os.system("cp batch_system.py "+workdir+"/")
   os.system("cp torque.py "+workdir+"/")
   os.system("cp slurm.py "+workdir+"/")
-  job.name = "build_"+job.name
+  #job.name = "build_"+job.name
   jobscript =(BATCHSCRIPT(job,'a')+
               "module load gcc/4.9.1                                          \n"+
               "module load python/2.7.9                                       \n"+

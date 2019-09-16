@@ -3,10 +3,8 @@ import os
 import sys
 import netCDF4 as nc
 import glob
-import time
 
 gplasim = True
-TIMELIMIT = 1.44e5
 
 #This version lets the model relax.
 
@@ -44,29 +42,19 @@ def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05):
     #radius is the planet radius in meters, and baseline is the number of years over which to measure
     #slope. Default is to track surface temperature. Threshhold is the maximum slope we'll allow.
   files = sorted(glob.glob("*.nc"))
-  nfiles = len(files)
-  prior=False
-  if len(glob.glob("thistory.ps*"))>0:
-      thistory = np.loadtxt("thistory.pso")
-      nfiles += len(thistory)
-      prior=True
-  dd = np.zeros(nfiles)
-  nstart=0
-  if prior:
-      dd[:len(thistory)] = thistory[:]
-      nstart=len(thistory)
   if len(files) < baseline+2:
     return False
   else:
+    dd=np.zeros(len(files))
     for n in range(0,len(files)):
         ncd = nc.Dataset(files[n],"r")
         variable = ncd.variables[key][:]
         if len(variable.shape)>3:
             variable = variable[:,-1,:,:]
         for m in range(0,variable.shape[0]):
-            dd[n+nstart] += spatialmath(ncd.variables['lat'][:],ncd.variables['lon'][:],variable[m,:,:],
+            dd[n] += spatialmath(ncd.variables['lat'][:],ncd.variables['lon'][:],variable[m,:,:],
                                  mean=mean,radius=radius)
-        dd[n+nstart] /= variable.shape[0] #Monthly mean
+            dd[n] /= variable.shape[0] #Monthly mean
         ncd.close()
     n=len(dd)-3
     tt=np.arange(baseline)+1
@@ -82,50 +70,23 @@ def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05):
     else:
       return False
   
-def gethistory(key="ts",mean=True,radius=6.371e6):
-    files = sorted(glob.glob("*.nc"))
-    dd=np.zeros(len(files))
-    for n in range(0,len(files)):
-        ncd = nc.Dataset(files[n],"r")
-        variable = ncd.variables[key][:]
-        if len(variable.shape)>3:
-            variable = variable[:,-1,:,:]
-        for m in range(0,variable.shape[0]):
-            dd[n] += spatialmath(ncd.variables['lat'][:],ncd.variables['lon'][:],variable[m,:,:],
-                                 mean=mean,radius=radius)
-        dd[n] /= variable.shape[0] #Monthly mean
-        ncd.close()
-    return dd
-  
 def hasnans():
     files = sorted(glob.glob("*.nc"))
     print "NetCDF  files:",files
     if type(files)!=type([1,2,3]):
         files = [files,]
     ncd = nc.Dataset(files[-1],"r") #Should be most recent
-    if np.sum(1.0*np.isnan(ncd.variables['ts'][-1,:]))>0.5:
+    if np.isnan(np.amax(ncd.variables['ts'][-1,:])):
         return True
     return False
 
 def energybalanced(threshhold = 1.0e-4,baseline=50): #Takes an average of 200 years
     files = sorted(glob.glob("*.nc"))
-    nfiles = len(files)
-    prior=False
-    if len(glob.glob("toahistory.ps*"))>0:
-        toahistory = np.loadtxt("toahistory.pso")
-        nfiles+=len(toahistory)
-        shistory = np.loadtxt("shistory.pso")
-        prior=True
-    sbalance = np.zeros(nfiles)
-    toabalance=np.zeros(nfiles)
-    nstart=0
-    if prior:
-        sbalance[:len(toahistory)] = shistory[:]
-        toabalance[:len(toahistory)] = toahistory[:]
-        nstart = len(toahistory)
     if len(files) < baseline: #Run for minimum of baseline years
         return False
     else:
+        sbalance = []
+        toabalance = []
         for n in range(0,len(files)):
             ncd = nc.Dataset(files[n],"r")
             ntr = ncd.variables['ntr'][:]
@@ -138,8 +99,8 @@ def energybalanced(threshhold = 1.0e-4,baseline=50): #Takes an average of 200 ye
             for m in range(0,12):
                 topt[m] = spatialmath(lat,lon,ntr[m,:,:])
                 bott[m] = spatialmath(lat,lon,hfns[m,:,:])
-            sbalance[n+nstart] = np.mean(bott)
-            toabalance[n+nstart] = np.mean(topt)
+            sbalance.append(np.mean(bott))
+            toabalance.append(np.mean(topt))
         savgs = []
         tavgs = []
         for n in range(9,len(sbalance)):
@@ -182,20 +143,16 @@ if __name__=="__main__":
     wf.write("     CO2       AVG SURF T   WEATHERING    OUTGASSING      DpCO2       NEW CO2\n")
     wf.close()
   EXP="MOST"
-  os.system("rm keepgoing")
-  tstart = time.clock()
   NCPU=int(sys.argv[1])
   nlevs = int(sys.argv[2])
   #os.system("rm -f plasim_restart") #Uncomment for a fresh run when you haven't cleaned up beforehand
   os.system("rm -f Abort_Message")
   os.system("echo 'SURFACE      TOA'>balance.log")
   os.system("echo 'SURFACE      TOA'>slopes.log")
-  exfiles = glob.glob("*DIAG*")
-  year=len(exfiles)
-  minyears=75
-  maxyears=year+300
+  year=0
+  minyears=50
   relaxed=False
-  while (year < minyears or not energybalanced(threshhold=4.0e-4)) and year<maxyears and (time.clock()-tstart)<=TIMELIMIT:
+  while year < minyears or not energybalanced(threshhold=4.0e-4):
     year+=1
     dataname=EXP+".%04d"%year
     snapname=EXP+"_SNAP.%04d"%year
@@ -219,19 +176,7 @@ if __name__=="__main__":
     os.system("[ -e "+snapname+".nc ] && rm "+snapname)
     os.system("[ -e "+snapname+".nc ] && mv "+snapname+".nc snapshots/")
     if hasnans():
-        os.system("echo 'NAN ENCOUNTERED'>>weathering.pso")
         break
     sb,tb = getbalance()
     os.system("echo '%02.6f  %02.6f'>>balance.log"%(sb,tb))
-  os.system("rm keepgoing")
-  if not hasnans() and not energybalanced(threshhold=4.0e-4):
-    os.system("touch keepgoing")
-    bott = gethistory(key="hfns")
-    topt = gethistory(key="ntr")
-    with open("shistory.pso","a+") as f:
-        text='\n'+'\n'.join(bott.astype(str))
-        f.write(text)
-    with open("toahistory.pso","a+") as f:
-        text='\n'+'\n'.join(topt.astype(str))
-        f.write(text)
-        
+    

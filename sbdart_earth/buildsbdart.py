@@ -5,7 +5,8 @@ import time
 from batch_system import SUB, BATCHSCRIPT
 
 def write_input_earth(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,surface,pCO2,p0,
-                tsurf,altz,flux,wmin=0.55,albedo=0.35,smooth=False,flat=True,sic=0.0,spec=False):
+                tsurf,altz,flux,wmin=0.55,wmax=19.0,albedo=0.35,smooth=False,flat=True,sic=0.0,
+                spec=False,iout=5,zout=(0,100)):
   template =("&INPUT                                                     \n"+ #0
              " IDATM=          0,                                        \n"+ #1
              " AMIX= -1.0000000000000000     ,                           \n"+ #2
@@ -72,8 +73,8 @@ def write_input_earth(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,su
              " ZGRID2=  30.000000000000000     ,                         \n"+ #63
              " NGRID=          0,                                        \n"+ #64
              " IDB= 20*0          ,                                      \n"+ #65
-             " ZOUT=  0.0000000000000000     ,  100.00000000000000     , \n"+ #66
-             " IOUT=         5,                                          \n"+ #67   
+             " ZOUT=  %3.8f     ,  %3.8f     , \n"%zout+ #66
+             " IOUT=         "+str(iout)+",                              \n"+ #67   
              " PRNT= 7*F,                                                \n"+ #68
              " TEMIS=  0.0000000000000000     ,                          \n"+ #69
              " NSTR=          0,                                         \n"+ #70
@@ -146,7 +147,7 @@ def write_input_earth(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,su
   
   input_text = template.split('\n')
   
-  wc = 0.5*(19.0+wmin)
+  wc = 0.5*(wmax+wmin)
   input_text[4] = " WLINF= %2.9f ,   "%wc
   input_text[5] = " WLSUP= %2.9f ,   "%(0.5*(wc-wmin))
   
@@ -211,6 +212,9 @@ def write_input_earth(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,su
   input_text[74]+="   , "
   
   input_text[8] = " CSZA= %.16f   ,     "%cszenith
+  if cszenith < 0:
+      input_text[7] = " SZA= %.16f    ,     "%(np.arccos(cszenith)*180.0/np.pi)
+      input_text[8] = " CSZA= -1     ,      "
   input_text[75] = " SAZA= %3.16f   ,   "%azimuth
   input_text[79] = " BTEMP= %3.3f   ,   "%tsurf
   input_text[9] = " SOLFAC= %.16f   ,   "%(flux/1367.0)
@@ -475,6 +479,9 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,
   input_text[74] = " PHI= %.16f,%.16f  , "%(avguaz,360.0-avguaz)
   
   input_text[8] = " CSZA= %.16f   ,     "%cszenith
+  if cszenith < 0:
+      input_text[7] = " SZA= %.16f    ,     "%(np.arccos(cszenith)*180.0/np.pi)
+      input_text[8] = " CSZA= -1     ,      "
   input_text[75] = " SAZA= %3.16f   ,   "%azimuth
   input_text[79] = " BTEMP= %3.3f   ,   "%tsurf
   input_text[9] = " SOLFAC= %.16f   ,   "%(flux/1367.0)
@@ -623,14 +630,17 @@ def writecolumn_single_lmdz(z,p,t,q,o,workdir,name='atms.dat'):
     f.write(dat)
     f.close()    
     
-def cloudcolumn_single(dql,cld,workdir,name='usrcld.dat'):
+def cloudcolumn_single(dql,cld,workdir,name='usrcld.dat',dqi=np.array([]),cirrus=False):
     dat = ''
     nlev = len(cld)
     for k in range(nlev-1,-1,-1):
         layer = []
         layer.append(str(dql[k]))
         layer.append("8")
-        layer.append("-1")
+        if cirrus:
+            layer.append(str(dqi[k]))
+        else:
+            layer.append("-1")
         layer.append("-1")
         layer.append(str(cld[k]))
         line = ' '.join(layer)
@@ -692,7 +702,8 @@ def getalt_single(ta,lev,grav=9.80665,gascon=287.0):
     return zzf  
 
 def analyzecell_plasim_earth(data,views,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
-                     sol_lon=0.0,smooth=False,clouds=True,istep=-1):
+                     sol_lon=0.0,smooth=False,clouds=True,istep=-1,fakecloudnz=None,
+                     fakecloudlwp=0.0,cirrus=False):
   #cszenith,azimuth,surface,pCO2,p0,tsurf,altz
   
   surf = "uniform"
@@ -709,7 +720,8 @@ def analyzecell_plasim_earth(data,views,lat,lon,workdir,grav=9.80665,sol_dec=0.0
       surf = "seamix"
   else:
     #if (np.mean(data.variables['snd'][:,lat,lon])+np.mean(data.variables['glac'][:,lat,lon]))>=0.7:
-    if (data.variables['snd'][istep,lat,lon]+data.variables['glac'][istep,lat,lon])>=0.7:
+    if ((data.variables['snd'][istep,lat,lon]+data.variables['glac'][istep,lat,lon])>=0 and 
+        data.variables['as'][istep,lat,lon]>0.2):
         surf = "snow"
     else:
         surf = "sand"
@@ -782,8 +794,23 @@ def analyzecell_plasim_earth(data,views,lat,lon,workdir,grav=9.80665,sol_dec=0.0
   print "Writing usrcld.dat"
   #Need to implement a cloud-free option
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
+  
+  if type(fakecloudnz)!=type(None):
+    dql[fakecloudnz] = fakecloudlwp
+    cld[fakecloudnz] = 1.0
+  
+  if cirrus:
+    dqi = -np.ones(dql.shape)
+    for k in range(len(lvs)):
+        if ta[k]<273.15:
+            dqi[k] = dql[k]
+            dql[k] = -1
+  else:
+    dqi = np.array([])
+            
+  
   for vw in views:
-    cloudcolumn_single(dql,cld,workdir+"_%s"%vw)
+    cloudcolumn_single(dql,cld,workdir+"_%s"%vw,dqi=dqi,cirrus=cirrus)
   
   latitude = data.variables['lat'][lat]
   longitude = data.variables['lon'][lon]
@@ -1318,7 +1345,8 @@ def _prep_lmdz(job):
 
     
 def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
-  workdir = job.top+"/sbdart_earth/job"+str(job.home)
+  workdir = "/mnt/node_scratch/paradise/sbdart_earth_job"+str(job.home)
+  os.system("mkdir "+workdir)
   if "source" in job.parameters:
     source = job.parameters["source"]
   else:
@@ -1326,6 +1354,11 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
     
   ntimes = '{0,1,2,3}'
   lviews = '{Z,E,W,N,S}'
+  
+  iout=5
+  
+  if "iout" in job.parameters:
+      iout = int(job.parameters["iout"])
   
   if "angles" in job.parameters:
       ntimes = job.parameters["angles"]
@@ -1370,18 +1403,22 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   else:
     lons = [0,64]
     
+  tempdest = workdir+"/output/"
+  os.system("mkdir "+tempdest)
+    
   if "outhopper" in job.parameters:
-    dest = job.top+"/sbdart_earth/"+job.parameters["outhopper"]
+    finaldest = job.top+"/sbdart_earth/"+job.parameters["outhopper"]
     os.system("mkdir "+job.top+"/sbdart_earth/"+job.parameters["outhopper"])
   else:
-    dest = job.top+"/sbdart_earth/output"
+    finaldest = job.top+"/sbdart_earth/output"
     
   token_name = "token"+job.pid+"_%02d-%02d-%02d-%02d.crwl"%(lats[0],lats[1],lons[0],lons[1])
   
-  os.system("mv "+dest+"/running/token"+job.pid+".crwl "+
-            dest+"/running/"+token_name)
+  os.system("mv "+finaldest+"/running/token"+job.pid+".crwl "+
+            finaldest+"/running/"+token_name)
   
-  data = nc.Dataset(job.top+"/hopper/"+job.parameters["gcm"],"r")  
+  os.system("cp "+job.top+"/hopper/"+job.parameters["gcm"]+" "+workdir+"/"+job.parameters["gcm"])
+  data = nc.Dataset(workdir+"/"+job.parameters["gcm"],"r")  
   
   if "pCO2" in job.parameters:
     pCO2 = float(job.parameters["pCO2"])
@@ -1414,17 +1451,24 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       lat2=48
       lon1=0
       lon2=64
-    
-    
-  star=False
-  if "starspec" in job.parameters:
-      star = job.parameters["starspec"]
-  
-  smooth=False  
-  if "smooth" in job.parameters:
-      if int(job.parameters["smooth"])==1:
-          smooth=True
-  
+   
+  fakecloudnz = None
+  fakecloudlwp = 0.0
+   
+  if "fakecloud" in job.parameters:
+      parts = job.parameters["fakecloud"].split('|')
+      fakecloudnz = int(parts[0])                      
+      fakecloudlwp = float(parts[1])                   
+                                                       
+  star=False                                           
+  if "starspec" in job.parameters:                     
+      star = job.parameters["starspec"]                
+                                                       
+  smooth=False                                         
+  if "smooth" in job.parameters:                       
+      if int(job.parameters["smooth"])==1:             
+          smooth=True                                  
+                                                       
   flat=False
   if "flat" in job.parameters:
       if int(job.parameters["flat"])==1:
@@ -1447,15 +1491,35 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   unialb = 0.35
   if "albedo" in job.parameters:
       uniform=True
-      unialb = float(job.parameters["unialb"])
+      unialb = float(job.parameters["albedo"])
       
 
   wmin=0.55 #microns
   if "wmin" in job.parameters:
       wmin = float(job.parameters["wmin"])
+  
+  wmax = 19.0 #microns
+  if "wmax" in job.parameters:
+      wmax = float(job.parameters["wmax"])
+  
+  
+  zout = (0.,100.)
+  if "zout" in job.parameters:
+      zout = (0.,float(job.parameters["zout"]))
           
       
   nlats = len(data.variables['lat'][:])
+  
+  os.system("mkdir "+workdir+"/source/")
+  #os.system("tar cvzf "+job.top+"/sbdart_earth/"+source+"/source.tar.gz "+
+            #job.top+"/sbdart_earth/"+source+"/* ")
+  os.system("rsync "+job.top+"/sbdart_earth/"+source+"/source.tar.gz "+workdir+"/source/")
+  #os.system("rm "+job.top+"/sbdart_earth/"+source+"/source.tar.gz ")
+  os.system("tar xvzf "+workdir+"/source/source.tar.gz -C "+workdir+"/source/")
+  os.system("rm "+workdir+"/source/source.tar.gz")
+  if star:
+      os.system("cp -r "+job.top+"/sbdart_earth/"+star+" "+workdir+"/source/solar.dat")
+  
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
       for nang in itimes:
@@ -1463,9 +1527,7 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
             print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
             print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
             os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
-            os.system("cp -r "+job.top+"/sbdart_earth/"+source+"/* "+workdir+"/sbdart-%02d_%02d_%1d_%s/"%(jlat,jlon,nang,vw))
-            if star:
-                os.system("cp -r "+job.top+"/sbdart_earth/"+star+" "+workdir+"/sbdart-%02d_%02d_%1d_%s/solar.dat"%(jlat,jlon,nang,vw))
+            os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%1d_%s/"%(jlat,jlon,nang,vw))
         
   
   role = "dom"
@@ -1486,6 +1548,13 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
           makemap=True
       else:
           makemap=False
+
+  cirrus=False
+  if "cirrus" in job.parameters:
+      if job.parameters["cirrus"]=="1":
+          cirrus=True
+      else:
+          cirrus=False
   
   
   tag = ''
@@ -1512,15 +1581,16 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   "                    echo $ILAT $ILON $IANG $vw              \n"+
                   "                    TAG=${ILAT}_${ILON}_${IANG}_$vw                    \n"+
                   "                    cd "+workdir+"/sbdart-$TAG                          \n"+
-                  "                    ./sbdart > "+workdir+"/sbout.$TAG                \n"+
+                  "                    ./sbdart > "+workdir+"/output/sbout.$TAG            \n"+
                   "                    cd "+workdir+"                                  \n"+
                   "               done                       \n"+
                   "          done                         \n"+
-                  "          cp sbout.* "+dest+"/                   \n"+
+                  "          mv "+workdir+"/output/sbout.* "+finaldest+"/                   \n"+
                   "     done                                    \n"+
                   "done \n"+
-                  "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
-                  './release.sh "'+dest+'"                                \n')
+                  "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
+                  './release.sh "'+finaldest+'"                                \n'+
+                  "rm -rf "+workdir+"/*/                                  \n")
       
   else:
       jobscript =(BATCHSCRIPT(job,notify)+
@@ -1540,16 +1610,17 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   "                    echo $ILAT $ILON $IANG $vw              \n"+
                   "                    TAG=${ILAT}_${ILON}_${IANG}_$vw                    \n"+
                   "                    cd "+workdir+"/sbdart-$TAG                          \n"+
-                  "                    ./sbdart > "+workdir+"/sbout.$TAG                \n"+
+                  "                    ./sbdart > "+workdir+"/output/sbout.$TAG            \n"+
                   "                    cd "+workdir+"                                  \n"+
                   "               done                       \n"+
                   "          done                         \n"+
-                  "          cp sbout.* "+dest+"/                   \n"+
+                  "          mv "+workdir+"/output/sbout.* "+finaldest+"/                   \n"+
                   "     done                                    \n"+
                   "done \n"+
-                  "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
-                  './release.sh "'+dest+'"                                \n'+
-                  "python checkprogress_earth.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
+                  './release.sh "'+finaldest+'"                                \n'+
+                  "rm -rf "+workdir+"/*/                                  \n"+
+                  "python checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
                   " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
   
   rs = open(workdir+"/runsbdart","w")
@@ -1570,7 +1641,8 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                                                          workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),
                                                          sol_lon = views[nang],
                                                          grav=grav,smooth=smooth,clouds=clouds,
-                                                         istep=istep)
+                                                         istep=istep,fakecloudnz=fakecloudnz,
+                                                         fakecloudlwp=fakecloudlwp,cirrus=cirrus)
         if uniform:
             surf='uniform'
         latitude = data.variables['lat'][jlat]
@@ -1580,7 +1652,8 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
             nv = viewdict[vws[vv]]
             write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
                               nv,nang,csz,azm,latitude,longitude,surf,pCO2,p0,tsurf,altz,flux,
-                              wmin=wmin,albedo=unialb,flat=flat,sic=sic,spec=star,smooth=smooth)
+                              wmin=wmin,wmax=wmax,albedo=unialb,flat=flat,sic=sic,spec=star,
+                              smooth=smooth,iout=iout,zout=zout)
         print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[vv])
       
 def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
@@ -1796,6 +1869,10 @@ def submit(job):
   
   os.system("cd "+workdir+" && "+SUB+" runsbdart && cd "+job.top)
   
+def run(job):
+  workdir = "/mnt/node_scratch/paradise/sbdart_earth_job"+str(job.home)
+  os.system("cd "+workdir+" && bash runsbdart")
+  
 if __name__=="__main__":
     job = np.load("jobdat.npy").item()
     try:
@@ -1803,4 +1880,5 @@ if __name__=="__main__":
     except:
         os.system("echo 'CRITICAL ERROR OPENING jobdat.npy'>sbdartfail.log")
     prep(job)
-    submit(job)
+    run(job)
+    #submit(job)

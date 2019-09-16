@@ -30,6 +30,10 @@ if __name__=="__main__":
       dryrun=True
   else:
       dryrun=False
+      
+  mode="normal"
+  if "batch" in sys.argv[:]:
+      mode="batch"
   
   f=open("nnodes.crwl","r")
   nnodes=float(f.read().split('\n')[0])+1.0 #Chances are this is being called by one of the current jobs!
@@ -168,6 +172,7 @@ if __name__=="__main__":
   print "Moving on to normal tasks"
   print running,nnodes
   capacityflag = False
+  nsofar = 0
   while running < nnodes: #We are using less than our full allocation, and the priority list is empty.
     
     #Get next task
@@ -276,8 +281,10 @@ if __name__=="__main__":
         newjob.write()
         running += float(newjob.ncores)/8.0#MODELS[taskmodel]    #Note that we are *that* much closer to the limit.
     
+    nsofar+=1
     if not dryrun:
-        resources = getjobs()  
+        if mode=="normal" or (mode=="batch" and nsofar%100==0): 
+            resources = getjobs()  
     
         running = 0
         for r in resources.keys():

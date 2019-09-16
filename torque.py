@@ -25,8 +25,10 @@ def BATCHSCRIPT(job,notify):
 MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale has 8 threads)
           "sbdart":8,           #Here we use 'task' to mean a Sunnyvale job, as opposed to the
           "sbdart_earth":8,     #HPC convention of a task being a thread or process. This way our
-          "postprocess":8,      #code is MPI/OpenMP-agnostic.
+          "sbdart_locked":8,    #code is MPI/OpenMP-agnostic.
+          "postprocess":8,      
           "postprocess_earth":8,
+          "postprocess_locked":8,
           "lmdz":8,
           "mitgcm":6}             
 

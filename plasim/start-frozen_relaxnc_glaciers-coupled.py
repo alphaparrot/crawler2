@@ -160,7 +160,7 @@ def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05,prefix=
     #Key is the netCDF variable to evaluate, mean toggles whether to track the average or total,
     #radius is the planet radius in meters, and baseline is the number of years over which to measure
     #slope. Default is to track surface temperature. Threshhold is the maximum slope we'll allow.
-  files = sorted(glob.glob(prefix+".nc"))
+  files = sorted(glob.glob(prefix+"*.nc"))
   if len(files) < baseline+2:
     return False
   else:
@@ -219,18 +219,13 @@ def getsol():
     return sol
 
 if __name__=="__main__":
-  if gplasim:
-    wf=open("weathering.pso","w")
-    wf.write("     CO2       AVG SURF T   WEATHERING    OUTGASSING      DpCO2       NEW CO2\n")
-    wf.close()
   EXP="MOST"
   NCPU=int(sys.argv[1])
   nlevs = int(sys.argv[2])
-  os.system("rm -f *.nc") #Clean up after old runs
-  os.system("rm -f plasim_restart") #Uncomment for a fresh run when you haven't cleaned up beforehand
+  #os.system("rm -f *.nc") #Clean up after old runs
+  #os.system("rm -f plasim_restart") #Uncomment for a fresh run when you haven't cleaned up beforehand
   os.system("rm -f Abort_Message")
   
-  os.system("echo 'New Cooldown'>cooldown.log")
   
   os.system("cp planet_namelist planet_namelist_wait")
   
@@ -238,73 +233,87 @@ if __name__=="__main__":
   
   p0 = 1010670.0
   
-  edit_namelist("planet_namelist","GSOL0","400.0") #Turn the Sun dim enough to freeze over
-  yearsfrozen = 0
-  cyear = 0
-  while getsurftemp()>255.0 or yearsfrozen<30:
-    os.system("echo 'cooldown year "+str(cyear)+"'>>cooldown.log")
-    cyear += 1
-    dataname=EXP+".%04d"%cyear
-    snapname=EXP+"_SNAP.%04d"%cyear
-    diagname=EXP+"_DIAG.%04d"%cyear
-    restname=EXP+"_REST.%03d"%cyear
-    snowname=EXP+"_SNOW_%1d"%(cyear%5)
-    os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l%d_p"%nlevs+str(NCPU)+".x")
-    os.system("[ -e restart_dsnow ] && rm restart_dsnow")
-    os.system("[ -e restart_xsnow ] && rm restart_xsnow")
-    os.system("[ -e Abort_Message ] && exit 1")
-    os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
-    os.system("[ -e plasim_snapshot ] && mv plasim_snapshot "+snapname)
-    os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
-    os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
-    os.system("[ -e plasim_status ] && mv plasim_status "+restname)
-    os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
-    os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
-    os.system("[ -e "+snapname+" ] && ./burn7.x -n <snapshot.nl>snapout "+snapname+" "+snapname+".nc")
-    os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%cyear)
-    os.system("[ -e "+dataname+".nc ] && rm "+dataname)
-    os.system("[ -e "+snapname+".nc ] && rm "+snapname)
-    os.system("[ -e "+snapname+".nc ] && mv "+snapname+".nc snapshots/")
-    os.system("cp weathering.pso $PBS_O_WORKDIR/")
-    os.system("cp "+diagname+" $PBS_O_WORKDIR/")
-    if hasnans():
-        break
-    if getsurftemp()<=230.0:
-        yearsfrozen+=1
+  stoprun=False
+  
+  cyear = len(glob.glob("*MOST.*.nc"))
+  cmaxyears = cyear+2000
+  ntgl = len(glob.glob("*OUTGLAC*.nc"))
+  if cyear==0:
+    os.system("echo 'New Cooldown'>cooldown.log")
     
-  sol = 500.0
-  while sol<sol0 and not hasnans():   #Ramp back up to target insolation.
-      edit_namelist("planet_namelist","GSOL0",str(sol))
-      for nt in range(0,2):
-         cyear += 1
-         dataname=EXP+".%04d"%cyear
-         snapname=EXP+"_SNAP.%04d"%cyear
-         diagname=EXP+"_DIAG.%04d"%cyear
-         restname=EXP+"_REST.%03d"%cyear
-         snowname=EXP+"_SNOW_%1d"%(cyear%5)
-         os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l%d_p"%nlevs+str(NCPU)+".x")
-         os.system("[ -e restart_dsnow ] && rm restart_dsnow")
-         os.system("[ -e restart_xsnow ] && rm restart_xsnow")
-         os.system("[ -e Abort_Message ] && exit 1")
-         os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
-         os.system("[ -e plasim_snapshot ] && mv plasim_snapshot "+snapname)
-         os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
-         os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
-         os.system("[ -e plasim_status ] && mv plasim_status "+restname)
-         os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
-         os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
-         os.system("[ -e "+snapname+" ] && ./burn7.x -n <snapshot.nl>snapout "+snapname+" "+snapname+".nc")
-         os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%cyear)
-         os.system("[ -e "+dataname+".nc ] && rm "+dataname)
-         os.system("[ -e "+snapname+".nc ] && rm "+snapname)
-         os.system("[ -e "+snapname+".nc ] && mv "+snapname+".nc snapshots/")
-         os.system("cp weathering.pso $PBS_O_WORKDIR/")
-         os.system("cp "+diagname+" $PBS_O_WORKDIR/")
-         if hasnans():
-             break
-      sol+=100.0
+    edit_namelist("planet_namelist","GSOL0","400.0") #Turn the Sun dim enough to freeze over
+    yearsfrozen = 0  
+    if gplasim:
+        wf=open("weathering.pso","w")
+        wf.write("     CO2       AVG SURF T   WEATHERING    OUTGASSING      DpCO2       NEW CO2\n")
+        wf.close()
+    while getsurftemp()>255.0 or yearsfrozen<30:
+        os.system("echo 'cooldown year "+str(cyear)+"'>>cooldown.log")
+        cyear += 1
+        dataname=EXP+".%04d"%cyear
+        snapname=EXP+"_SNAP.%04d"%cyear
+        diagname=EXP+"_DIAG.%04d"%cyear
+        restname=EXP+"_REST.%03d"%cyear
+        snowname=EXP+"_SNOW_%1d"%(cyear%5)
+        os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l%d_p"%nlevs+str(NCPU)+".x")
+        os.system("[ -e restart_dsnow ] && rm restart_dsnow")
+        os.system("[ -e restart_xsnow ] && rm restart_xsnow")
+        os.system("[ -e Abort_Message ] && exit 1")
+        os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
+        os.system("[ -e plasim_snapshot ] && mv plasim_snapshot "+snapname)
+        os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
+        os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
+        os.system("[ -e plasim_status ] && mv plasim_status "+restname)
+        os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
+        os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
+        os.system("[ -e "+snapname+" ] && ./burn7.x -n <snapshot.nl>snapout "+snapname+" "+snapname+".nc")
+        os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%cyear)
+        os.system("[ -e "+dataname+".nc ] && rm "+dataname)
+        os.system("[ -e "+snapname+".nc ] && rm "+snapname)
+        os.system("[ -e "+snapname+".nc ] && mv "+snapname+".nc snapshots/")
+        os.system("cp weathering.pso $PBS_O_WORKDIR/")
+        os.system("cp "+diagname+" $PBS_O_WORKDIR/")
+        if hasnans():
+            break
+        if getsurftemp()<=230.0:
+            yearsfrozen+=1
+        
+    sol = 500.0
+    while sol<sol0 and not hasnans():   #Ramp back up to target insolation.
+        edit_namelist("planet_namelist","GSOL0",str(sol))
+        for nt in range(0,2):
+            cyear += 1
+            dataname=EXP+".%04d"%cyear
+            snapname=EXP+"_SNAP.%04d"%cyear
+            diagname=EXP+"_DIAG.%04d"%cyear
+            restname=EXP+"_REST.%03d"%cyear
+            snowname=EXP+"_SNOW_%1d"%(cyear%5)
+            os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l%d_p"%nlevs+str(NCPU)+".x")
+            os.system("[ -e restart_dsnow ] && rm restart_dsnow")
+            os.system("[ -e restart_xsnow ] && rm restart_xsnow")
+            os.system("[ -e Abort_Message ] && exit 1")
+            os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
+            os.system("[ -e plasim_snapshot ] && mv plasim_snapshot "+snapname)
+            os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
+            os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
+            os.system("[ -e plasim_status ] && mv plasim_status "+restname)
+            os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
+            os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
+            os.system("[ -e "+snapname+" ] && ./burn7.x -n <snapshot.nl>snapout "+snapname+" "+snapname+".nc")
+            os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%cyear)
+            os.system("[ -e "+dataname+".nc ] && rm "+dataname)
+            os.system("[ -e "+snapname+".nc ] && rm "+snapname)
+            os.system("[ -e "+snapname+".nc ] && mv "+snapname+".nc snapshots/")
+            os.system("cp weathering.pso $PBS_O_WORKDIR/")
+            os.system("cp "+diagname+" $PBS_O_WORKDIR/")
+            if hasnans():
+                break
+        sol+=100.0
+    if abs(cyear-cmaxyears)<10:
+        stoprun=True
+        os.system("touch keepgoing")
     
-  if not hasnans():  
+  if not hasnans() and not stoprun:  
     
     os.system("cp planet_namelist_wait planet_namelist") #Turn the Sun back up
     
@@ -315,16 +324,17 @@ if __name__=="__main__":
     
     os.system("cp restart_dsnow restart_dsnow_old")
     os.system("cp restart_xsnow restart_xsnow_old")
+    
     os.system("cp newdsnow_old newdsnow")
     os.system("cp newxsnow_old newxsnow")
     os.system("cp plasim_restart_old plasim_restart")
     
     
-    ntgl = 0
+  #  ntgl = 0
     glacrelaxed = False
     trelaxed = False
     longtime=False
-    while ntgl < 90 and not glacrelaxed and not trelaxed: #No more than 50 iterations
+    while ntgl < ntgl+90 and not glacrelaxed and not trelaxed and cyear<cmaxyears: #No more than 50 iterations
       os.system("rm "+EXP+"_OUT.*")
       os.system("cp -a "+EXP+"*.nc $PBS_O_WORKDIR/")
       os.system("rm "+EXP+"*.nc")
@@ -337,7 +347,7 @@ if __name__=="__main__":
       minyears=25
       maxyears = 125
       relaxed=False
-      while (year < minyears or not relaxed) and (year < maxyears):
+      while (year < minyears or not relaxed) and (year < maxyears) and cyear<cmaxyears:
         os.system("echo 'relaxation year "+str(year)+"'>>cooldown.log")
         year+=1
         cyear += 1
@@ -471,3 +481,5 @@ if __name__=="__main__":
         glacrelaxed = isflat(baseline=5,key='icez',threshhold=10.0,prefix=EXP+"_OUTGLAC.*") #less than 10m average annual change over 5 cycles
         trelaxed = isflat(baseline=5,prefix=EXP+"_OUTGLAC.*") #Temperature should be flat too
         ntgl+=1
+    if not glacrelaxed or not trelaxed:
+        os.system("touch keepgoing")

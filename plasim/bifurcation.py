@@ -10,6 +10,33 @@ TIMELIMIT = 1.44e5
 
 #This version lets the model relax.
 
+def edit_namelist(filename,arg,val): 
+  f=open(filename,"r")
+  fnl=f.read().split('\n')
+  f.close()
+  found=False
+  for l in range(1,len(fnl)-2):
+    fnl[l]=fnl[l].split(' ')
+    if '=' in fnl[l]:
+      mode='EQ'
+    else:
+      mode='CM'
+    if arg in fnl[l]:
+      fnl[l]=['',arg,'','=','',str(val),'']
+      found=True
+    elif (arg+'=') in fnl[l]:
+      fnl[l]=['',arg+'=','',str(val),'',',']
+      found=True
+    fnl[l]=' '.join(fnl[l])
+  if not found:
+    if mode=='EQ':
+      fnl.insert(-3,' '+arg+' = '+val+' ')
+    else:
+      fnl.insert(-3,' '+arg+'= '+val+' ,')
+  f=open(filename,"w")
+  f.write('\n'.join(fnl))
+  f.close() 
+
 def spatialmath(lt,ln,variable,mean=True,radius=6.371e6):
     lt1 = np.zeros(len(lt)+1)
     lt1[0] = 90
@@ -192,46 +219,45 @@ if __name__=="__main__":
   os.system("echo 'SURFACE      TOA'>slopes.log")
   exfiles = glob.glob("*DIAG*")
   year=len(exfiles)
-  minyears=75
+  
   maxyears=year+300
+  sols = [1250.0,1200.0,1150.0,1100.0,1050.0,1000.0,950.0,900.0,850.0,800.0]
+  sols = sols + (sols[:-1])[::-1] + [1300.0,1350.0,1400.0,1450.0,1500.0]
+  sols = np.array(sols)
+  
+  nsol = year/50
+  
   relaxed=False
-  while (year < minyears or not energybalanced(threshhold=4.0e-4)) and year<maxyears and (time.clock()-tstart)<=TIMELIMIT:
-    year+=1
-    dataname=EXP+".%04d"%year
-    snapname=EXP+"_SNAP.%04d"%year
-    diagname=EXP+"_DIAG.%04d"%year
-    restname=EXP+"_REST.%03d"%year
-    snowname=EXP+"_SNOW_%1d"%(year%5)
-    os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l"+str(nlevs)+"_p"+str(NCPU)+".x")
-    os.system("[ -e restart_dsnow ] && rm restart_dsnow")
-    os.system("[ -e restart_xsnow ] && rm restart_xsnow")
-    os.system("[ -e Abort_Message ] && exit 1")
-    os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
-    os.system("[ -e plasim_snapshot ] && mv plasim_snapshot "+snapname)
-    os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
-    os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
-    os.system("[ -e plasim_status ] && mv plasim_status "+restname)
-    os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
-    os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
-    os.system("[ -e "+snapname+" ] && ./burn7.x -n <snapshot.nl>snapout "+snapname+" "+snapname+".nc")
-    os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%year)
-    os.system("[ -e "+dataname+".nc ] && rm "+dataname)
-    os.system("[ -e "+snapname+".nc ] && rm "+snapname)
-    os.system("[ -e "+snapname+".nc ] && mv "+snapname+".nc snapshots/")
-    if hasnans():
-        os.system("echo 'NAN ENCOUNTERED'>>weathering.pso")
-        break
-    sb,tb = getbalance()
-    os.system("echo '%02.6f  %02.6f'>>balance.log"%(sb,tb))
+  while nsol<len(sols) and year<maxyears and (time.clock()-tstart)<=TIMELIMIT:
+    edit_namelist("planet_namelist","GSOL0","%4.1f"%(sols[nsol]))
+    for nnn in range(0,50):
+      year+=1
+      dataname=EXP+".%04d"%year
+      snapname=EXP+"_SNAP.%04d"%year
+      diagname=EXP+"_DIAG.%04d"%year
+      restname=EXP+"_REST.%03d"%year
+      snowname=EXP+"_SNOW_%1d"%(year%5)
+      os.system("mpiexec -np "+str(NCPU)+" most_plasim_t21_l"+str(nlevs)+"_p"+str(NCPU)+".x")
+      os.system("[ -e restart_dsnow ] && rm restart_dsnow")
+      os.system("[ -e restart_xsnow ] && rm restart_xsnow")
+      os.system("[ -e Abort_Message ] && exit 1")
+      os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
+      os.system("[ -e plasim_snapshot ] && mv plasim_snapshot "+snapname)
+      os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
+      os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
+      os.system("[ -e plasim_status ] && mv plasim_status "+restname)
+      os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
+      os.system("[ -e "+dataname+" ] && ./burn7.x -n <essos.nl>burnout "+dataname+" "+dataname+".nc")
+      os.system("[ -e "+snapname+" ] && ./burn7.x -n <snapshot.nl>snapout "+snapname+" "+snapname+".nc")
+      os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%year)
+      os.system("[ -e "+dataname+".nc ] && rm "+dataname)
+      os.system("[ -e "+snapname+".nc ] && rm "+snapname)
+      os.system("[ -e "+snapname+".nc ] && mv "+snapname+".nc snapshots/")
+      if hasnans():
+          os.system("echo 'NAN ENCOUNTERED'>>weathering.pso")
+          break
+    nsol+=1
   os.system("rm keepgoing")
-  if not hasnans() and not energybalanced(threshhold=4.0e-4):
+  if not hasnans() and nsol<len(sols):
     os.system("touch keepgoing")
-    bott = gethistory(key="hfns")
-    topt = gethistory(key="ntr")
-    with open("shistory.pso","a+") as f:
-        text='\n'+'\n'.join(bott.astype(str))
-        f.write(text)
-    with open("toahistory.pso","a+") as f:
-        text='\n'+'\n'.join(topt.astype(str))
-        f.write(text)
         

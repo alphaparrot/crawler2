@@ -66,6 +66,8 @@ def prep(job):
   
     os.system("cp "+job.top+"/lmdz/"+template+"/* "+workdir+"/")
     os.system("cp "+job.top+"/lmdz/"+scriptfile+" "+workdir+"/")
+    os.system("cp "+job.top+"/crawldefs.py "+workdir+"/")
+    os.system("cp "+job.top+"/identity.py " +workdir+"/")
     
     recompile = False
     
@@ -117,6 +119,10 @@ def prep(job):
         edit_def(jid,"callphys.def","tlocked",job.parameters["tlocked"])
         if job.parameters['tlocked']==".true.":
             edit_def(jid,"callphys.def","diurnal",".false.")
+            edit_def(jid,"callphys.def","nres","1")
+        else:
+            edit_def(jid,"callphys.def","nres","365")
+            edit_def(jid,"callphys.def","diurnal",".true.")
 
     if "nres" in job.parameters:
         edit_def(jid,"callphys.def","nres",job.parameters["nres"])

@@ -207,6 +207,9 @@ def write_input_earth(workdir,nview,cszenith,azimuth,latitude,longitude,surface,
   input_text[74]+="   , "
   
   input_text[8] = " CSZA= %.16f   ,     "%cszenith
+  if cszenith < 0:
+      input_text[7] = " SZA= %.16f    ,     "%(np.arccos(cszenith)*180.0/np.pi)
+      input_text[8] = " CSZA= -1     ,      "
   input_text[75] = " SAZA= %3.16f   ,   "%azimuth
   input_text[79] = " BTEMP= %3.3f   ,   "%tsurf
   input_text[9] = " SOLFAC= %.16f   ,   "%(flux/1367.0)

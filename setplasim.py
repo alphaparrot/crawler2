@@ -49,17 +49,39 @@ def edit_namelist(jid,filename,arg,val):
   fnl=f.read().split('\n')
   f.close()
   found=False
+  fnl1=fnl[1].split(' ')
+  if '=' in fnl1:
+    mode='EQ'
+  else:
+    mode='CM'
+  #print fnl1
+  item = fnl1[-1]
+  if item=='':
+    item = fnl1[-2]
+  if item.strip()[-1]!=",":
+    mode='EQ'
+  
   for l in range(1,len(fnl)-2):
     fnl[l]=fnl[l].split(' ')
-    if '=' in fnl[l]:
-      mode='EQ'
-    else:
-      mode='CM'
+    #if '=' in fnl[l]:
+      #mode='EQ'
+    #else:
+      #mode='CM'
+    #print fnl[l][-1]
+    #print fnl[l][-1].strip()
+    #if fnl[l][-1].strip()[-1]!=",":
+      #mode='EQ'
     if arg in fnl[l]:
       fnl[l]=['',arg,'','=','',str(val),'']
       found=True
     elif (arg+'=') in fnl[l]:
-      fnl[l]=['',arg+'=','',str(val),'',',']
+      tag = ','
+      item = fnl[l][-1]
+      if item=='':
+        item = fnl[l][-2]
+      if item.strip()[-1]!=',':
+        tag = ''
+      fnl[l]=['',arg+'=','',str(val),'',tag]
       found=True
     fnl[l]=' '.join(fnl[l])
   if not found:
@@ -70,6 +92,23 @@ def edit_namelist(jid,filename,arg,val):
   f=open("plasim/job"+jid+"/"+filename,"w")
   f.write('\n'.join(fnl))
   f.close() 
+  
+def edit_postnamelist(home,filename,arg,val):
+  with open(home+"/"+filename,"r") as f:
+      pnl = f.read().split('\n')
+  flag=False
+  pnl = [y for y in pnl if y!='']
+  for n in range(len(pnl)):
+      if pnl[n].split('=')[0].strip()==arg:
+          pnl[n]=arg+"="+val
+          flag=True
+          break
+  if not flag:
+      pnl.append(arg+'='+val)
+  pnl.append('')
+  with open(home+"/"+filename,"w") as f:
+      f.write('\n'.join(pnl))
+
 
 
 def prep(job):
@@ -87,6 +126,11 @@ def prep(job):
   else:
     source = "clean"
 
+  if "westeros" in job.parameters:
+    source = "westeros"
+    
+  if "source" in job.parameters:
+    source = job.parameters["source"]
   
   print "Setting stuff for job "+sig+" in plasim/job"+jid+" which is task number "+pid
   print "Arguments are:",fields[2:]
@@ -99,10 +143,14 @@ def prep(job):
   
   p0 = 1010670.0
   
-  os.system("rm plasim/job"+jid+"/*.sh")
+  #os.system("rm plasim/job"+jid+"/*.sh")
+  os.system("mkdir plasim/errorlogs/")
+  os.system("cp plasim/job"+jid+"/*.e* plasim/errorlogs/")
+  os.system("rm plasim/job"+jid+"/*")
   os.system("cp plasim/"+source+"/* plasim/job"+jid+"/")
   os.system("rm plasim/job"+jid+"/plasim_restart")
   os.system("cp plasim/"+scriptfile+" plasim/job"+jid+"/")
+  os.system("cp plasim/synthoutput.py plasim/job"+jid+"/")
   os.system("cp crawldefs.py plasim/job"+jid+"/")
   os.system("cp identity.py plasim/job"+jid+"/")
   
@@ -120,6 +168,35 @@ def prep(job):
   weathrestart = False
   nlevs = 10
   nsn = False
+  nwesteros = False
+  setgas=False
+  
+  gases_default = {'pH2': 0.0,
+                   'pHe': 5.24e-6,
+                   'pN2': 0.78084,
+                   'pO2': 0.20946,
+                   'pCO2':330.0e-6,
+                   'pAr': 9.34e-3,
+                   'pNe': 18.18e-6,
+                   'pKr': 1.14e-6}
+  
+  gases = {'pH2': 0.0,
+           'pHe': 0.0,
+           'pN2': 0.0,
+           'pO2': 0.0,
+           'pCO2':0.0,
+           'pAr': 0.0,
+           'pNe': 0.0,
+           'pKr': 0.0}
+  
+  smws = {'mH2': 2.01588,
+          'mHe': 4.002602,
+          'mN2': 28.0134,
+          'mO2': 31.9988,
+          'mCO2':44.01,
+          'mAr': 39.948,
+          'mNe': 20.1797,
+          'mKr': 83.798}
   
   for name in job.fields[2:]:
     val = job.parameters[name]
@@ -138,6 +215,87 @@ def prep(job):
       edit_namelist(jid,"radmod_namelist","STARBBTEMP",val)
       found=True
       
+    if name=='pH2u': #in ubars
+      found=True
+      setgas=True
+      gases['pH2'] = float(val)*1.0e-6
+            
+    if name=='pH2b': #in bars
+      found=True
+      setgas=True
+      gases['pH2'] = float(val) 
+      
+    if name=='pHeu': #in ubars
+      found=True
+      setgas=True
+      gases['pHe'] = float(val)*1.0e-6
+            
+    if name=='pHeb': #in bars
+      found=True
+      setgas=True
+      gases['pHe'] = float(val)
+          
+    if name=='pN2u': #in ubars
+      found=True
+      setgas=True
+      gases['pN2'] = float(val)*1.0e-6
+            
+    if name=='pN2b': #in bars
+      found=True
+      setgas=True
+      gases['pN2'] = float(val)
+      
+    if name=='pO2u': #in ubars
+      found=True
+      setgas=True
+      gases['pO2'] = float(val)*1.0e-6
+            
+    if name=='pO2b': #in bars
+      found=True
+      setgas=True
+      gases['pO2'] = float(val)
+    
+    if name=='pCO2u': #in ubars
+      found=True
+      setgas=True
+      gases['pCO2'] = float(val)*1.0e-6
+            
+    if name=='pCO2b': #in bars
+      found=True
+      setgas=True
+      gases['pCO2'] = float(val)  
+      
+    if name=='pAru': #in ubars
+      found=True
+      setgas=True
+      gases['pAr'] = float(val)*1.0e-6
+            
+    if name=='pArb': #in bars
+      found=True
+      setgas=True
+      gases['pAr'] = float(val)
+      
+    if name=='pNeu': #in ubars
+      found=True
+      setgas=True
+      gases['pNe'] = float(val)*1.0e-6
+            
+    if name=='pNeb': #in bars
+      found=True
+      setgas=True
+      gases['pNe'] = float(val)
+      
+    if name=='pKru': #in ubars
+      found=True
+      setgas=True
+      gases['pKr'] = float(val)*1.0e-6
+            
+    if name=='pKrb': #in bars
+      found=True
+      setgas=True
+      gases['pKr'] = float(val)
+    
+      
     if name=="pCO2":
       found=True
       gotpress=False
@@ -154,8 +312,13 @@ def prep(job):
       
     if name=="pressure":
       found=True
-      
       p0 = float(val)*1.0e6
+      if "pCO2" in fields:
+          p0 += float(job.parameters["pCO2"])
+          edit_namelist(jid,"radmod_namelist","CO2",str(float(job.parameters["pCO2"])/p0*1.0e6))
+      else:
+          p0 += 360.0
+          edit_namelist(jid,"radmod_namelist","CO2",str(360.0/p0*1.0e6))
       edit_namelist(jid,"plasim_namelist","PSURF",str(p0*0.1))
        
     if name=="alloutput":
@@ -172,6 +335,10 @@ def prep(job):
       found=True
       if int(job.parameters["monitor"])==1:
           monitor = True
+          
+    if name=="pressurebroaden":
+      found=True
+      edit_namelist(jid,"radmod_namelist","NPBROADEN",val)
       
     if name=="year": #In days
       found=True
@@ -224,6 +391,7 @@ def prep(job):
       #edit_namelist(jid,"planet_namelist","SIDEREAL_YEAR","31536000.0")
       edit_namelist(jid,"radmod_namelist","NFIXED","1")
       edit_namelist(jid,"radmod_namelist","FIXEDLON",val1)
+      edit_namelist(jid,"plasim_namelist","N_DAYS_PER_YEAR",str(int(360.0/float(val0)/12+0.5)*12))
       
     if name=="restart":
       found=True
@@ -245,10 +413,14 @@ def prep(job):
     if name=="gravity":
       found=True
       edit_namelist(jid,"planet_namelist","GA",val) 
+      edit_postnamelist(workdir,"example.nl","gravity",val)
+      edit_postnamelist(workdir,"snapshot.nl","gravity",val)
        
     if name=="radius":
       found=True
-      edit_namelist(jid,"planet_namelist","PLARAD",str(float(val)*6371220.0)) 
+      edit_namelist(jid,"planet_namelist","PLARAD",str(float(val)*6371220.0))
+      edit_postnamelist(workdir,"example.nl","radius",str(float(val)*6371220.0))
+      edit_postnamelist(workdir,"snapshot.nl","radius",str(float(val)*6371220.0))
      
     if name=="eccen":
       found=True
@@ -393,6 +565,10 @@ def prep(job):
       if int(val)==1:
         #edit_namelist(jid,"plasim_namelist","NQSPEC","0") #Turn off water advection
         edit_namelist(jid,"fluxmod_namelist","NEVAP","0") #Turn off evaporation
+        
+    if name=="ozone":
+      found=True
+      edit_namelist(jid,"radmod_namelist","NO3",val)
       
     if name=="soilheat": # 0.001 J/m^3/K = 1 J/kg/K. Ocean = 4180 J/kg/K = 4.18e6 J/m^3/K
       found=True
@@ -415,6 +591,21 @@ def prep(job):
       found=True
       edit_namelist(jid,"plasim_namelist","N_RUN_MONTHS",val)
       
+    if name=="rhum_c":
+      found=True
+      edit_namelist(jid,"rainmod_namelist","RCRITMOD",val)
+      
+    if name=="rhum_m":
+      found=True
+      edit_namelist(jid,"rainmod_namelist","RCRITSLOPE",val)
+      #if negative, cloud formation will be suppressed at high altitudes
+      #if positive, cloud formation will be encouraged at high altitudes
+      
+    if name=="rcrit":
+      found=True
+      exec("critlevs="+val)
+      edit_namelist(jid,"rainmod_namelist","RCRIT",','.join(critlevs.astype(str)))
+      
     if name=="days":
       found=True
       edit_namelist(jid,"plasim_namelist","N_RUN_DAYS",val)
@@ -429,7 +620,7 @@ def prep(job):
       
     if name=="vlog_top":
       found=True
-      edit_namelist(jid,"plasim_namelist","NEQSIG","2")
+      edit_namelist(jid,"plasim_namelist","NEQSIG","3")
       edit_namelist(jid,"plasim_namelist","PTOP",str(float(val)*100.0))
       
     if name=="timestep":
@@ -453,6 +644,16 @@ def prep(job):
     if name=="notify":
       found=True
       notify = val
+
+      
+    if name=="columnmode":
+      found=True
+      parts = val.split("|")
+      if "static" in parts:
+          edit_namelist(jid,"plasim_namelist","NADV","0")
+      if "clear" in parts:
+          edit_namelist(jid,"radmod_namelist","NCLOUDS","0")
+          edit_namelist(jid,"radmod_namelist","ACLLWR","0.0")
       
     if name=="snapshots":
       found=True
@@ -479,6 +680,7 @@ def prep(job):
       f.write(fnl)
       f.close()
       
+      
     if name=="fixedlon":
       found=True
       edit_namelist(jid,"radmod_namelist","NFIXED","1")
@@ -490,6 +692,42 @@ def prep(job):
     if name=='cleanup':
       found=True #We already took care of it
       
+    if name=="westeros":
+      found=True
+      edit_namelist(jid,"plasim_namelist","NWESTEROS",val)
+      edit_namelist(jid,"planet_namelist","NFIXORB","1") 
+      if "runyears" in job.parameters:
+        nrunyears = int(job.parameters["runyears"])
+      else:
+        nrunyears = 100
+      nwesteros=True
+      
+    if name=="binarystar":
+      found=True
+      edit_namelist(jid,"radmod_namelist","NDOUBLESTAR",val)
+      
+    if name=="flux2":
+      found=True
+      edit_namelist(jid,"planet_namelist","GSOL1",val)
+      
+    if name=="initialmzv":
+      found=True
+      parts = val.split('/')
+      manom0 = parts[0]
+      x0 = parts[1]
+      v0 = parts[2]
+      edit_namelist(jid,"planet_namelist","MEANANOM0",manom0)
+      edit_namelist(jid,"planet_namelist","ZWZZ",x0)
+      edit_namelist(jid,"planet_namelist","ZWVV",v0)
+      
+    if name=="semimajor":
+      found=True
+      edit_namelist(jid,"planet_namelist","SEMIMAJOR",val)
+      
+    if name=="maxflux":
+      found=True
+      edit_namelist(jid,"radmod_namelist","SOLMAX",val)
+      
     if not found: #Catchall for options we didn't include
       found=True
       args = name.split('@')
@@ -500,11 +738,31 @@ def prep(job):
       else:
         print "Unknown parameter "+name+"! Submit unsupported parameters as KEY@NAMELIST in the header!"
       
+  if setgas:
+      p0 = 0
+      gasesx = {}
+      for k in gases.keys():
+          p0 += gases[k]
+      for k in gases.keys():
+          gasesx['x'+k[1:]] = gases[k]/p0
+      mmw = 0
+      for x in gasesx.keys():
+          mmw += gasesx[x]*smws['m'+x[1:]]
+      print 'Mean Molecular Weight set to %1.4f g/mol'%mmw
+      gascon = 8314.46261815324 / mmw
+      print "Gas Constant set to %1.1f"%gascon
+      edit_namelist(jid,"plasim_namelist","PSURF",str(p0*1.0e5))
+      edit_namelist(jid,"radmod_namelist","CO2",str(gasesx['xCO2']*1e6))
+      edit_namelist(jid,"planet_namelist","GASCON",str(gascon))
+      
+      
   print "Arguments set"
   
   histargs = ''
   if weathrestart:
       histargs = wfile+" "+str(yearini)
+  if nwesteros:
+      histargs = str(nrunyears)
   
   # You may have to change this part
   jobscript =(BATCHSCRIPT(job,notify)+
@@ -512,23 +770,37 @@ def prep(job):
               "module load python/2.7.9                                       \n"+
               "module load intel/intel-17                                       \n"+
               "module load openmpi/2.0.1-intel-17                               \n"+
+              "rm keepgoing                                                     \n"+
               "mkdir /mnt/node_scratch/paradise/job"+jid+"            \n")
-  if nsn:
-      jobscript+="mkdir /mnt/node_scratch/paradise/job"+jid+"/snapshots         \n"
-  jobscript +=("cp -a * /mnt/node_scratch/paradise/job"+jid+"/         \n"+
+  jobscript+=("mkdir /mnt/node_scratch/paradise/job"+jid+"/snapshots         \n"+
+                  "tar cvzf stuff.tar.gz --exclude='*_OUT*' --exclude='*_REST*' --exclude='*.nc' --exclude='snapshots/' ./* \n")
+  jobscript +=("rsync -avzhur stuff.tar.gz /mnt/node_scratch/paradise/job"+jid+"/         \n"+
+              "rm -rf stuff.tar.gz                     \n"+
               "cd /mnt/node_scratch/paradise/job"+jid+"/              \n"+
+              "tar xvzf stuff.tar.gz                   \n"+
+              "rm stuff.tar.gz          \n"+
               "./"+scriptfile+" "+str(job.ncores)+" "+str(nlevs)+" "+histargs+"   \n"+
-              "cp -a * $PBS_O_WORKDIR/                                          \n"+
+              "tar cvzf stuff.tar.gz *                                          \n"+
+              "rsync -avzhur stuff.tar.gz $PBS_O_WORKDIR/                                          \n"+
               "rm -rf *                                                         \n"+
-              "cd $PBS_O_WORKDIR                                                \n")
+              "cd $PBS_O_WORKDIR                                                \n"+
+              "tar xvzf stuff.tar.gz                                \n"+
+              "rm stuff.tar.gz          \n"+
+              "if [ -e keepgoing ]                                              \n"+
+              "then                                                            \n"+
+              "      qsub runplasim                                             \n"+
+              "else        \n")
   if keeprs:
       jobscript+= "cp plasim_restart ../output/"+job.name+"_restart            \n"
   if monitor:
       jobscript+= "python monitor_balance.py                                   \n"
       
-  jobscript += ("[ -e balance.log ] && cp balance.log ../output/"+job.name+"_balance.log    \n"+
-                "[ -e slopes.log ] && cp slopes.log ../output/"+job.name+"_slopes.log    \n"+ 
-                'python '+cleanup+' '+job.name+' '+tag+'                           \n')
+  jobscript += ("   [ -e balance.log ] && cp balance.log ../output/"+job.name+"_balance.log    \n"+
+                "   [ -e slopes.log ] && cp slopes.log ../output/"+job.name+"_slopes.log    \n"+
+                "   python synthoutput.py MOST 1                                      \n"+
+                "   cp MOST_history.npy ../output/"+job.name+"_history.npy            \n"+
+                '   python '+cleanup+' '+job.name+' '+tag+'                           \n'+
+                "fi \n")
   
   rs = open(workdir+"/runplasim","w")
   rs.write(jobscript)

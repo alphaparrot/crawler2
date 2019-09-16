@@ -3,8 +3,11 @@ import os
 import sys
 import netCDF4 as nc
 import glob
+import time
 
-gplasim = False
+gplasim = True
+TIMELIMIT = 1.44e5
+
 
 #This version lets the model relax.
 
@@ -41,20 +44,30 @@ def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05):
     #Key is the netCDF variable to evaluate, mean toggles whether to track the average or total,
     #radius is the planet radius in meters, and baseline is the number of years over which to measure
     #slope. Default is to track surface temperature. Threshhold is the maximum slope we'll allow.
-  files = sorted(glob.glob(".nc"))
+  files = sorted(glob.glob("*.nc"))
+  nfiles = len(files)
+  prior=False
+  if len(glob.glob("thistory.ps*"))>0:
+      thistory = np.loadtxt("thistory.pso")
+      nfiles += len(thistory)
+      prior=True
+  dd = np.zeros(nfiles)
+  nstart=0
+  if prior:
+      dd[:len(thistory)] = thistory[:]
+      nstart=len(thistory)
   if len(files) < baseline+2:
     return False
   else:
-    dd=np.zeros(len(files))
     for n in range(0,len(files)):
         ncd = nc.Dataset(files[n],"r")
         variable = ncd.variables[key][:]
         if len(variable.shape)>3:
             variable = variable[:,-1,:,:]
         for m in range(0,variable.shape[0]):
-            dd[n] += spatialmath(ncd.variables['lat'][:],ncd.variables['lon'][:],variable[m,:,:],
+            dd[n+nstart] += spatialmath(ncd.variables['lat'][:],ncd.variables['lon'][:],variable[m,:,:],
                                  mean=mean,radius=radius)
-            dd[n] /= variable.shape[0] #Monthly mean
+        dd[n+nstart] /= variable.shape[0] #Monthly mean
         ncd.close()
     n=len(dd)-3
     tt=np.arange(baseline)+1
@@ -70,6 +83,21 @@ def isflat(key="ts",mean=True,radius=6.371e6,baseline=13,threshhold=0.05):
     else:
       return False
   
+def gethistory(key="ts",mean=True,radius=6.371e6):
+    files = sorted(glob.glob("*.nc"))
+    dd=np.zeros(len(files))
+    for n in range(0,len(files)):
+        ncd = nc.Dataset(files[n],"r")
+        variable = ncd.variables[key][:]
+        if len(variable.shape)>3:
+            variable = variable[:,-1,:,:]
+        for m in range(0,variable.shape[0]):
+            dd[n] += spatialmath(ncd.variables['lat'][:],ncd.variables['lon'][:],variable[m,:,:],
+                                 mean=mean,radius=radius)
+        dd[n] /= variable.shape[0] #Monthly mean
+        ncd.close()
+    return dd
+  
 def hasnans():
     files = sorted(glob.glob("*.nc"))
     ncd = nc.Dataset(files[-1],"r") #Should be most recent
@@ -83,14 +111,19 @@ if __name__=="__main__":
     wf.write("     CO2       AVG SURF T   WEATHERING    OUTGASSING      DpCO2       NEW CO2\n")
     wf.close()
   EXP="MOST"
+  os.system("rm keepgoing")
+  tstart = time.clock()
   NCPU=int(sys.argv[1])
   nlevs=int(sys.argv[2])
   #os.system("rm -f plasim_restart") #Uncomment for a fresh run when you haven't cleaned up beforehand
   os.system("rm -f Abort_Message")
-  year=0
+  exfiles=glob.glob("*DIAG*")
+  year=len(exfiles)
   minyears=13
+  maxyears=year+100
+  overtime=False
   relaxed=False
-  while year < minyears or not relaxed:
+  while (year < minyears or not relaxed) and year < maxyears and (time.clock()-tstart)<=TIMELIMIT:
     year+=1
     dataname=EXP+".%04d"%year
     snapname=EXP+"_SNAP.%04d"%year
@@ -117,3 +150,9 @@ if __name__=="__main__":
         break
     relaxed=isflat(baseline=minyears)
     
+  if not relaxed:
+    os.system("touch keepgoing")
+    temps = gethistory()
+    with open("thistory.pso","a+") as f:
+        text = '\n'+'\n'.join(temps.astype(str))
+        f.write(text)

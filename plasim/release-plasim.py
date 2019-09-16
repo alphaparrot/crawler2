@@ -61,5 +61,5 @@ if __name__=="__main__":
     os.system("rm -rf snapshots/")
     os.system("rm -rf MOST*")
     os.system("rm -rf cyclelog.txt")
-    
+    os.system("cp ../../release.py .")
     os.system("python release.py")
