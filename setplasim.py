@@ -2,6 +2,7 @@ import os
 import numpy as np
 import time
 from batch_system import SUB, BATCHSCRIPT
+from identity import USER
 
 # Options:
 #   noutput
@@ -766,17 +767,13 @@ def prep(job):
   
   # You may have to change this part
   jobscript =(BATCHSCRIPT(job,notify)+
-              "module load gcc/4.9.1                                          \n"+
-              "module load python/2.7.9                                       \n"+
-              "module load intel/intel-17                                       \n"+
-              "module load openmpi/2.0.1-intel-17                               \n"+
               "rm keepgoing                                                     \n"+
-              "mkdir /mnt/node_scratch/paradise/job"+jid+"            \n")
-  jobscript+=("mkdir /mnt/node_scratch/paradise/job"+jid+"/snapshots         \n"+
+              "mkdir /mnt/node_scratch/"+USER+"/job"+jid+"            \n")
+  jobscript+=("mkdir /mnt/node_scratch/"+USER+"/job"+jid+"/snapshots         \n"+
                   "tar cvzf stuff.tar.gz --exclude='*_OUT*' --exclude='*_REST*' --exclude='*.nc' --exclude='snapshots/' ./* \n")
-  jobscript +=("rsync -avzhur stuff.tar.gz /mnt/node_scratch/paradise/job"+jid+"/         \n"+
+  jobscript +=("rsync -avzhur stuff.tar.gz /mnt/node_scratch/"+USER+"/job"+jid+"/         \n"+
               "rm -rf stuff.tar.gz                     \n"+
-              "cd /mnt/node_scratch/paradise/job"+jid+"/              \n"+
+              "cd /mnt/node_scratch/"+USER+"/job"+jid+"/              \n"+
               "tar xvzf stuff.tar.gz                   \n"+
               "rm stuff.tar.gz          \n"+
               "./"+scriptfile+" "+str(job.ncores)+" "+str(nlevs)+" "+histargs+"   \n"+
