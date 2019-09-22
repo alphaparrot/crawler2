@@ -171,6 +171,7 @@ def prep(job):
   nsn = False
   nwesteros = False
   setgas=False
+  setgasx=False
   
   gases_default = {'pH2': 0.0,
                    'pHe': 5.24e-6,
