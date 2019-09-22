@@ -179,7 +179,8 @@ def prep(job):
                    'pCO2':330.0e-6,
                    'pAr': 9.34e-3,
                    'pNe': 18.18e-6,
-                   'pKr': 1.14e-6}
+                   'pKr': 1.14e-6,
+                   'pH2O':0.01}
   
   gases = {'pH2': 0.0,
            'pHe': 0.0,
@@ -188,7 +189,18 @@ def prep(job):
            'pCO2':0.0,
            'pAr': 0.0,
            'pNe': 0.0,
-           'pKr': 0.0}
+           'pKr': 0.0,
+           'pH2O':0.0}
+  
+  gasesx = {'H2': 0.0,
+            'He': 0.0,
+            'N2': 0.0,
+            'O2': 0.0,
+            'CO2':0.0,
+            'Ar': 0.0,
+            'Ne': 0.0,
+            'Kr': 0.0,
+            'H2O':0.0}
   
   smws = {'mH2': 2.01588,
           'mHe': 4.002602,
@@ -197,7 +209,8 @@ def prep(job):
           'mCO2':44.01,
           'mAr': 39.948,
           'mNe': 20.1797,
-          'mKr': 83.798}
+          'mKr': 83.798,
+          'mH2O':18.01528}
   
   for name in job.fields[2:]:
     val = job.parameters[name]
@@ -219,83 +232,144 @@ def prep(job):
     if name=='pH2u': #in ubars
       found=True
       setgas=True
-      gases['pH2'] = float(val)*1.0e-6
+      gases['pH2'] = eval(val)*1.0e-6
             
     if name=='pH2b': #in bars
       found=True
       setgas=True
-      gases['pH2'] = float(val) 
+      gases['pH2'] = eval(val) 
       
     if name=='pHeu': #in ubars
       found=True
       setgas=True
-      gases['pHe'] = float(val)*1.0e-6
+      gases['pHe'] = eval(val)*1.0e-6
             
     if name=='pHeb': #in bars
       found=True
       setgas=True
-      gases['pHe'] = float(val)
+      gases['pHe'] = eval(val)
           
     if name=='pN2u': #in ubars
       found=True
       setgas=True
-      gases['pN2'] = float(val)*1.0e-6
+      gases['pN2'] = eval(val)*1.0e-6
             
     if name=='pN2b': #in bars
       found=True
       setgas=True
-      gases['pN2'] = float(val)
+      gases['pN2'] = eval(val)
       
     if name=='pO2u': #in ubars
       found=True
       setgas=True
-      gases['pO2'] = float(val)*1.0e-6
+      gases['pO2'] = eval(val)*1.0e-6
             
     if name=='pO2b': #in bars
       found=True
       setgas=True
-      gases['pO2'] = float(val)
+      gases['pO2'] = eval(val)
     
     if name=='pCO2u': #in ubars
       found=True
       setgas=True
-      gases['pCO2'] = float(val)*1.0e-6
+      gases['pCO2'] = eval(val)*1.0e-6
             
     if name=='pCO2b': #in bars
       found=True
       setgas=True
-      gases['pCO2'] = float(val)  
+      gases['pCO2'] = eval(val)  
       
     if name=='pAru': #in ubars
       found=True
       setgas=True
-      gases['pAr'] = float(val)*1.0e-6
+      gases['pAr'] = eval(val)*1.0e-6
             
     if name=='pArb': #in bars
       found=True
       setgas=True
-      gases['pAr'] = float(val)
+      gases['pAr'] = eval(val)
       
     if name=='pNeu': #in ubars
       found=True
       setgas=True
-      gases['pNe'] = float(val)*1.0e-6
+      gases['pNe'] = eval(val)*1.0e-6
             
     if name=='pNeb': #in bars
       found=True
       setgas=True
-      gases['pNe'] = float(val)
+      gases['pNe'] = eval(val)
       
     if name=='pKru': #in ubars
       found=True
       setgas=True
-      gases['pKr'] = float(val)*1.0e-6
+      gases['pKr'] = eval(val)*1.0e-6
             
     if name=='pKrb': #in bars
       found=True
       setgas=True
-      gases['pKr'] = float(val)
+      gases['pKr'] = eval(val)
+      
+    if name=='pH2Ou': # NOTE this will ONLY change the mmw--no affect on moist processes
+      found=True
+      setgasx=True
+      gases['pH2O'] = eval(val)*1.0e-6
+      
+    if name=='pH2Ob': # NOTE this will ONLY change the mmw--no affect on moist processes
+      found=True
+      setgasx=True
+      gases['pH2O'] = eval(val)
     
+    if name=='xH2': # mass fraction
+      found=True
+      setgasx=True
+      gasesx['H2'] = eval(val)
+            
+      
+    if name=='xHe': # mass fraction
+      found=True
+      setgasx=True
+      gasesx['He'] = eval(val)
+            
+          
+    if name=='xN2': # mass fraction
+      found=True
+      setgasx=True
+      gasesx['N2'] = eval(val)
+            
+      
+    if name=='xO2': # mass fraction
+      found=True
+      setgasx=True
+      gasesx['O2'] = eval(val)
+            
+    
+    if name=='xCO2': # mass fraction
+      found=True
+      setgasx=True
+      gasesx['CO2'] = eval(val)
+            
+      
+    if name=='xAr': # mass fraction
+      found=True
+      setgasx=True
+      gasesx['Ar'] = eval(val)
+            
+      
+    if name=='xNe': # mass fraction
+      found=True
+      setgasx=True
+      gasesx['Ne'] = eval(val)
+            
+      
+    if name=='xKr': # mass fraction
+      found=True
+      setgasx=True
+      gasesx['Kr'] = eval(val)
+      
+    if name=='xH2O': # NOTE this will ONLY change the mmw--no affect on moist processes
+      found=True
+      setgasx=True
+      gasesx['H2O'] = eval(val)
       
     if name=="pCO2":
       found=True
@@ -309,6 +383,8 @@ def prep(job):
         edit_namelist(jid,"plasim_namelist","PSURF",str(p0*1.0e5))
     
       pCO2 = float(val)/(p0*1.0e6)*1.0e6 #ppmv
+      gases['pCO2'] = float(val)*1.0e-6
+      gasesx['CO2'] = pCO2*1e-6
       edit_namelist(jid,"radmod_namelist","CO2",str(pCO2))      
       
     if name=="pressure":
@@ -741,20 +817,32 @@ def prep(job):
       
   if setgas:
       p0 = 0
-      gasesx = {}
+      gasesvx = {}
       for k in gases.keys():
           p0 += gases[k]
       for k in gases.keys():
-          gasesx['x'+k[1:]] = gases[k]/p0
+          gasesvx[k[1:]] = gases[k]/p0
       mmw = 0
-      for x in gasesx.keys():
-          mmw += gasesx[x]*smws['m'+x[1:]]
+      for x in gasesvx.keys():
+          mmw += gasesvx[x]*smws['m'+x]
       print 'Mean Molecular Weight set to %1.4f g/mol'%mmw
       gascon = 8314.46261815324 / mmw
       print "Gas Constant set to %1.1f"%gascon
       edit_namelist(jid,"plasim_namelist","PSURF",str(p0*1.0e5))
-      edit_namelist(jid,"radmod_namelist","CO2",str(gasesx['xCO2']*1e6))
+      edit_namelist(jid,"radmod_namelist","CO2",str(gasesvx['CO2']*1e6))
       edit_namelist(jid,"planet_namelist","GASCON",str(gascon))
+      
+  if setgasx: #We assume here that surface pressure is set separately
+      mmw = 0
+      mmwd = 0
+      for x in gasesx.keys():
+          mmwd += gasesx[x]/smws['m'+x]
+      mmw = 1.0/mmwd
+      print 'Mean Molecular Weight set to %1.4f g/mol'%mmw
+      gascon = 8314.46261815324 / mmw
+      print "Gas Constant set to %1.1f"%gascon
+      edit_namelist(jid,"planet_namelist","GASCON",str(gascon))
+      edit_namelist(jid,"radmod_namelist","CO2",str(gasesx['CO2']/smws['mCO2']*mmw*1e6))
       
       
   print "Arguments set"
