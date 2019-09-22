@@ -1,3 +1,3 @@
 # PID MODEL JOBNAME STATE NCORES QUEUE flux pressure pCO2 ncarbon timestep snapshots script extra notify alloutput keeprestart
-1 plasim Earth 0 16 sandyq 1367.0 1.01325 330.0 1 45.0 480 super-equil.sh super_relax.py ae 1 1
-2 plasim Earth_2xco2 0 16 sandyq 1367.0 1.01325 660.0 1 45.0 480 super-equil.sh super_relax.py ae 1 1
+1 plasim Earth 0 16 sandyq 1367.0 1.01292 330.0 1 45.0 480 super-equil.sh super_relax.py ae 1 1
+2 plasim Earth_2xco2 0 16 sandyq 1367.0 1.01292 660.0 1 45.0 480 super-equil.sh super_relax.py ae 1 1
