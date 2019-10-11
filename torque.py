@@ -12,7 +12,7 @@ _BATCHSCRIPT = ("#!/bin/bash -l                                                 
               "#PBS -q %s                                                      \n"+
               "#PBS -m %s                                                      \n"+
               "#PBS -r n                                                        \n"+
-              "#PBS -l walltime=48:00:00                                        \n"+
+              "#PBS -l walltime=%02d:00:00                                        \n"+
               "#PBS -N %s                                                       \n"
               "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
               " nodes,ppn,walltime and my_job_name VALUES                       \n"+
@@ -22,8 +22,8 @@ _BATCHSCRIPT = ("#!/bin/bash -l                                                 
               "module load "+INTELMOD            +"                              \n"+
               "module load "+MPIMOD              +"                              \n")
 
-def BATCHSCRIPT(job,notify):
-    return _BATCHSCRIPT%(1,job.ncores,job.queue,notify,job.name)
+def BATCHSCRIPT(job,notify,wt=48):
+    return _BATCHSCRIPT%(1,job.ncores,job.queue,notify,wt,job.name)
     
 
 MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale has 8 threads)

@@ -3,6 +3,7 @@ import numpy as np
 import time
 from batch_system import SUB, BATCHSCRIPT
 from identity import USER
+from crawldefs import Job
 
 # Options:
 #   noutput
@@ -172,6 +173,8 @@ def prep(job):
   nwesteros = False
   setgas=False
   setgasx=False
+  maketransit = False
+  prescgascon = False
   
   gases_default = {'pH2': 0.0,
                    'pHe': 5.24e-6,
@@ -228,6 +231,10 @@ def prep(job):
     if name=="startemp":
       edit_namelist(jid,"radmod_namelist","NSTARTEMP","1")
       edit_namelist(jid,"radmod_namelist","STARBBTEMP",val)
+      found=True
+    
+    if name=="transit":
+      maketransit=True
       found=True
       
     if name=='pH2u': #in ubars
@@ -385,7 +392,7 @@ def prep(job):
     
       pCO2 = float(val)/(p0*1.0e6)*1.0e6 #ppmv
       gases['pCO2'] = float(val)*1.0e-6
-      gasesx['CO2'] = pCO2*1e-6
+      gasesx['CO2'] = pCO2*1e-6     #volumefraction
       edit_namelist(jid,"radmod_namelist","CO2",str(pCO2))      
       
     if name=="pressure":
@@ -397,6 +404,9 @@ def prep(job):
       else:
           p0 += 360.0
           edit_namelist(jid,"radmod_namelist","CO2",str(360.0/p0*1.0e6))
+          gases['pCO2'] = 360.0*1.0e-6
+          gasesx['CO2'] = 360.0/p0 # volumefraction
+          print gasesx['CO2']
       edit_namelist(jid,"plasim_namelist","PSURF",str(p0*0.1))
        
     if name=="alloutput":
@@ -457,6 +467,7 @@ def prep(job):
     if name=="rotspd":
       found=True
       edit_namelist(jid,"planet_namelist","ROTSPD",val)
+      edit_namelist(jid,"plasim_namelist","N_DAYS_PER_YEAR",str(int(360.0*float(val)/12+0.5)*12))
       
     if name=="lockedyear": #Year length in days for a tidally-locked planet_namelist, and lon0.
       found=True
@@ -806,6 +817,11 @@ def prep(job):
       found=True
       edit_namelist(jid,"radmod_namelist","SOLMAX",val)
       
+    if name=="gascon":
+      found=True
+      prescgascon=True
+      edit_namelist(jid,"planet_namelist","GASCON",val)
+      
     if not found: #Catchall for options we didn't include
       found=True
       args = name.split('@')
@@ -828,6 +844,8 @@ def prep(job):
           mmw += gasesvx[x]*smws['m'+x]
       print 'Mean Molecular Weight set to %1.4f g/mol'%mmw
       gascon = 8314.46261815324 / mmw
+      if prescgascon:
+          gascon = job.parameters["gascon"]
       print "Gas Constant set to %1.1f"%gascon
       edit_namelist(jid,"plasim_namelist","PSURF",str(p0*1.0e5))
       edit_namelist(jid,"radmod_namelist","CO2",str(gasesvx['CO2']*1e6))
@@ -841,12 +859,66 @@ def prep(job):
       mmw = 1.0/mmwd
       print 'Mean Molecular Weight set to %1.4f g/mol'%mmw
       gascon = 8314.46261815324 / mmw
+      if prescgascon:
+          gascon = job.parameters["gascon"]
       print "Gas Constant set to %1.1f"%gascon
       edit_namelist(jid,"planet_namelist","GASCON",str(gascon))
       edit_namelist(jid,"radmod_namelist","CO2",str(gasesx['CO2']/smws['mCO2']*mmw*1e6))
       
       
   print "Arguments set"
+  
+  transittag = ''
+  if maketransit:
+      transitparams = ''
+      if setgas:
+          transitparams+="%f "%(gasesvx['H2']*mmw/smws['mH2'])
+          transitparams+="%f "%(gasesvx['He']*mmw/smws['mHe'])
+          transitparams+="%f "%(gasesvx['CO2']*mmw/smws['mCO2'])
+          transitparams+="%f "%(gasesvx['N2']*mmw/smws['mN2'])
+          transitparams+="%f"%(gasesvx['O2']*mmw/smws['mO2'])
+      elif setgasx:
+          transitparams+="%f "%(gasesx['H2'])
+          transitparams+="%f "%(gasesx['He'])
+          transitparams+="%f "%(gasesx['CO2'])
+          transitparams+="%f "%(gasesx['N2'])
+          transitparams+="%f"%(gasesx['O2'])
+      else:
+          co2 = gasesx['CO2']*(8314.46261815324/287.0)/smws['mCO2']
+          transitparams+="%f "%(0.0)
+          transitparams+="%f "%(0.0)
+          transitparams+="%f "%co2
+          transitparams+="%f "%(1.0-co2)
+          transitparams+="%f"%(0.0)
+          transitparams+=" 287.0" #gas constant for normal atmosphere
+      if prescgascon:
+          transitparams+=" %f"%job.parameters['gascon']
+      
+      print "CONFIGURING POST-RUN TRANSIT SPECTROSCOPY..."
+      txs = transitparams.split()
+      txsn = ['H2','He','CO2',"N2",'O2']
+      for ntt in range(len(txsn)):
+          print "\t... %s mass fraction = \t %s"%(txsn[ntt],txs[ntt])
+      if len(txs)>len(txsn):
+          print "\t... gas constant R manually set to %s"%(txs[-1])
+        
+      transitjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%s transit transit_%s 0 1 workq"%(job.pid,job.name),-1)
+      transitfw =(BATCHSCRIPT(transitjob,"abe",wt=3)+
+                   "mkdir /mnt/node_scratch/"+USER+"/transit_%s   \n"%job.name+
+                   "cp %s/plasim/output/%s_snapshot.nc /mnt/node_scratch/"%(job.top,job.name)+USER+"/transit_%s/  \n"%job.name+
+                   "cp %s/plasim/plasimtransit.py /mnt/node_scratch/"%job.top+USER+"/transit_%s/   \n"%job.name+
+                   "cd /mnt/node_scratch/"+USER+"/transit_%s   \n"%job.name+
+                   "python plasimtransit.py %s_snapshot.nc %s   \n"%(job.name,transitparams)+
+                   "cp *.png %s/plasim/output/   \n"%job.top+
+                   "cp *.pdf %s/plasim/output/   \n"%job.top+
+                   "cp *.npy %s/plasim/output/   \n"%job.top+
+                   "rm -rf *        \n"+
+                   "cd $PBS_O_WORKDIR    \n")
+      with open(workdir+"/runtransit_%s"%job.name,"w") as transitf:
+          transitf.write(transitfw)
+      transittag = ("   cp runtransit_%s %s/plasim/output/ \n"%(job.name,job.top)+
+                    "   cd %s/plasim/output/ \n"%job.top+
+                    "   qsub runtransit_%s\n"%job.name)
   
   histargs = ''
   if weathrestart:
@@ -886,6 +958,7 @@ def prep(job):
                 "   python synthoutput.py MOST 1                                      \n"+
                 "   cp MOST_history.npy ../output/"+job.name+"_history.npy            \n"+
                 '   python '+cleanup+' '+job.name+' '+tag+'                           \n'+
+                transittag+
                 "fi \n")
   
   rs = open(workdir+"/runplasim","w")
