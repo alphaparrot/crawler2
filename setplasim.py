@@ -175,6 +175,9 @@ def prep(job):
   setgasx=False
   maketransit = False
   prescgascon = False
+  plarad = 1.0
+  grav = 9.80665
+  starrad = 1.0
   
   gases_default = {'pH2': 0.0,
                    'pHe': 5.24e-6,
@@ -232,6 +235,10 @@ def prep(job):
       edit_namelist(jid,"radmod_namelist","NSTARTEMP","1")
       edit_namelist(jid,"radmod_namelist","STARBBTEMP",val)
       found=True
+      
+    if name=="starrad": #radius of the star in solar radii--only used for transit calc
+      found=True
+      starrad = float(val)
     
     if name=="transit":
       maketransit=True
@@ -501,12 +508,14 @@ def prep(job):
      
     if name=="gravity":
       found=True
+      grav = float(val)
       edit_namelist(jid,"planet_namelist","GA",val) 
       edit_postnamelist(workdir,"example.nl","gravity",val)
       edit_postnamelist(workdir,"snapshot.nl","gravity",val)
        
     if name=="radius":
       found=True
+      plarad = float(val)
       edit_namelist(jid,"planet_namelist","PLARAD",str(float(val)*6371220.0))
       edit_postnamelist(workdir,"example.nl","radius",str(float(val)*6371220.0))
       edit_postnamelist(workdir,"snapshot.nl","radius",str(float(val)*6371220.0))
@@ -552,6 +561,11 @@ def prep(job):
       found=True
       if int(val)==1:
         os.system("cp plasim/glacsra/*.sra plasim/job"+jid+"/")
+    
+    if name=="nseaice": #Toggle whether sea ice and snow are allowed (1=yes,0=no, 1 is default)
+      found=True
+      edit_namelist(jid,"icemod_namelist","NICE",val)
+      edit_namelist(jid,"icemod_namelist","NSNOW",val)
     
     if name=="ncarbon":
       found=True
@@ -870,7 +884,7 @@ def prep(job):
   
   transittag = ''
   if maketransit:
-      transitparams = ''
+      transitparams = '%f %f %f '%(plarad,grav,starrad)
       if setgas:
           transitparams+="%f "%(gasesvx['H2']*mmw/smws['mH2'])
           transitparams+="%f "%(gasesvx['He']*mmw/smws['mHe'])
@@ -912,7 +926,8 @@ def prep(job):
                    "cp *.png %s/plasim/output/   \n"%job.top+
                    "cp *.pdf %s/plasim/output/   \n"%job.top+
                    "cp *.npy %s/plasim/output/   \n"%job.top+
-                   "rm -rf *        \n"+
+                   "cd ../    \n"+
+                   "rm -rf transit_%s/        \n"%job.name+
                    "cd $PBS_O_WORKDIR    \n")
       with open(workdir+"/runtransit_%s"%job.name,"w") as transitf:
           transitf.write(transitfw)
@@ -940,7 +955,8 @@ def prep(job):
               "./"+scriptfile+" "+str(job.ncores)+" "+str(nlevs)+" "+histargs+"   \n"+
               "tar cvzf stuff.tar.gz *                                          \n"+
               "rsync -avzhur stuff.tar.gz $PBS_O_WORKDIR/                                          \n"+
-              "rm -rf *                                                         \n"+
+              "cd ../ \n"+
+              "rm -rf job"+jid+"                                                         \n"+
               "cd $PBS_O_WORKDIR                                                \n"+
               "tar xvzf stuff.tar.gz                                \n"+
               "rm stuff.tar.gz          \n"+
