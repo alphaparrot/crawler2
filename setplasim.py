@@ -236,6 +236,11 @@ def prep(job):
       edit_namelist(jid,"radmod_namelist","STARBBTEMP",val)
       found=True
       
+    if name=="starspec":
+      edit_namelist(jid,"radmod_namelist","NSTARFILE","1")
+      edit_namelist(jid,"radmod_namelist","STARFILE","'"+val+"'")
+      found=True
+      
     if name=="starrad": #radius of the star in solar radii--only used for transit calc
       found=True
       starrad = float(val)
@@ -564,8 +569,9 @@ def prep(job):
     
     if name=="nseaice": #Toggle whether sea ice and snow are allowed (1=yes,0=no, 1 is default)
       found=True
-      edit_namelist(jid,"icemod_namelist","NICE",val)
-      edit_namelist(jid,"icemod_namelist","NSNOW",val)
+      #edit_namelist(jid,"icemod_namelist","NICE",val)
+      edit_namelist(jid,"icemod_namelist","NSEAICE",val)
+      #edit_namelist(jid,"icemod_namelist","NSNOW",val)
     
     if name=="ncarbon":
       found=True
@@ -631,7 +637,13 @@ def prep(job):
       
     if name=="wmax":
       found=True
-      edit_namelist(jid,"carbonmod_namelist","WMAX",val) 
+      edit_namelist(jid,"carbonmod_namelist","WMAX",val)
+    
+    if name=="snowicealbedo":
+      found=True
+      edit_namelist(jid,"seamod_namelist","ALBICE",val)
+      edit_namelist(jid,"landmod_namelist","ALBSMIN",val)
+      edit_namelist(jid,"landmod_namelist","ALBSMAX",val)
       
     if name=="snowmax":
       found=True
@@ -725,6 +737,15 @@ def prep(job):
       found=True
       edit_namelist(jid,"plasim_namelist","NEQSIG","3")
       edit_namelist(jid,"plasim_namelist","PTOP",str(float(val)*100.0))
+      
+    if name=="stratosphere":
+      found=True
+      ptop2 = val.split('|')
+      ptop = ptop2[0]
+      ptop2 = ptop2[1]
+      edit_namelist(jid,"plasim_namelist","NEQSIG","5")
+      edit_namelist(jid,"plasim_namelist","PTOP",ptop)
+      edit_namelist(jid,"plasim_namelist","PTOP2",ptop2)
       
     if name=="timestep":
       found=True
@@ -836,6 +857,12 @@ def prep(job):
       prescgascon=True
       edit_namelist(jid,"planet_namelist","GASCON",val)
       
+    if name=="landmap":
+      found=True
+    
+    if name=="topomap":
+      found=True
+      
     if not found: #Catchall for options we didn't include
       found=True
       args = name.split('@')
@@ -845,7 +872,17 @@ def prep(job):
         edit_namelist(jid,namelist,name,val)
       else:
         print "Unknown parameter "+name+"! Submit unsupported parameters as KEY@NAMELIST in the header!"
-      
+    
+  if ("landmap" in job.fields) or ("topomap" in job.fields):
+      os.system("rm plasim/job"+jid+"/*.sra")
+  if "landmap" in job.fields:
+      mapname = job.parameters["landmap"]
+      os.system("cp hopper/%s plasim/job%s/N032_surf_0172.sra"%(mapname,jid))
+  if "topomap" in job.fields:
+      mapname = job.parameters["topomap"]
+      os.system("cp hopper/%s plasim/job%s/N032_surf_0129.sra"%(mapname,jid))
+    
+    
   if setgas:
       p0 = 0
       gasesvx = {}
@@ -859,7 +896,7 @@ def prep(job):
       print 'Mean Molecular Weight set to %1.4f g/mol'%mmw
       gascon = 8314.46261815324 / mmw
       if prescgascon:
-          gascon = job.parameters["gascon"]
+          gascon = float(job.parameters["gascon"])
       print "Gas Constant set to %1.1f"%gascon
       edit_namelist(jid,"plasim_namelist","PSURF",str(p0*1.0e5))
       edit_namelist(jid,"radmod_namelist","CO2",str(gasesvx['CO2']*1e6))

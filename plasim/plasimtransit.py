@@ -85,25 +85,30 @@ if __name__=="__main__":
             t_sim=ta[nt,:,lat,lon]
             h2o_spechum_sim=hus[nt,:,lat,lon]
             cloud = clf[nt,:,lat,lon]   
-            
-            m1 = np.log10((h2o_spechum_sim[1]+1.0e-18)/(h2o_spechum_sim[0]+1.0e-18))\
-                     /np.log10((p_sim[1]+1.0e-18)/(p_sim[0]+1.0e-18))  
-            new_p = np.concatenate((np.logspace(-1,np.log10(p_sim[0]),num=50),
-                        np.logspace(np.log10(p_sim[0]),np.log10(p_sim[1]),num=50)[1:],
-                        p_sim[2:]))
-            new_q = np.zeros_like(new_p)
-            new_q[:50] = np.minimum(h2o_spechum_sim[0]*(new_p[:50]/p_sim[0])**m1,h2o_spechum_sim[0])
-            new_q[50:98] = np.minimum(h2o_spechum_sim[1]*(new_p[50:98]/p_sim[1])**m1,h2o_spechum_sim[1])
-                #new_q[50:] = np.interp(new_p[50:],p_sim,h2o_spechum_sim)
-            new_q[98:] = h2o_spechum_sim[1:]
-
-            new_t = np.zeros_like(new_p)
-            new_t[:50] = t_sim[0]
-            new_t[50:] = np.interp(new_p[50:],p_sim,t_sim)
-
-            new_cloud = np.zeros_like(new_p)
-            new_cloud[50:] = np.interp(new_p[50:],p_sim,cloud)
-                #pressures = p_sim / 1e3 # mbar to bar
+            if len(lev) == 10:
+               m1 = np.log10((h2o_spechum_sim[1]+1.0e-18)/(h2o_spechum_sim[0]+1.0e-18))\
+                        /np.log10((p_sim[1]+1.0e-18)/(p_sim[0]+1.0e-18))  
+               new_p = np.concatenate((np.logspace(-1,np.log10(p_sim[0]),num=50),
+                           np.logspace(np.log10(p_sim[0]),np.log10(p_sim[1]),num=50)[1:],
+                           p_sim[2:]))
+               new_q = np.zeros_like(new_p)
+               new_q[:50] = np.minimum(h2o_spechum_sim[0]*(new_p[:50]/p_sim[0])**m1,h2o_spechum_sim[0])
+               new_q[50:98] = np.minimum(h2o_spechum_sim[1]*(new_p[50:98]/p_sim[1])**m1,h2o_spechum_sim[1])
+                   #new_q[50:] = np.interp(new_p[50:],p_sim,h2o_spechum_sim)
+               new_q[98:] = h2o_spechum_sim[1:]
+               
+               new_t = np.zeros_like(new_p)
+               new_t[:50] = t_sim[0]
+               new_t[50:] = np.interp(new_p[50:],p_sim,t_sim)
+               
+               new_cloud = np.zeros_like(new_p)
+               new_cloud[50:] = np.interp(new_p[50:],p_sim,cloud)
+                   #pressures = p_sim / 1e3 # mbar to bar
+            else:
+               new_p = p_sim
+               new_q = h2o_spechum_sim
+               new_t = t_sim
+               new_cloud = cloud
             pressures = new_p / 1e3
                 
             atmosphere.setup_opa_structure(pressures)
@@ -186,24 +191,30 @@ if __name__=="__main__":
             h2o_spechum_sim=hus[nt,:,lat,lon]
             cloud = clf[nt,:,lat,lon]   
             
-            m1 = np.log10((h2o_spechum_sim[1]+1.0e-18)/(h2o_spechum_sim[0]+1.0e-18))\
-                     /np.log10((p_sim[1]+1.0e-18)/(p_sim[0]+1.0e-18))  
-            new_p = np.concatenate((np.logspace(-1,np.log10(p_sim[0]),num=50),
-                        np.logspace(np.log10(p_sim[0]),np.log10(p_sim[1]),num=50)[1:],
-                        p_sim[2:]))
-            new_q = np.zeros_like(new_p)
-            new_q[:50] = np.minimum(h2o_spechum_sim[0]*(new_p[:50]/p_sim[0])**m1,h2o_spechum_sim[0])
-            new_q[50:98] = np.minimum(h2o_spechum_sim[1]*(new_p[50:98]/p_sim[1])**m1,h2o_spechum_sim[1])
-                #new_q[50:] = np.interp(new_p[50:],p_sim,h2o_spechum_sim)
-            new_q[98:] = h2o_spechum_sim[1:]
-
-            new_t = np.zeros_like(new_p)
-            new_t[:50] = t_sim[0]
-            new_t[50:] = np.interp(new_p[50:],p_sim,t_sim)
-
-            new_cloud = np.zeros_like(new_p)
-            new_cloud[50:] = np.interp(new_p[50:],p_sim,cloud)
-                #pressures = p_sim / 1e3 # mbar to bar
+            if len(lev) == 10:
+                m1 = np.log10((h2o_spechum_sim[1]+1.0e-18)/(h2o_spechum_sim[0]+1.0e-18))\
+                         /np.log10((p_sim[1]+1.0e-18)/(p_sim[0]+1.0e-18))  
+                new_p = np.concatenate((np.logspace(-1,np.log10(p_sim[0]),num=50),
+                            np.logspace(np.log10(p_sim[0]),np.log10(p_sim[1]),num=50)[1:],
+                            p_sim[2:]))
+                new_q = np.zeros_like(new_p)
+                new_q[:50] = np.minimum(h2o_spechum_sim[0]*(new_p[:50]/p_sim[0])**m1,h2o_spechum_sim[0])
+                new_q[50:98] = np.minimum(h2o_spechum_sim[1]*(new_p[50:98]/p_sim[1])**m1,h2o_spechum_sim[1])
+                    #new_q[50:] = np.interp(new_p[50:],p_sim,h2o_spechum_sim)
+                new_q[98:] = h2o_spechum_sim[1:]
+                
+                new_t = np.zeros_like(new_p)
+                new_t[:50] = t_sim[0]
+                new_t[50:] = np.interp(new_p[50:],p_sim,t_sim)
+                
+                new_cloud = np.zeros_like(new_p)
+                new_cloud[50:] = np.interp(new_p[50:],p_sim,cloud)
+                    #pressures = p_sim / 1e3 # mbar to bar
+            else:
+                new_p = p_sim
+                new_q = h2o_spechum_sim
+                new_t = t_sim
+                new_cloud = cloud
             pressures = new_p / 1e3
                 
             atmosphere.setup_opa_structure(pressures)
@@ -275,7 +286,7 @@ if __name__=="__main__":
             alltransits[nx,:] = atmosphere.transm_rad[:]
             snaptransits[nt,:] = np.nansum([snaptransits[nt,:],atmosphere.transm_rad*dlat[lat]],axis=0)
             nx+=1
-    transit /= (latwt*ntimes)
+    transit /= (latwt*len(ntimes))
     snaptransits /= latwt
     np.save("wavelengths.npy",nc.c/atmosphere.freq/1e-4)
     np.save(prefix+"_transit.npy",transit)
