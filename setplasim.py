@@ -1098,9 +1098,9 @@ def prep(job):
               "rm stuff.tar.gz          \n"+
               "if [ -e keepgoing ]                                              \n"+
               "then                                                            \n"+
-              "      qsub runplasim > %s/%d_new.id                \n"%(job.top,job.pid)+
+              "      qsub runplasim > %s/%s_new.id                \n"%(job.top,job.pid)+
               "      cd "+job.top+"                           \n"+
-              "      python updatedependency.py %d            \n"%job.pid+
+              "      python updatedependency.py %s            \n"%job.pid+
               "      cd $PBS_O_WORKDIR                        \n"+
               "else        \n")
   if keeprs:
@@ -1128,11 +1128,11 @@ def submit(job):
      for d in dlist:
          with open(d+".id","r") as f:
              priorjobs.append(f.read().split('\n')[0].split()[0])
-         os.system("echo %d >> "%job.pid+d+".id") #indicate that we depend on this job
-     os.system("cd plasim/job"+str(job.home)+" && "+HOLD(priorjobs)+" runplasim > %s/%d.id && cd "%(job.top,job.pid)+job.top)
+         os.system("echo %s >> "%job.pid+d+".id") #indicate that we depend on this job
+     os.system("cd plasim/job"+str(job.home)+" && "+HOLD(priorjobs)+" runplasim > %s/%s.id && cd "%(job.top,job.pid)+job.top)
 
   else:
-     os.system("cd plasim/job"+str(job.home)+" && "+SUB+" runplasim > %s/%d.id && cd "%(job.top,job.pid)+job.top)
+     os.system("cd plasim/job"+str(job.home)+" && "+SUB+" runplasim > %s/%s.id && cd "%(job.top,job.pid)+job.top)
   time.sleep(1.0)
   tag = job.getID()
   job.write()

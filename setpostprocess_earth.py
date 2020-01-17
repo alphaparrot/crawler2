@@ -156,10 +156,10 @@ def submit(job):
         for d in dlist:
             with open(d+".id","r") as f:
                 priorjobs.append(f.read().split('\n')[0].split()[0])
-            os.system("echo %d >> "%job.pid+d+".id") #indicate that we depend on this job
-        os.system("cd "+homedir+" && "+HOLD(priorjobs)+" runpostprocess_earth > %s/%d.id && cd ../../"%(job.top,job.pid))
+            os.system("echo %s >> "%job.pid+d+".id") #indicate that we depend on this job
+        os.system("cd "+homedir+" && "+HOLD(priorjobs)+" runpostprocess_earth > %s/%s.id && cd ../../"%(job.top,job.pid))
     else:
-        os.system("cd "+homedir+" && "+SUB+" runpostprocess_earth > %s/%d.id && cd ../../"%(job.top,job.pid))
+        os.system("cd "+homedir+" && "+SUB+" runpostprocess_earth > %s/%s.id && cd ../../"%(job.top,job.pid))
 
 def _prep(job):
     workdir = job[0]

@@ -41,7 +41,7 @@ def submit(job):
       for d in dlist:
           with open(d+".id","r") as f:
               priorjobs.append(f.read().split('\n')[0].split()[0])
-          os.system("echo %d >> "%job.pid+d+".id") #indicate that we depend on this job
-      os.system("cd "+workdir+" && "+HOLD(priorjobs)+" runsbdart_locked > %s/%d.id && cd "%(job.top,job.pid)+job.top)
+          os.system("echo %s >> "%job.pid+d+".id") #indicate that we depend on this job
+      os.system("cd "+workdir+" && "+HOLD(priorjobs)+" runsbdart_locked > %s/%s.id && cd "%(job.top,job.pid)+job.top)
   else:
-      os.system("cd "+workdir+" && "+SUB+" runsbdart_locked > %s/%d.id && cd "%(job.top,job.pid)+job.top)
+      os.system("cd "+workdir+" && "+SUB+" runsbdart_locked > %s/%s.id && cd "%(job.top,job.pid)+job.top)
