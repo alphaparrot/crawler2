@@ -1069,7 +1069,9 @@ def prep(job):
           sbdf.write(sbdfw)
       sbdarttag = ("   cd "+job.top+"/sbdart_%s/"%sbdvar+job.name+"/   \n"+
                    "   qsub autosbdart               \n"+
+                   "   cp "+job.top+"/plasim/job"+jid+"/job.npy "+job.top+"/sbdart_%s/"%sbdvar+job.name+"/    \n"+
                    "   cd $PBS_O_WORKDIR             \n")
+      os.system("cp "+job.top+"/release.py "+job.top+"/sbdart_%s/"%sbdvar+job.name+"/")
 
   histargs = ''
   if weathrestart:

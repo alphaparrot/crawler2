@@ -230,7 +230,9 @@ def _prep(job):
                     "python orthoprojection.py "+jobname+"_phases.nc 0 \n"+
                     "mv "+jobname+"*/*.png . \n"+
                     "rm -rf "+jobname+"*/   \n"
-                    "cp "+top+"/plasim/output/"+jobname+".nc .  \n")
+                    "cp "+top+"/plasim/output/"+jobname+".nc .  \n"+
+                    "cd "+workdir+"       \n"+
+                    "python release.py     \n")
 
     rs = open(workdir+"/runpostprocess_earth","w")
     rs.write(jobscript)
