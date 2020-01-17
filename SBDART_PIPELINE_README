@@ -1,0 +1,48 @@
+============================================
+  README : USING THE EXOPLASIM PIPELINE
+============================================
+
+Note: the version of SBDART being distributed 
+here is what was available in zipped form on 
+the internet in early 2017. It does not 
+represent the most up-to-date version of 
+SBDART, and I take no responsibility for its 
+proper functioning. I am not maintaining this 
+version of SBDART, and encourage users to 
+incorporate updated versions of SBDART when 
+those releases are stable. -AP
+
+
+----------------------------------------------
+
+Using the ExoPlaSim pipeline
+
+
+Starting with the January 16, 2020 release of
+crawler2, code is available to create ExoPlaSim
+runs that automatically proceed on to SBDART
+postprocessing, and then to the collector code
+that stitches everything together. Finally,
+the colormatching and orthoprojection codes are
+also included, which can be used to translate
+SBDART spectral maps into true-color images.
+
+To use this mode, simply include the "sbdart"
+field in the ExoPlaSim job header. The argument
+should take the form {0,1,2}|{Z,N,E,W,S}, where
+the first list in braces is a list of integers
+corresponding to the substellar points you want.
+In the current code, options are 0--3. You must
+specify at least one in the form {0,}. The 
+second list in braces is the viewer orientation:
+Zenith, North, East, West, or South. This list
+should be any combination of these (i.e. {Z,}).
+The minimal case is therefore {0,}|{Z,}. All
+but the zenith orientations represent quarter
+phases. Zenith has the viewer in the same
+position as the star, corresponding to a full
+phase. There is no need to further specify
+whether you are using the Earth-like or tidally-
+locked variant; the code will determine which
+is appropriate based on the ExoPlaSim job you
+have created.
