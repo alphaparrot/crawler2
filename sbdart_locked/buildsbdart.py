@@ -2381,7 +2381,7 @@ def getbroken(job):
         else:
             try:
                 bundle = readradiance(o)
-                if np.nanmax(bundle["radiance"])<1:
+                if np.nanmax(bundle["radiance"])<1.0 and bundle["zens"]<90.:
                     broken.append(o.split('/')[-1])
                     reasons.append("unphysically low output")
             except: #We encounter some sort of error when parsing the file
