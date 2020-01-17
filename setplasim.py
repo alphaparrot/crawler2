@@ -2,7 +2,7 @@ import os
 import numpy as np
 import time
 from batch_system import SUB, BATCHSCRIPT
-from identity import USER
+from identity import USER, SCRATCH
 from crawldefs import Job
 
 # Options:
@@ -174,7 +174,9 @@ def prep(job):
   setgas=False
   setgasx=False
   maketransit = False
+  makesbdart = False
   prescgascon = False
+  sbdvar = "earth"
   plarad = 1.0
   grav = 9.80665
   starrad = 1.0
@@ -219,6 +221,18 @@ def prep(job):
           'mKr': 83.798,
           'mH2O':18.01528}
   
+  flux = 1367.0
+  startemp = -1
+  starfile = False
+  
+  #SI units:
+  hh = 6.62607004e-34
+  cc = 2.99792458e8
+  kb = 1.38064852e-23
+  rsun = 6.95510e8 #meters
+  au = 1.496e11
+  adjfac = 3.1011857558763545
+  
   for name in job.fields[2:]:
     val = job.parameters[name]
     found=False    
@@ -228,17 +242,21 @@ def prep(job):
       found=True
       
     if name=="flux":
+      flux = float(val)
       edit_namelist(jid,"planet_namelist","GSOL0",val) 
       found=True
       
     if name=="startemp":
       edit_namelist(jid,"radmod_namelist","NSTARTEMP","1")
       edit_namelist(jid,"radmod_namelist","STARBBTEMP",val)
+      startemp = float(val)
       found=True
       
     if name=="starspec":
       edit_namelist(jid,"radmod_namelist","NSTARFILE","1")
       edit_namelist(jid,"radmod_namelist","STARFILE","'"+val+"'")
+      edit_namelist(jid,"radmod_namelist","STARFILEHR","'"+val[:-4]+"_hr.dat'")
+      starfile = val[:-4]+"_hr.dat"
       found=True
       
     if name=="starrad": #radius of the star in solar radii--only used for transit calc
@@ -248,6 +266,12 @@ def prep(job):
     if name=="transit":
       maketransit=True
       found=True
+      
+    if name=="sbdart":
+      makesbdart=True
+      found=True
+      ntimes = val.split('|')[0]
+      lviews = val.split('|')[1]
       
     if name=='pH2u': #in ubars
       found=True
@@ -331,12 +355,12 @@ def prep(job):
       
     if name=='pH2Ou': # NOTE this will ONLY change the mmw--no affect on moist processes
       found=True
-      setgasx=True
+      setgas=True
       gases['pH2O'] = eval(val)*1.0e-6
       
     if name=='pH2Ob': # NOTE this will ONLY change the mmw--no affect on moist processes
       found=True
-      setgasx=True
+      setgas=True
       gases['pH2O'] = eval(val)
     
     if name=='xH2': # mass fraction
@@ -361,7 +385,6 @@ def prep(job):
       found=True
       setgasx=True
       gasesx['O2'] = eval(val)
-            
     
     if name=='xCO2': # mass fraction
       found=True
@@ -483,6 +506,7 @@ def prep(job):
       
     if name=="lockedyear": #Year length in days for a tidally-locked planet_namelist, and lon0.
       found=True
+      sbdvar="locked"
       val0 = val.split('/')[0]
       val1 = val.split('/')[1]
       edit_namelist(jid,"planet_namelist","ROTSPD",str(1.0/float(val0)))
@@ -661,7 +685,8 @@ def prep(job):
       
     if name=="soilh2o":
       found=True
-      edit_namelist(jid,"landmod_namelist","WSMAX",val) 
+      edit_namelist(jid,"landmod_namelist","WSMAX",val)
+      os.system("rm plasim/job"+jid+"/*0229.sra") 
       
     if name=="naqua":
       found=True
@@ -674,6 +699,12 @@ def prep(job):
       edit_namelist(jid,"landmod_namelist","NWATCINI","1")
       edit_namelist(jid,"landmod_namelist","DWATCINI","0.0")
       os.system("rm plasim/job"+jid+"/*.sra")
+      
+    if name=="soilwetness":
+      found=True
+      edit_namelist(jid,"landmod_namelist","NWATCINI","1")
+      edit_namelist(jid,"landmod_namelist","DWATCINI",val)
+      os.system("rm plasim/job"+jid+"/*0229.sra")
       
     if name=="drycore":
       found=True
@@ -946,19 +977,19 @@ def prep(job):
           transitparams+=" %f"%job.parameters['gascon']
       
       print "CONFIGURING POST-RUN TRANSIT SPECTROSCOPY..."
-      txs = transitparams.split()
+      txs = transitparams.split()[3:]
       txsn = ['H2','He','CO2',"N2",'O2']
       for ntt in range(len(txsn)):
           print "\t... %s mass fraction = \t %s"%(txsn[ntt],txs[ntt])
       if len(txs)>len(txsn):
           print "\t... gas constant R manually set to %s"%(txs[-1])
         
-      transitjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%s transit transit_%s 0 1 workq"%(job.pid,job.name),-1)
-      transitfw =(BATCHSCRIPT(transitjob,"abe",wt=3)+
-                   "mkdir /mnt/node_scratch/"+USER+"/transit_%s   \n"%job.name+
+      transitjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%s transit transit_%s 0 1 sandyq"%(job.pid,job.name),-1)
+      transitfw =(BATCHSCRIPT(transitjob,"abe")+
+                   "mkdir "+SCRATCH+"/transit_%s   \n"%job.name+
                    "cp %s/plasim/output/%s_snapshot.nc /mnt/node_scratch/"%(job.top,job.name)+USER+"/transit_%s/  \n"%job.name+
                    "cp %s/plasim/plasimtransit.py /mnt/node_scratch/"%job.top+USER+"/transit_%s/   \n"%job.name+
-                   "cd /mnt/node_scratch/"+USER+"/transit_%s   \n"%job.name+
+                   "cd "+SCRATCH+"/transit_%s   \n"%job.name+
                    "python plasimtransit.py %s_snapshot.nc %s   \n"%(job.name,transitparams)+
                    "cp *.png %s/plasim/output/   \n"%job.top+
                    "cp *.pdf %s/plasim/output/   \n"%job.top+
@@ -972,6 +1003,74 @@ def prep(job):
                     "   cd %s/plasim/output/ \n"%job.top+
                     "   qsub runtransit_%s\n"%job.name)
   
+  sbdarttag = ''
+  if makesbdart:
+      
+      sbdparams = [job.name,job.ncores]
+      if setgas:
+          _pco2 = gases['pCO2']*1.0e3
+          sbdparams.append(gases['pCO2']*1.0e3)
+      elif setgasx:
+          _pco2 = gasesx['CO2']/smws['mCO2']*mmw*p0*1.0e-3
+          sbdparams.append(gasesx['CO2']/smws['mCO2']*mmw*p0*1.0e-3)
+      else:
+          _pco2 = gases['pCO2']*1.0e3
+          sbdparams.append(gases['pCO2']*1.0e3)
+      sbdparams.append(flux)
+      print p0*1.0e3, _pco2
+      sbdparams.append(p0*1.0e3-_pco2)
+      sbdparams.append(grav)
+      sbdparams.append('^'.join(ntimes[1:-1].split(',')))
+      sbdparams.append('^'.join(lviews[1:-1].split(',')))
+      
+      print tuple(sbdparams),sbdvar
+      os.system("mkdir "+job.top+"/sbdart_%s/%s"%(sbdvar,job.name))
+      
+      sbd_specfile = ""
+      
+      if startemp>0:
+          wvl_icm = np.arange(100.0,49980.0,20.0) # 20 cm-1 resolution
+          wvl_cm = 1.0/wvl_icm #centimeters
+          wvl = wvl_cm[::-1]*1.0e4 #microns
+          wvl_m = wvl*1.0e-6 #meters
+          bf = 2*hh*cc**2/wvl_m**5 * 1.0/(np.exp(hh*cc/(wvl_m*kb*startemp))-1) #Planck function
+          Lsun = 4*np.pi*rsun**2 * bf #solar luminosity (W/m)
+          Fsun = Lsun / (4*np.pi*au**2) #solar flux at 1 AU (W/m^2/m)
+          flux = Fsun * 1367.0/np.trapz(Fsun,x=wvl_m) #adjust to equal 1367 W/m^2
+          #It's okay that we're not using user-specified insolation here, since that's set
+          #separately in SBDART with solfac--but that's a modifier relative to 1367 W/m^2.
+          flux *= 1.0e-6 #convert to W/m^2/um
+          spectxt = ''
+          for nw in range(len(wvl)-1):
+              spectxt += "%s %s \n"%(wvl[nw],flux[nw])
+          spectxt += "%s %s"%(wvl[-1],flux[-1])
+          with open(job.top+"/sbdart_%s/%s/sbdart_%d.dat"%(sbdvar,job.name,startemp),"w") as specf:
+              specf.write(spectxt)
+          sbd_specfile = "sbdart_%d.dat"%startemp 
+      
+      if starfile: #This will always supersede a specified blackbody temperature
+          with open(job.top+"/plasim/clean/"+starfile,"r") as starf:
+              spectxt = starf.read().split('\n')
+          if spectxt[-1]=='':
+              spectxt = spectxt[:-1]
+          with open(job.top+"/sbdart_%s/%s/sbdart_%s"%(sbdvar,job.name,starfile),"w") as specf:
+              specf.write('\n'.join(spectxt[1:]))
+          sbd_specfile = "sbdart_%s"%starfile
+      
+      
+      sbdtag = sbd_specfile
+      
+      os.system("cp "+job.top+"/identity.py "+job.top+"/sbdart_%s/"%sbdvar)
+      sbdjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%s sbdart_%s sbd_%s 0 %d sandyq"%(job.pid,sbdvar,job.name,job.ncores),-1)
+      sbdfw = (BATCHSCRIPT(sbdjob,"abe")+
+               "cd "+job.top+"/sbdart_%s    \n"%sbdvar+
+               "python buildsbdart.py %s %d sandyq %f %f %f %f %s %s "%tuple(sbdparams)+sbdtag+"    \n")
+      with open(job.top+"/sbdart_%s/"%sbdvar+job.name+"/autosbdart","w") as sbdf:
+          sbdf.write(sbdfw)
+      sbdarttag = ("   cd "+job.top+"/sbdart_%s/"%sbdvar+job.name+"/   \n"+
+                   "   qsub autosbdart               \n"+
+                   "   cd $PBS_O_WORKDIR             \n")
+
   histargs = ''
   if weathrestart:
       histargs = wfile+" "+str(yearini)
@@ -981,12 +1080,12 @@ def prep(job):
   # You may have to change this part
   jobscript =(BATCHSCRIPT(job,notify)+
               "rm keepgoing                                                     \n"+
-              "mkdir /mnt/node_scratch/"+USER+"/job"+jid+"            \n")
-  jobscript+=("mkdir /mnt/node_scratch/"+USER+"/job"+jid+"/snapshots         \n"+
+              "mkdir "+SCRATCH+"/job"+jid+"            \n")
+  jobscript+=("mkdir "+SCRATCH+"/job"+jid+"/snapshots         \n"+
                   "tar cvzf stuff.tar.gz --exclude='*_OUT*' --exclude='*_REST*' --exclude='*.nc' --exclude='snapshots/' ./* \n")
-  jobscript +=("rsync -avzhur stuff.tar.gz /mnt/node_scratch/"+USER+"/job"+jid+"/         \n"+
+  jobscript +=("rsync -avzhur stuff.tar.gz "+SCRATCH+"/job"+jid+"/         \n"+
               "rm -rf stuff.tar.gz                     \n"+
-              "cd /mnt/node_scratch/"+USER+"/job"+jid+"/              \n"+
+              "cd "+SCRATCH+"/job"+jid+"/              \n"+
               "tar xvzf stuff.tar.gz                   \n"+
               "rm stuff.tar.gz          \n"+
               "./"+scriptfile+" "+str(job.ncores)+" "+str(nlevs)+" "+histargs+"   \n"+
@@ -999,7 +1098,10 @@ def prep(job):
               "rm stuff.tar.gz          \n"+
               "if [ -e keepgoing ]                                              \n"+
               "then                                                            \n"+
-              "      qsub runplasim                                             \n"+
+              "      qsub runplasim > %s/%d_new.id                \n"%(job.top,job.pid)+
+              "      cd "+job.top+"                           \n"+
+              "      python updatedependency.py %d            \n"%job.pid+
+              "      cd $PBS_O_WORKDIR                        \n"+
               "else        \n")
   if keeprs:
       jobscript+= "cp plasim_restart ../output/"+job.name+"_restart            \n"
@@ -1012,6 +1114,7 @@ def prep(job):
                 "   cp MOST_history.npy ../output/"+job.name+"_history.npy            \n"+
                 '   python '+cleanup+' '+job.name+' '+tag+'                           \n'+
                 transittag+
+                sbdarttag+
                 "fi \n")
   
   rs = open(workdir+"/runplasim","w")
@@ -1019,7 +1122,17 @@ def prep(job):
   rs.close()
   
 def submit(job):
-  os.system("cd plasim/job"+str(job.home)+" && "+SUB+" runplasim && cd "+job.top)
+  if "DEPENDENCIES" in job.parameters:
+     dlist = job.parameters["DEPENDENCIES"].split(',')
+     priorjobs = []
+     for d in dlist:
+         with open(d+".id","r") as f:
+             priorjobs.append(f.read().split('\n')[0].split()[0])
+         os.system("echo %d >> "%job.pid+d+".id") #indicate that we depend on this job
+     os.system("cd plasim/job"+str(job.home)+" && "+HOLD(priorjobs)+" runplasim > %s/%d.id && cd "%(job.top,job.pid)+job.top)
+
+  else:
+     os.system("cd plasim/job"+str(job.home)+" && "+SUB+" runplasim > %s/%d.id && cd "%(job.top,job.pid)+job.top)
   time.sleep(1.0)
   tag = job.getID()
   job.write()

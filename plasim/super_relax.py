@@ -133,9 +133,10 @@ def energybalanced(threshhold = 1.0e-4,baseline=50): #Takes an average of 200 ye
             lat = ncd.variables['lat'][:]
             lon = ncd.variables['lon'][:]
             ncd.close()
-            topt = np.zeros(12)
-            bott = np.zeros(12)
-            for m in range(0,12):
+            ntimes = ntr.shape[0]
+            topt = np.zeros(ntimes)
+            bott = np.zeros(ntimes)
+            for m in range(0,ntimes):
                 topt[m] = spatialmath(lat,lon,ntr[m,:,:])
                 bott[m] = spatialmath(lat,lon,hfns[m,:,:])
             sbalance[n+nstart] = np.mean(bott)
@@ -167,9 +168,10 @@ def getbalance():
     lat = ncd.variables['lat'][:]
     lon = ncd.variables['lon'][:]
     ncd.close()
-    topt = np.zeros(12)
-    bott = np.zeros(12)
-    for m in range(0,12):
+    ntimes = ntr.shape[0]
+    topt = np.zeros(ntimes)
+    bott = np.zeros(ntimes)
+    for m in range(0,ntimes):
         topt[m] = spatialmath(lat,lon,ntr[m,:,:])
         bott[m] = spatialmath(lat,lon,hfns[m,:,:])
     return (np.mean(bott),np.mean(topt))

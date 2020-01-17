@@ -1,7 +1,9 @@
 import numpy as np
-import os
+import os, sys
 import netCDF4 as nc
 from batch_system import SUB, BATCHSCRIPT
+from identity import USER, SCRATCH
+from crawldefs import Job
 
 #This is really a minimal working example. The user has no choice in which fields to provide.
 #Any missed fields, and the script will crash. It is however unusual in that the 'workdir' is
@@ -94,12 +96,12 @@ def prep(job):
                     "module load python/2.7.9                                         \n"+
                     "cd "+workdir+"                      \n"+
                     "cp "+cwd+"/postprocess_earth/job"+str(job.home)+"/job.npy ./           \n"+
-                    "mkdir /mnt/node_scratch/paradise/postprocess_earth/                    \n"+
-                    "mkdir /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "mkdir "+SCRATCH+"/postprocess_earth/                    \n"+
+                    "mkdir "+SCRATCH+"/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "tar cvzf stuff.tar.gz *                                         \n"+
-                    "rsync -avzhur stuff.tar.gz /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "rsync -avzhur stuff.tar.gz "+SCRATCH+"/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "rm -rf stuff.tar.gz            \n"+
-                    "cd /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "cd "+SCRATCH+"/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "tar xvzf stuff.tar.gz                \n"+
                     "rm -rf stuff.tar.gz                   \n"+
                     "python postprocess_earth.py "+times+" "+angles+" "+tag+"                           \n"+
@@ -119,12 +121,12 @@ def prep(job):
                     "module load python/2.7.9                                         \n"+
                     "cd "+workdir+"                      \n"+
                     "cp "+cwd+"/postprocess_earth/job"+str(job.home)+"/job.npy ./           \n"+
-                    "mkdir /mnt/node_scratch/paradise/postprocess_earth/                    \n"+
-                    "mkdir /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "mkdir "+SCRATCH+"/postprocess_earth/                    \n"+
+                    "mkdir "+SCRATCH+"/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "tar cvzf stuff.tar.gz *                                         \n"+
-                    "rsync -avzhur stuff.tar.gz /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "rsync -avzhur stuff.tar.gz "+SCRATCH+"/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "rm -rf stuff.tar.gz            \n"+
-                    "cd /mnt/node_scratch/paradise/postprocess_earth/job"+str(job.home)+"/  \n"+
+                    "cd "+SCRATCH+"/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "tar xvzf stuff.tar.gz                \n"+
                     "rm -rf stuff.tar.gz                   \n"+
                     "python postprocess_earth.py "+times+" "+angles+" "+tag+"                                    \n"+
@@ -147,5 +149,102 @@ def submit(job):
     workdir = job.parameters["workdir"]
     cwd = os.getcwd()
     homedir = cwd+"/postprocess_earth/job"+str(job.home)
-  
-    os.system("cd "+homedir+" && "+SUB+" runpostprocess_earth && cd ../../")
+    
+    if "DEPENDENCIES" in job.parameters:
+        dlist = job.parameters["DEPENDENCIES"].split(',')
+        priorjobs = []
+        for d in dlist:
+            with open(d+".id","r") as f:
+                priorjobs.append(f.read().split('\n')[0].split()[0])
+            os.system("echo %d >> "%job.pid+d+".id") #indicate that we depend on this job
+        os.system("cd "+homedir+" && "+HOLD(priorjobs)+" runpostprocess_earth > %s/%d.id && cd ../../"%(job.top,job.pid))
+    else:
+        os.system("cd "+homedir+" && "+SUB+" runpostprocess_earth > %s/%d.id && cd ../../"%(job.top,job.pid))
+
+def _prep(job):
+    workdir = job[0]
+    cwd = os.getcwd()
+    top = cwd
+    
+    gtype = "plasim" #job.parameters["type"]
+    jobname = job[1]
+    gcm = top + "/plasim/output/"+jobname+"_snapshot.nc"
+    
+    homedir = cwd+"/postprocess_earth/"+jobname
+    
+    notify = 'ae'
+    
+    os.system("cp postprocess_earth/clean/* "+workdir+'/')
+    os.system("cp release.py "+workdir+'/')
+    os.system("cp crawldefs.py "+workdir+"/")
+    os.system("cp identity.py "+workdir+"/")
+    
+    data = nc.Dataset(gcm,"r")
+    lats = data.variables['lat'][:]
+    lons = data.variables['lon'][:]
+    np.save(workdir+"/latitudes.npy",lats)
+    np.save(workdir+"/longitudes.npy",lons)
+    
+    times = job[2]
+    angles = job[3]
+    
+    ncpu = '1'
+    
+    queue = job[4]
+    
+    notify = 'ae'
+    
+    color = True
+    makemap = True
+    
+    tag = ''
+    if color:
+        tag+="color "
+    if makemap:
+        tag+="map "
+            
+    dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline ppc_%s 0 1 %s"%(-9999,jobname,queue),-1)
+    jobscript =(BATCHSCRIPT(dummyjob,notify)+
+                    "module load gcc/4.9.1                                            \n"+
+                    "module load python/2.7.9                                         \n"+
+                    "cd "+workdir+"                      \n"+
+                    #"cp "+cwd+"/postprocess_earth/job"+str(job.home)+"/job.npy ./           \n"+
+                    "mkdir "+SCRATCH+"/postprocess_earth/                    \n"+
+                    "mkdir "+SCRATCH+"/postprocess_earth/"+jobname+"/  \n"+
+                    "tar cvzf stuff.tar.gz *                                         \n"+
+                    "rsync -avzhur stuff.tar.gz "+SCRATCH+"/postprocess_earth/"+jobname+"/  \n"+
+                    "rm -rf stuff.tar.gz            \n"+
+                    "cd "+SCRATCH+"/postprocess_earth/"+jobname+"/  \n"+
+                    "tar xvzf stuff.tar.gz                \n"+
+                    "rm -rf stuff.tar.gz                   \n"+
+                    "python postprocess_earth.py "+times+" "+angles+" "+tag+"                           \n"+
+                    "tar cvzf stuff.tar.gz *                 \n"+
+                    "rsync -avzhur stuff.tar.gz "+workdir+"/ \n"+
+                    "rm -rf *                                                         \n"+
+                    "cd "+workdir+"                                                \n"+
+                    "tar xvzf stuff.tar.gz                                \n"+
+                    "rm stuff.tar.gz          \n"+
+                    "cp spectra.nc "+cwd+"/postprocess_earth/output/"+jobname+"_spectra.nc \n"+
+                    "cp phases.nc "+cwd+"/postprocess_earth/output/"+jobname+"_phases.nc \n\n"+
+                    "cd "+cwd+"/postprocess_earth/output/   \n"+
+                    "python orthoprojection.py "+jobname+"_phases.nc 0 \n"+
+                    "mv "+jobname+"*/*.png . \n"+
+                    "rm -rf "+jobname+"*/   \n"
+                    "cp "+top+"/plasim/output/"+jobname+".nc .  \n")
+
+    rs = open(workdir+"/runpostprocess_earth","w")
+    rs.write(jobscript)
+    rs.close()
+
+    
+def _submit(job):
+    workdir = job[0]
+    cwd = os.getcwd()
+    homedir = cwd+"/postprocess_earth/"+job[1]
+    os.system("cd "+workdir+" && "+SUB+" runpostprocess_earth && cd ../../")
+    
+if __name__=="__main__":
+    job = sys.argv[1:]
+    _prep(job)
+    _submit(job)
+    

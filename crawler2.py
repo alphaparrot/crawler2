@@ -31,6 +31,10 @@ if __name__=="__main__":
   else:
       dryrun=False
       
+  rude=False    
+  if "RUDE" in sys.argv[:]:
+      rude=True
+      
   mode="normal"
   if "batch" in sys.argv[:]:
       mode="batch"
@@ -45,14 +49,16 @@ if __name__=="__main__":
     #resources[m] = resources[m].split()
     ##print resources[m]
     #rf.close()
+  if rude:
+      resources,running = getjobs(rude=rude)
+  else:
+      resources = getjobs(rude=rude)  
     
-  resources = getjobs()  
-    
-  running = 0
-  for r in resources.keys():
+      running = 0
+      for r in resources.keys():
     #for n in range(0,len(resources[r])):
       #running+=int(resources[r][n])*1.0/MODELS[r]
-    running += np.sum(resources[r])  
+          running += np.sum(resources[r])  
   print str(running)+" of "+str(nnodes)+" nodes used"
   
   priority = True
@@ -283,12 +289,16 @@ if __name__=="__main__":
     
     nsofar+=1
     if not dryrun:
-        if mode=="normal" or (mode=="batch" and nsofar%100==0): 
-            resources = getjobs()  
+        if mode=="normal" or (mode=="batch" and nsofar%100==0):
+            if rude:
+                resources,running = getjobs(rude=rude)  
+            else:
+                resources = getjobs(rude=rude)
     
-        running = 0
-        for r in resources.keys():
-            running += np.sum(resources[r]) 
+        if not rude:
+            running = 0
+            for r in resources.keys():
+                running += np.sum(resources[r]) 
     
     
     if capacityflag:

@@ -105,10 +105,10 @@ if __name__=="__main__":
                new_cloud[50:] = np.interp(new_p[50:],p_sim,cloud)
                    #pressures = p_sim / 1e3 # mbar to bar
             else:
-               new_p = p_sim
-               new_q = h2o_spechum_sim
-               new_t = t_sim
-               new_cloud = cloud
+               new_p = p_sim[:]
+               new_q = h2o_spechum_sim[:]
+               new_t = t_sim[:]
+               new_cloud = cloud[:]
             pressures = new_p / 1e3
                 
             atmosphere.setup_opa_structure(pressures)
@@ -211,10 +211,10 @@ if __name__=="__main__":
                 new_cloud[50:] = np.interp(new_p[50:],p_sim,cloud)
                     #pressures = p_sim / 1e3 # mbar to bar
             else:
-                new_p = p_sim
-                new_q = h2o_spechum_sim
-                new_t = t_sim
-                new_cloud = cloud
+                new_p = p_sim[:]
+                new_q = h2o_spechum_sim[:]
+                new_t = t_sim[:]
+                new_cloud = cloud[:]
             pressures = new_p / 1e3
                 
             atmosphere.setup_opa_structure(pressures)

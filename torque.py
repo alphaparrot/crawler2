@@ -13,7 +13,7 @@ _BATCHSCRIPT = ("#!/bin/bash -l                                                 
               "#PBS -m %s                                                      \n"+
               "#PBS -r n                                                        \n"+
               "#PBS -l walltime=%02d:00:00                                        \n"+
-              "#PBS -N %s                                                       \n"
+              "#PBS -N %s                                                       \n"+
               "# EVERYTHING ABOVE THIS COMMENT IS NECESSARY, SHOULD ONLY CHANGE"+
               " nodes,ppn,walltime and my_job_name VALUES                       \n"+
               "cd $PBS_O_WORKDIR                                                \n"+
@@ -25,6 +25,9 @@ _BATCHSCRIPT = ("#!/bin/bash -l                                                 
 def BATCHSCRIPT(job,notify,wt=48):
     return _BATCHSCRIPT%(1,job.ncores,job.queue,notify,wt,job.name)
     
+def HOLD(jobs):
+    return SUB+" -W depend=afterany:" + ":".join(jobs)
+
 
 MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale has 8 threads)
           "sbdart":8,           #Here we use 'task' to mean a Sunnyvale job, as opposed to the
@@ -36,7 +39,7 @@ MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale 
           "lmdz":8,
           "mitgcm":6}             
 
-def getjobs():
+def getjobs(rude=False):
     print "Checking jobs"
     os.system("qstat -u "+USER+" > cjobs.tmp")
     cjf = open("cjobs.tmp","r")
@@ -46,6 +49,8 @@ def getjobs():
     resources={}
     for m in MODELS.keys():
         resources[m] = np.zeros(256)
+    running = 0
+    statuses = []
     tags = []
     #This part may need changing depending on how job tags are handled.
     for j in joblist:
@@ -53,6 +58,8 @@ def getjobs():
         #if job[3][5:]!="lmdz-":
             #tags.append(job[0])
         tags.append(job[0])
+        statuses.append(job[-2])
+    nt = 0
     for t in tags:
         print "Looking up "+t
         os.system("qstat -f "+t+" > jinfo.tmp")
@@ -94,5 +101,11 @@ def getjobs():
                 tmp[:len(resources[job.model])] = resources[job.model][:]
                 resources[job.model] = tmp
             resources[job.model][jid] = float(ncpus)/8.0#MODELS[job.model]
-    
-    return resources
+            if rude:
+                if statuses[nt]=="R":
+                    running += float(ncpus)/8.0
+        nt+=1
+    if rude:
+        return resources,running
+    else:
+        return resources

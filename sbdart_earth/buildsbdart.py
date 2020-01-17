@@ -1,12 +1,14 @@
 import numpy as np
 import netCDF4 as nc
-import os
+import os, sys, glob
 import time
-from batch_system import SUB, BATCHSCRIPT
+from identity import USER, SCRATCH
+from batch_system import BATCHSCRIPT, SUB, HOLD
+from crawldefs import Job
 
 def write_input_earth(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,surface,pCO2,p0,
                 tsurf,altz,flux,wmin=0.55,wmax=19.0,albedo=0.35,smooth=False,flat=True,sic=0.0,
-                spec=False,iout=5,zout=(0,100)):
+                spec=False,iout=5,zout=(0,100),icefile='seaice.dat',waterfile='seawater.dat'):
   template =("&INPUT                                                     \n"+ #0
              " IDATM=          0,                                        \n"+ #1
              " AMIX= -1.0000000000000000     ,                           \n"+ #2
@@ -265,13 +267,17 @@ def write_input_earth(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,su
     input_text[35] = " ISALB= 0  , "
     input_text[36] = " ALBCON= %.16f ,"%albedo
   elif surface == "snow":
-    input_text[35] = " ISALB= 1  , "
+    #input_text[35] = " ISALB= 1  , "
+    input_text[35] = " ISALB= -1  , "
+    os.system("cp %s/%s %s/albedo.dat"%(workdir,icefile,workdir))
   elif surface == "clearwater":
     input_text[35] = " ISALB= 2  , "
   elif surface == "lakewater":
     input_text[35] = " ISALB= 3  , "
   elif surface == "seawater":
-    input_text[35] = " ISALB= 4  , "
+    #input_text[35] = " ISALB= 4  , "
+    input_text[35] = " ISALB= -1  , "
+    os.system("cp %s/%s %s/albedo.dat"%(workdir,waterfile,workdir))
   elif surface == "sand":
     input_text[35] = " ISALB= 5  , "
   elif surface == "vegetation":
@@ -295,7 +301,8 @@ def write_input_earth(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,su
   inp.close()
 
 def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,
-                tsurf,altz,flux,wmin=0.55,albedo=0.35,smooth=False,flat=True,sic=0.0,spec=False):
+                tsurf,altz,flux,icefile='seaice.dat',waterfile='seawater.dat',
+                wmin=0.55,albedo=0.35,smooth=False,flat=True,sic=0.0,spec=False):
   template =("&INPUT                                                     \n"+ #0
              " IDATM=          0,                                        \n"+ #1
              " AMIX= -1.0000000000000000     ,                           \n"+ #2
@@ -532,13 +539,17 @@ def write_input(workdir,cszenith,azimuth,latitude,surface,pCO2,p0,
     input_text[35] = " ISALB= 0  , "
     input_text[36] = " ALBCON= %.16f ,"%albedo
   elif surface == "snow":
-    input_text[35] = " ISALB= 1  , "
+    #input_text[35] = " ISALB= 1  , "
+    input_text[35] = " ISALB= -1  , "
+    os.system("cp %s/%s %s/albedo.dat"%(workdir,icefile,workdir))
   elif surface == "clearwater":
     input_text[35] = " ISALB= 2  , "
   elif surface == "lakewater":
     input_text[35] = " ISALB= 3  , "
   elif surface == "seawater":
-    input_text[35] = " ISALB= 4  , "
+    #input_text[35] = " ISALB= 4  , "
+    input_text[35] = " ISALB= -1  , "
+    os.system("cp %s/%s %s/albedo.dat"%(workdir,waterfile,workdir))
   elif surface == "sand":
     input_text[35] = " ISALB= 5  , "
   elif surface == "vegetation":
@@ -1210,6 +1221,43 @@ def _prep_lmdz(job):
       lon1=0
       lon2=64
     
+  if job.ncores>1:
+      mode="batch"
+      if (lats[1]-lats[0])%job.ncores==0:
+          latpairs = []
+          dlat = (lats[1]-lats[0])/job.ncores
+          for ll in range(lats[0],lats[1],dlat):
+              latpairs.append([ll,ll+dlat])
+          lonpairs = [lons,]
+      elif (lats[1]-lats[0]==1) and (lons[1]-lons[0])%job.ncores==0:
+          latpairs = [lats,]
+          lonpairs = []
+          dlon = (lons[1]-lons[0])/job.ncores
+          for ll in range(lons[0],lons[1],dlon):
+              lonpairs.append([ll,ll+dlon])
+      elif ((lats[1]-lats[0])*(lons[1]-lons[0]))%job.ncores == 0:
+          if (lats[1]-lats[0])<job.ncores:
+            nlonchunks = job.ncores/(lats[1]-lats[0])
+            dlons = (lons[1]-lons[0])/nlonchunks
+            latpairs = []
+            lonpairs = []
+            for ll in range(lats[0],lats[1]):
+                latpairs.append([ll,ll+1])
+            for ll in range(lons[0],lons[1],dlons):
+                lonpairs.append([ll,ll+dlons])
+          else:
+            nlatchunks = job.ncores/(lons[1]-lons[0])
+            dlats = (lats[1]-lats[0])/nlatchunks
+            latpairs = []
+            lonpairs = []
+            for ll in range(lats[0],lats[1],dlats):
+                latpairs.append([ll,ll+dlats])
+            for ll in range(lons[0],lons[1]):
+                lonpairs.append([ll,ll+1])
+      else:
+          mode="single"
+  else:
+      mode="single"
   star = False
     
   if "starspec" in job.parameters:
@@ -1345,7 +1393,7 @@ def _prep_lmdz(job):
 
     
 def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
-  workdir = "/mnt/node_scratch/paradise/sbdart_earth_job"+str(job.home)
+  workdir = SCRATCH+"/sbdart_earth_job"+str(job.home)
   os.system("mkdir "+workdir)
   if "source" in job.parameters:
     source = job.parameters["source"]
@@ -1452,6 +1500,51 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       lon1=0
       lon2=64
    
+  if job.ncores>1:
+      mode="batch"
+      if (lats[1]-lats[0])%job.ncores==0:
+          latpairs = []
+          dlat = (lats[1]-lats[0])/job.ncores
+          for ll in range(lats[0],lats[1],dlat):
+              latpairs.append([ll,ll+dlat])
+          lonpairs = [lons,]
+      elif (lats[1]-lats[0]==1) and (lons[1]-lons[0])%job.ncores==0:
+          latpairs = [lats,]
+          lonpairs = []
+          dlon = (lons[1]-lons[0])/job.ncores
+          for ll in range(lons[0],lons[1],dlon):
+              lonpairs.append([ll,ll+dlon])
+      elif ((lats[1]-lats[0])*(lons[1]-lons[0]))%job.ncores == 0:
+          if (lats[1]-lats[0])<job.ncores:
+            nlonchunks = job.ncores/(lats[1]-lats[0])
+            dlons = (lons[1]-lons[0])/nlonchunks
+            latpairs = []
+            lonpairs = []
+            for ll in range(lats[0],lats[1]):
+                latpairs.append([ll,ll+1])
+            for ll in range(lons[0],lons[1],dlons):
+                lonpairs.append([ll,ll+dlons])
+          else:
+            nlatchunks = job.ncores/(lons[1]-lons[0])
+            dlats = (lats[1]-lats[0])/nlatchunks
+            latpairs = []
+            lonpairs = []
+            for ll in range(lats[0],lats[1],dlats):
+                latpairs.append([ll,ll+dlats])
+            for ll in range(lons[0],lons[1]):
+                lonpairs.append([ll,ll+1])
+      else:
+          mode="single"
+      if mode!="single":
+          for n in range(len(latpairs)):
+              for l in range(len(latpairs[n])):
+                  latpairs[n][l] = min(31,latpairs[n][l])
+          for n in range(len(lonpairs)):
+              for l in range(len(lonpairs[n])):
+                  lonpairs[n][l] = min(63,lonpairs[n][l])
+  else:
+      mode="single"
+      
   fakecloudnz = None
   fakecloudlwp = 0.0
    
@@ -1524,8 +1617,8 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
     for jlon in range(lons[0],lons[1]):
       for nang in itimes:
         for vw in vws:
-            print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
-            print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
+            #print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
+            #print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
             os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
             os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%1d_%s/"%(jlat,jlon,nang,vw))
         
@@ -1555,6 +1648,13 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
           cirrus=True
       else:
           cirrus=False
+
+  icefile='seaice.dat'
+  waterfile='seawater.dat'
+  if "icespec" in job.parameters:
+      icefile=job.parameters["icespec"]
+  if "waterspec" in job.parameters:
+      waterfile=job.parameters["waterspec"]
   
   
   tag = ''
@@ -1563,8 +1663,73 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   if makemap:
       tag+="map "
   
+  if mode!="single":
+      role="dom"
+      
+  #if role=="sub":
+      #jobscript =(BATCHSCRIPT(job,notify)+
+                  #"module load gcc/4.9.1                                          \n"+
+                  #"module load python/2.7.9                                       \n"+
+                  #"for al in "+ntimes+";                         \n"+
+                  #"do \n"+
+                  #"     for vw in "+lviews+";                \n"+
+                  #"     do \n"+     
+                  #"          for jl in {%02d..%02d};                       \n"%(lats[0],lats[1]-1)+
+                  #"          do \n"+
+                  #"               for il in {%02d..%02d};                  \n"%(lons[0],lons[1]-1)+
+                  #"               do \n"+
+                  #"                    ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+                  #"                    ILON=`printf '%02d' $(( 10#$il ))`           \n"+
+                  #"                    IANG=`printf '%1d' $al`           \n"+
+                  #"                    echo $ILAT $ILON $IANG $vw              \n"+
+                  #"                    TAG=${ILAT}_${ILON}_${IANG}_$vw                    \n"+
+                  #"                    cd "+workdir+"/sbdart-$TAG                          \n"+
+                  #"                    ./sbdart > "+workdir+"/output/sbout.$TAG            \n"+
+                  #"                    cd "+workdir+"                                  \n"+
+                  #"               done                       \n"+
+                  #"          done                         \n"+
+                  #"          mv "+workdir+"/output/sbout.* "+finaldest+"/                   \n"+
+                  #"     done                                    \n"+
+                  #"done \n"+
+                  #"cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
+                  #'./release.sh "'+finaldest+'"                                \n'+
+                  #"rm -rf "+workdir+"/*/                                  \n")
+      
+  #else:
+      #jobscript =(BATCHSCRIPT(job,notify)+
+                  #"module load gcc/4.9.1                                          \n"+
+                  #"module load python/2.7.9                                       \n"+
+                  #"for al in "+ntimes+";                          \n"+
+                  #"do \n"+
+                  #"     for vw in "+lviews+";                \n"+
+                  #"     do \n"+     
+                  #"          for jl in {%02d..%02d};                       \n"%(lats[0],lats[1]-1)+
+                  #"          do \n"+
+                  #"               for il in {%02d..%02d};                  \n"%(lons[0],lons[1]-1)+
+                  #"               do \n"+
+                  #"                    ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+                  #"                    ILON=`printf '%02d' $(( 10#$il ))`           \n"+
+                  #"                    IANG=`printf '%1d' $al`           \n"+
+                  #"                    echo $ILAT $ILON $IANG $vw              \n"+
+                  #"                    TAG=${ILAT}_${ILON}_${IANG}_$vw                    \n"+
+                  #"                    cd "+workdir+"/sbdart-$TAG                          \n"+
+                  #"                    ./sbdart > "+workdir+"/output/sbout.$TAG            \n"+
+                  #"                    cd "+workdir+"                                  \n"+
+                  #"               done                       \n"+
+                  #"          done                         \n"+
+                  #"          mv "+workdir+"/output/sbout.* "+finaldest+"/                   \n"+
+                  #"     done                                    \n"+
+                  #"done \n"+
+                  #"cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
+                  #'./release.sh "'+finaldest+'"                                \n'+
+                  #"rm -rf "+workdir+"/*/                                  \n"+
+                  #"python checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  #" "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
+  
+  
   if role=="sub":
-      jobscript =(BATCHSCRIPT(job,notify)+
+      if mode=="single":
+        jobscript =(BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for al in "+ntimes+";                         \n"+
@@ -1591,9 +1756,51 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
                   './release.sh "'+finaldest+'"                                \n'+
                   "rm -rf "+workdir+"/*/                                  \n")
+      else:
+          runscript = ("#!/bin/bash \n\n"+
+                      "cd "+workdir+" \n"+
+                  "for al in "+ntimes+";                         \n"+
+                  "do \n"+
+                  "     for vw in "+lviews+";                \n"+
+                  "     do \n"+     
+                  "          for ((jl=$1; jl<=$2; jl++));                       \n"+
+                  "          do \n"+
+                  "               for ((il=$3; il<=$4; il++));                  \n"+
+                  "               do \n"+
+                  "                    ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+                  "                    ILON=`printf '%02d' $(( 10#$il ))`           \n"+
+                  "                    IANG=`printf '%1d' $al`           \n"+
+                  "                    echo $ILAT $ILON $IANG $vw              \n"+
+                  "                    TAG=${ILAT}_${ILON}_${IANG}_$vw                    \n"+
+                  "                    cd "+workdir+"/sbdart-$TAG                          \n"+
+                  "                    ./sbdart > "+workdir+"/output/sbout.$TAG            \n"+
+                  "                    cd "+workdir+"                                  \n"+
+                  "               done                       \n"+
+                  "          done                         \n"+
+                  "          mv "+workdir+"/output/sbout.* "+finaldest+"/                   \n"+
+                  "     done                                    \n"+
+                  "done \n")
+          with open(workdir+"/sbdart_batch.sh","w") as rs:
+              rs.write(runscript)
+          os.system("chmod a+x "+workdir+"/sbdart_batch.sh")
+          jobscript =(BATCHSCRIPT(job,notify)+
+                      "module load gcc/4.9.1 \n"+
+                      "module load python/2.7.9 \n"+
+                      "cd "+workdir+" \n"+
+                      "#ls -d * \n"+
+                      "cat sbdart_batch.sh  \n\n")
+          for ltp in latpairs:
+              for lnp in lonpairs:
+                  jobscript += "./sbdart_batch.sh %2d %2d %2d %2d &    \n\n"%(ltp[0],ltp[1],lnp[0],lnp[1])
+          jobscript += ("wait     \n"+
+                        "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
+                  './release.sh "'+finaldest+'"                                \n'+
+                  "rm -rf "+workdir+"/*/                                  \n")
+          
       
   else:
-      jobscript =(BATCHSCRIPT(job,notify)+
+      if mode=="single":
+        jobscript =(BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for al in "+ntimes+";                          \n"+
@@ -1620,13 +1827,59 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
                   './release.sh "'+finaldest+'"                                \n'+
                   "rm -rf "+workdir+"/*/                                  \n"+
-                  "python checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  "#python checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
                   " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
+      else:
+          runscript = ("#!/bin/bash \n\n"+
+                      "cd "+workdir+" \n"+
+                  "for al in "+ntimes+";                         \n"+
+                  "do \n"+
+                  "     for vw in "+lviews+";                \n"+
+                  "     do \n"+     
+                  "          for ((jl=$1; jl<=$2; jl++));                       \n"+
+                  "          do \n"+
+                  "               for ((il=$3; il<=$4; il++));                  \n"+
+                  "               do \n"+
+                  "                    ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+                  "                    ILON=`printf '%02d' $(( 10#$il ))`           \n"+
+                  "                    IANG=`printf '%1d' $al`           \n"+
+                  "                    echo $ILAT $ILON $IANG $vw              \n"+
+                  "                    TAG=${ILAT}_${ILON}_${IANG}_$vw                    \n"+
+                  "                    cd "+workdir+"/sbdart-$TAG                          \n"+
+                  "                    ./sbdart > "+workdir+"/output/sbout.$TAG            \n"+
+                  "                    cd "+workdir+"                                  \n"+
+                  "               done                       \n"+
+                  "          done                         \n"+
+                  "          mv "+workdir+"/output/sbout.* "+finaldest+"/                   \n"+
+                  "     done                                    \n"+
+                  "done \n")
+          with open(workdir+"/sbdart_batch.sh","w") as rs:
+              rs.write(runscript)
+          os.system("chmod a+x "+workdir+"/sbdart_batch.sh")
+          jobscript =(BATCHSCRIPT(job,notify)+
+                      "module load gcc/4.9.1 \n"+
+                      "module load python/2.7.9 \n"+
+                      "cd "+workdir+" \n"+
+                      "#ls -d * \n"+
+                      "cat sbdart_batch.sh  \n\n")
+          for ltp in latpairs:
+              for lnp in lonpairs:
+                  jobscript += "./sbdart_batch.sh %2d %2d %2d %2d &    \n\n"%(ltp[0],ltp[1],lnp[0],lnp[1])
+          jobscript += ("wait     \n"+
+                  "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
+                  './release.sh "'+finaldest+'"                                \n'+
+                  "rm -rf "+workdir+"/*/                                  \n"+
+                  "#python checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n"+
+                  "cd $PBS_O_WORKDIR   \n"+
+                  "python release.py   \n")
+  
   
   rs = open(workdir+"/runsbdart","w")
   rs.write(jobscript)
   rs.close()
   
+  os.system("chmod a+x "+workdir+"/runsbdart")
   os.system("cp -r "+job.top+"/sbdart_earth/release.sh "+workdir+"/")
   os.system("cp -r "+job.top+"/sbdart_earth/checkprogress_earth.py "+workdir+"/")
   os.system("cp "+job.top+"/crawldefs.py "+workdir+"/")
@@ -1653,7 +1906,8 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
             write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
                               nv,nang,csz,azm,latitude,longitude,surf,pCO2,p0,tsurf,altz,flux,
                               wmin=wmin,wmax=wmax,albedo=unialb,flat=flat,sic=sic,spec=star,
-                              smooth=smooth,iout=iout,zout=zout)
+                              smooth=smooth,iout=iout,zout=zout,waterfile=waterfile,
+                              icefile=icefile)
         print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[vv])
       
 def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
@@ -1870,15 +2124,808 @@ def submit(job):
   os.system("cd "+workdir+" && "+SUB+" runsbdart && cd "+job.top)
   
 def run(job):
-  workdir = "/mnt/node_scratch/paradise/sbdart_earth_job"+str(job.home)
+  workdir = SCRATCH+"/sbdart_earth_job"+str(job.home)
   os.system("cd "+workdir+" && bash runsbdart")
   
-if __name__=="__main__":
-    job = np.load("jobdat.npy").item()
+def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
+  print job
+  
+  with open("../.home","r") as homef:
+      top = homef.read().split('\n')[0]
+  
+  os.system("cp "+top+"/identity.py "+top+"/sbdart_earth/")
+  os.system("cp "+top+"/crawldefs.py "+top+"/sbdart_earth/")
+  os.system("cp "+top+"/torque.py "+top+"/sbdart_earth/")
+  os.system("cp "+top+"/slurm.py "+top+"/sbdart_earth/")
+  os.system("cp "+top+"/batch_system.py "+top+"/sbdart_earth/")
+  
+  jobname = job[0]
+  jobncores = int(job[1])
+  jobqueue = job[2]
+  pco2 = float(job[3])
+  flux = float(job[4])
+  p0 = float(job[5])
+  grav = float(job[6])
+  ntimes = '{'+','.join(job[7].split('^'))+'}'
+  if "," not in ntimes:
+      ntimes = ntimes[:-1]+",}"
+  lviews = '{'+','.join(job[8].split('^'))+"}"
+  if "," not in lviews:
+      lviews = lviews[:-1]+",}"
+  #ntimes = '{0,1,2,3}'
+  #lviews = '{Z,E,W,N,S}'
+  try:
+      star = job[9]
+  except:
+      star = False
+  
+  workdir = SCRATCH+"/sbdart_earth_"+jobname
+  os.system("mkdir "+workdir)
+
+  source = "clean"
+    
+  
+  iout=5
+  
+  vws = lviews[1:-1].split(',')
+  if vws[-1]=='':
+      vws = vws[:-1]
+  itimes = ntimes[1:-1].split(',')
+  if itimes[-1]=='':
+      itimes = itimes[:-1]
+  itimes = np.array(itimes).astype(int)     
+  
+  viewdict = {'Z':0,
+              'E':1,
+              'W':2,
+              'N':3,
+              'S':4}    
+      
+  print "Setting up for times ",itimes,"and views",vws
+    
+  lats = [0,32]
+  lons = [0,64]
+    
+  tempdest = workdir+"/output/"
+  os.system("mkdir "+tempdest)
+  
+  finaldest = top+"/sbdart_earth/"+jobname
+  os.system("mkdir "+finaldest)
+    
+    
+  token_name = "token_%02d-%02d-%02d-%02d.crwl"%(lats[0],lats[1],lons[0],lons[1])
+  
+  os.system("mkdir "+finaldest+"/running")
+  os.system("touch "+finaldest+"/running/"+token_name)
+  
+  os.system("cp "+top+"/plasim/output/"+jobname+"_snapshot.nc "
+            +workdir+"/"+jobname+"_snapshot.nc")
+  data = nc.Dataset(workdir+"/"+jobname+"_snapshot.nc","r")  
+     
+  lat1=0
+  lat2=32
+  lon1=0
+  lon2=64
+  
+  if jobncores>1:
+      mode="batch"
+      if (lats[1]-lats[0])%jobncores==0:
+          latpairs = []
+          dlat = (lats[1]-lats[0])/jobncores
+          for ll in range(lats[0],lats[1],dlat):
+              latpairs.append([ll,ll+dlat])
+          lonpairs = [lons,]
+      elif (lats[1]-lats[0]==1) and (lons[1]-lons[0])%jobncores==0:
+          latpairs = [lats,]
+          lonpairs = []
+          dlon = (lons[1]-lons[0])/jobncores
+          for ll in range(lons[0],lons[1],dlon):
+              lonpairs.append([ll,ll+dlon])
+      elif ((lats[1]-lats[0])*(lons[1]-lons[0]))%jobncores == 0:
+          if (lats[1]-lats[0])<jobncores:
+            nlonchunks = jobncores/(lats[1]-lats[0])
+            dlons = (lons[1]-lons[0])/nlonchunks
+            latpairs = []
+            lonpairs = []
+            for ll in range(lats[0],lats[1]):
+                latpairs.append([ll,ll+1])
+            for ll in range(lons[0],lons[1],dlons):
+                lonpairs.append([ll,ll+dlons])
+          else:
+            nlatchunks = jobncores/(lons[1]-lons[0])
+            dlats = (lats[1]-lats[0])/nlatchunks
+            latpairs = []
+            lonpairs = []
+            for ll in range(lats[0],lats[1],dlats):
+                latpairs.append([ll,ll+dlats])
+            for ll in range(lons[0],lons[1]):
+                lonpairs.append([ll,ll+1])
+      else:
+          mode="single"
+      if mode!="single":
+          for n in range(len(latpairs)):
+              for l in range(len(latpairs[n])):
+                  latpairs[n][l] = min(31,latpairs[n][l])
+          for n in range(len(lonpairs)):
+              for l in range(len(lonpairs[n])):
+                  lonpairs[n][l] = min(63,lonpairs[n][l])
+  else:
+      mode="single"
+      
+  fakecloudnz = None
+  fakecloudlwp = 0.0
+                                                       
+  smooth=False                                        
+                                                       
+  flat=False
+    
+  clouds=True
+    
+  notify = 'ae'
+      
+  istep=12
+      
+  uniform=False     
+  unialb = 0.35
+
+  wmin=0.35 #microns
+  
+  wmax = 80.0 #microns
+  
+  
+  zout = (0.,100.)
+      
+  nlats = len(data.variables['lat'][:])
+  
+  os.system("mkdir "+workdir+"/source/")
+  #os.system("tar cvzf "+job.top+"/sbdart_earth/"+source+"/source.tar.gz "+
+            #job.top+"/sbdart_earth/"+source+"/* ")
+  os.system("rsync "+top+"/sbdart_earth/"+source+"/source.tar.gz "+workdir+"/source/")
+  #os.system("rm "+job.top+"/sbdart_earth/"+source+"/source.tar.gz ")
+  os.system("tar xvzf "+workdir+"/source/source.tar.gz -C "+workdir+"/source/")
+  os.system("rm "+workdir+"/source/source.tar.gz")
+  if star:
+      os.system("cp -r "+finaldest+"/"+star+" "+workdir+"/source/solar.dat")
+  
+  for jlat in range(lats[0],lats[1]):
+    for jlon in range(lons[0],lons[1]):
+      for nang in itimes:
+        for vw in vws:
+            #print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
+            #print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
+            os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
+            print "made directory "+workdir+"/sbdart-%02d-%02d-%1d_%s"%(jlat,jlon,nang,vw)
+            os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%1d_%s/"%(jlat,jlon,nang,vw))
+
+  icefile='seaice.dat'
+  waterfile='seawater.dat'
+  #if "icespec" in job.parameters:
+  #    icefile=job.parameters["icespec"]
+  #if "waterspec" in job.parameters:
+  #    waterfile=job.parameters["waterspec"]
+  
+  
+  tag = 'color map '
+  
+  runscript = ("#!/bin/bash \n\n"+
+              "cd "+workdir+" \n"+
+          "for al in "+ntimes+";                         \n"+
+          "do \n"+
+          "     for vw in "+lviews+";                \n"+
+          "     do \n"+     
+          "          for ((jl=$1; jl<=$2; jl++));                       \n"+
+          "          do \n"+
+          "               for ((il=$3; il<=$4; il++));                  \n"+
+          "               do \n"+
+          "                    ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
+          "                    ILON=`printf '%02d' $(( 10#$il ))`           \n"+
+          "                    IANG=`printf '%1d' $al`           \n"+
+          "                    echo $ILAT $ILON $IANG $vw              \n"+
+          "                    TAG=${ILAT}_${ILON}_${IANG}_$vw                    \n"+
+          "                    cd "+workdir+"/sbdart-$TAG                          \n"+
+          "                    ./sbdart > "+workdir+"/output/sbout.$TAG            \n"+
+          "                    cd "+workdir+"                                  \n"+
+          "               done                       \n"+
+          "          done                         \n"+
+          "          mv "+workdir+"/output/sbout.* "+finaldest+"/                   \n"+
+          "     done                                    \n"+
+          "done \n")
+  with open(workdir+"/sbdart_batch.sh","w") as rs:
+      rs.write(runscript)
+  os.system("chmod a+x "+workdir+"/sbdart_batch.sh")
+  jobscript =("#!/bin/bash -l \n"+
+              "cd "+workdir+" \n"+
+              "#ls -d * \n"+
+              "cat sbdart_batch.sh  \n\n")
+  for ltp in latpairs:
+      for lnp in lonpairs:
+          jobscript += "./sbdart_batch.sh %2d %2d %2d %2d &    \n\n"%(ltp[0],ltp[1],lnp[0],lnp[1])
+  jobscript += ("wait     \n"+
+          "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
+          './release.sh "'+finaldest+'"                                \n'+
+          "rm -rf "+workdir+"/                                  \n"+
+          "cd "+finaldest+"  \n"+
+          SUB+" runparfix  \n")
+  
+  
+  rs = open(workdir+"/runsbdart","w")
+  rs.write(jobscript)
+  rs.close()
+  
+  jobtag = ' '.join(job)
+  dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline pfix_%s 0 %d %s"%(-9999,jobname,1,jobqueue),-1)
+  fixscript = (BATCHSCRIPT(dummyjob,'ae')+
+               "cd "+top+"/sbdart_earth/     \n"+
+               "python buildsbdart.py PARFIX %s  \n"%jobtag)
+  with open(finaldest+"/runparfix","w") as fixf:
+      fixf.write(fixscript)
+  
+  jobtag = ' '.join(job)
+  dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline fix_%s 0 1 %s"%(-9999,jobname,jobqueue),-1)
+  fixscript = (BATCHSCRIPT(dummyjob,'ae')+
+               "cd "+top+"/sbdart_earth/     \n"+
+               "python buildsbdart.py FIX %s  \n"%jobtag+
+               "cd "+top+"                    \n"+
+               "python setpostprocess_earth.py "+top+"/sbdart_earth/"+jobname+" "+
+                jobname+" "+'^'.join(ntimes[1:-1].split(','))+" "+'^'.join(lviews[1:-1].split(','))+" "+jobqueue+" \n")
+  with open(finaldest+"/runfix","w") as fixf:
+      fixf.write(fixscript)
+  
+  
+  os.system("chmod a+x "+workdir+"/runsbdart")
+  os.system("cp "+top+"/crawldefs.py "+workdir+"/")
+  os.system("cp "+top+"/identity.py "+workdir+"/")
+  
+  
+  views = [28.125,118.125,196.875,275.625]
+  
+  for jlon in range(lons[0],lons[1]):
+    for jlat in range(lats[0],lats[1]):
+      for nang in itimes:
+        csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,vws,jlat,jlon,
+                                                         workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),
+                                                         sol_lon = views[nang],
+                                                         grav=grav,smooth=smooth,clouds=clouds,
+                                                         istep=istep)
+        if uniform:
+            surf='uniform'
+        latitude = data.variables['lat'][jlat]
+        longitude = data.variables['lon'][jlon]
+        #vws = ['Z','N','E','S','W']
+        for vv in range(0,len(vws)):
+            nv = viewdict[vws[vv]]
+            write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
+                              nv,nang,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
+                              wmin=wmin,wmax=wmax,albedo=unialb,flat=flat,sic=sic,spec=star,
+                              smooth=smooth,iout=iout,zout=zout,waterfile=waterfile,
+                              icefile=icefile)
+        print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[vv])  
+        
+def _run(job):
+  jobname = job[0]
+  workdir = SCRATCH+"/sbdart_earth_"+jobname
+  os.system("cd "+workdir+" && bash runsbdart")
+
+
+def readradiance(filename):
+  fl = open(filename,"r")
+  dd = fl.read().split('\n')[:-1]
+  typeid = dd[1]
+  if typeid == '"tbf':
     try:
-        top = job.top
+        nrecs = int(dd[2].split()[0])
     except:
-        os.system("echo 'CRITICAL ERROR OPENING jobdat.npy'>sbdartfail.log")
-    prep(job)
-    run(job)
+        print filename
+        print dd[2]
+        raise
+    dd = dd[3:]
+    nzens = int(dd[1].split()[1])
+    nphis = int(dd[1].split()[0])
+    
+    wvls = np.zeros(nrecs)
+    insol = np.zeros(nrecs)
+    rads = np.zeros((nphis,nzens,nrecs))
+    
+    inc=1
+    if nzens>6:
+        zens = dd[3] + dd[4]
+        inc=2
+    else:
+        zens = dd[3]
+    zens = zens.split()
+    for z in range(0,len(zens)):
+        zens[z] = float(zens[z])
+    zens = np.array(zens)
+    
+    phis = dd[2].split()
+    for p in range(0,len(phis)):
+        phis[p] = float(phis[p])
+    phis = np.array(phis)
+    
+    njump = 3+inc+len(zens)
+    
+    for n in range(0,nrecs):
+      wvls[n] = float(dd[njump*n].split()[0])
+      insol[n] = float(dd[njump*n].split()[2])
+      for k in range(3+inc,njump):
+        for a in range(0,nphis):
+            try:
+                rads[a,k-3-inc,n] = float(dd[njump*n+k].split()[a])
+            except:
+                print a,k-3-inc,n,njump,k,len(dd),rads.shape
+                print njump*n+k
+                print len(dd[njump*n+k].split())
+                raise
+    
+    bundle = {"type":typeid[1:],
+              "phis":phis,
+              "zens":zens,
+              "wvl":wvls,
+              "radiance":rads,
+              "input":insol}
+    return bundle
+  
+def getbroken(job):
+    name = job[0]
+    views = job[8].split('^')
+    
+    if views[-1]=='':
+        views = views[:-1]
+    
+    with open("../.home","r") as homef:
+      top = homef.read().split('\n')[0]
+  
+    namedir = top+"/sbdart_earth/%s"%name 
+    ofiles = sorted(glob.glob(namedir+"/sbout*"))
+    broken = []
+    reasons = []
+    
+    for nlt in range(0,32):
+        for nln in range(0,64):
+            for v in views:
+                if namedir+"/sbout.%02d_%02d_0_%s"%(nlt,nln,v) not in ofiles:
+                    broken.append("sbout.%02d_%02d_0_%s"%(nlt,nln,v))
+                    reasons.append("missing file")
+    
+    for o in ofiles:
+        size = os.path.getsize(o)
+        if size<2.45e4:
+            broken.append(o.split('/')[-1])
+            reasons.append("incomplete file")
+        else:
+            try:
+                bundle = readradiance(o)
+                if np.nanmax(bundle["radiance"])<1:
+                    broken.append(o.split('/')[-1])
+                    reasons.append("unphysically low output")
+            except:
+                broken.append(o.split('/')[-1])
+                reasons.append("parsing error")
+    lats = []
+    lons = []
+    angs = []
+    vws = []
+    kb = 0
+    for b in broken:
+        tag = b.split('sbout')[1][1:]
+        parts = tag.split('_')
+        if parts[0]!='32' and parts[1]!='64':
+            lats.append(int(parts[0]))
+            lons.append(int(parts[1]))
+            angs.append(int(parts[2]))
+            vws.append(parts[3])
+            print "Found broken output file: sbout_%02d_%02d_%d_%s --- reason: %s"%(lats[-1],lons[-1],angs[-1],vws[-1],reasons[kb])
+        else:
+            os.system("rm "+top+"/sbdart_earth/%s/%s"%(name,b))
+        kb += 1
+    if len(angs)>0:
+        return lons,lats,angs[-1],vws  
+    else:
+        return lons,lats,angs,vws
+
+
+def par_do_plasim_earth(job,vws,nang,lons,lats):
+  name = job[0]
+  with open("../.home","r") as homef:
+    top = homef.read().split('\n')[0]
+  
+  jobname = job[0]
+  jobncores = int(job[1])
+  jobqueue = job[2]
+  pco2 = float(job[3])
+  flux = float(job[4])
+  p0 = float(job[5])
+  grav = float(job[6])
+  ntimes = job[7].split('^')
+  views = job[8].split('^')
+  try:
+      star = job[9]
+  except:
+      star = False
+  
+  viewdict = {'Z':0,
+              'E':1,
+              'W':2,
+              'N':3,
+              'S':4}    
+      
+  istep=12    
+  
+  flat = False
+  
+  print "Setting up for times ",nang,"and views",vws
+  
+  
+  
+  if len(lons)>=jobncores:
+      pjobscript = ("#!/bin/bash -l           \n\n"+
+                    "cd "+top+"/sbdart_earth/%s/   \n"%name)
+      
+      ncells = int(len(lons)/jobncores+0.5)
+      subjobs = []
+      jobtag = ' '.join(job)
+      
+      
+      #We're going to spawn NCORES independent 1-core jobs, each of which will have a
+      #specialized list of things to do.
+      
+      for j in range(jobncores-1):
+        
+        dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline %s 0 1 %s"%(-9999,"fixsbdart_%d_%s"%(j,name),jobqueue),-1)
+        jobscript = BATCHSCRIPT(dummyjob,'a')
+        jobtask = ''
+        
+        #Build the list of cells this job will have to do
+        for n in range(ncells):
+            jlat = lats[j*ncells+n]
+            jlon = lons[j*ncells+n]
+            vw = vws[j*ncells+n]
+            jobtask += "%d %d %d %s \n"%(jlat,jlon,nang,vw)
+            
+        jobscript += "cd "+top+"/sbdart_earth/  \n"
+        
+        jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
+        
+        #Write the control script that will run these cells
+        with open(top+"/sbdart_earth/%s/fixsbdart_%d.sh"%(name,j),"w") as rf:
+            rf.write(jobscript)
+        
+        #Write the list of cells for this job
+        with open(top+"/sbdart_earth/%s/laundry%d"%(name,j),"w") as jf:
+            jf.write(jobtask)
+        
+        #This will submit and spawn the job, and store the job id in '$JOB%d'%j
+        pjobscript += "JOB%d=$("%j+SUB+" fixsbdart_%d.sh)     \n"%j
+        subjobs.append("$JOB%d"%j)
+        
+      #We couldn't do this one in the loop because it may have fewer elements  
+      j=jobncores-1
+      dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline %s 0 1 %s"%(-9999,"fixsbdart_%d_%s"%(j,name),jobqueue),-1)
+      jobscript = BATCHSCRIPT(dummyjob,'a')
+      jobtask = ''
+      
+      for n in range(j*ncells,len(lons)): #may be less than ncells
+          jlat = lats[n]
+          jlon = lons[n]
+          vw = vws[n]
+          jobtask += "%d %d %d %s \n"%(jlat,jlon,nang,vw)
+          
+      jobscript += "cd "+top+"/sbdart_earth/  \n"
+      jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
+      
+      with open(top+"/sbdart_earth/%s/fixsbdart_%d.sh"%(name,j),"w") as rf:
+          rf.write(jobscript)
+      with open(top+"/sbdart_earth/%s/laundry%d"%(name,j),"w") as jf:
+          jf.write(jobtask)
+          
+      pjobscript += "JOB%d=$("%j+SUB+" fixsbdart_%d.sh)     \n\n"%j
+      subjobs.append("$JOB%d"%j)
+      
+      #Now that we've spawned all child jobs, submit the follow-up job, but specifying that
+      #it should be held until the previous jobs finish.
+      pjobscript += HOLD(subjobs)+" runfix  \n"
+      with open(top+"/sbdart_earth/%s/fixsbdart.sh"%name,"w") as prf:
+          prf.write(pjobscript)
+  else:    
+      #We have fewer than NCORES cells to fix, so we'll do the same thing, but have fewer
+      #than NCORES jobs submitted, with one cell per job.
+      pjobscript = ("#!/bin/bash -l           \n\n"+
+                    "cd "+top+"/sbdart_earth/%s/   \n"%name)
+      subjobs = []
+      jobtag = ' '.join(job)
+      for j in range(len(lats)):
+        
+        dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline %s 0 1 %s"%(-9999,"fixsbdart_%d_%s"%(j,name),jobqueue),-1)
+        jobscript = BATCHSCRIPT(dummyjob,'a')
+        jobtask = ''
+        jlat = lats[j]
+        jlon = lons[j]
+        vw = vws[j]
+        
+        jobtask += "%d %d %d %s \n"%(jlat,jlon,nang,vw)
+    
+        jobscript += "cd "+top+"/sbdart_earth/  \n"
+        jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
+        
+        with open(top+"/sbdart_earth/%s/fixsbdart_%d.sh"%(name,j),"w") as rf:
+            rf.write(jobscript)
+            
+        with open(top+"/sbdart_earth/%s/laundry%d"%(name,j),"w") as jf:
+            jf.write(jobtask)
+        
+        pjobscript += "JOB%d=$("%j+SUB+" fixsbdart_%d.sh)     \n"%j
+        subjobs.append("$JOB%d"%j)
+      
+      #When those previous jobs are finished, submit the single-core fixer
+      pjobscript += HOLD(subjobs)+" runfix  \n"
+      with open(top+"/sbdart_earth/%s/fixsbdart.sh"%name,"w") as prf:
+          prf.write(pjobscript)
+  
+  #Run the script that will submit these child jobs and continue the work.
+  os.system("chmod a+x "+top+"/sbdart_earth/%s/fixsbdart.sh"%name)
+  os.system("bash "+top+"/sbdart_earth/%s/fixsbdart.sh"%jobname) 
+
+def batch_plasim_earth(jid,job):
+  #SBDART-process the cells given in laundry<jid>.
+  name = job[0]
+  workdir = SCRATCH+"/fix_%s_%d"%(name,jid)
+  os.system("mkdir "+workdir)
+  with open("../.home","r") as homef:
+    top = homef.read().split('\n')[0]
+  
+  jobname = job[0]
+  jobncores = int(job[1])
+  jobqueue = job[2]
+  pco2 = float(job[3])
+  flux = float(job[4])
+  p0 = float(job[5])
+  grav = float(job[6])
+  views = job[8].split('^')
+  ntimes = job[7].split('^')
+  try:
+      star = job[9]
+  except:
+      star = False
+  
+  flat =False
+  
+  lats = []
+  lons = []
+  vws = []
+  nangs = []
+  #Get the list of cells we need to do
+  with open(top+"/sbdart_earth/%s/laundry%d"%(name,jid),"r") as laundry:
+      jlist = laundry.read().split('\n')
+      if jlist[-1]=="":
+          jlist = jlist[:-1]
+      for j in jlist:
+          parts = j.split()
+          lats.append(int(parts[0]))
+          lons.append(int(parts[1]))
+          nangs.append(int(parts[2]))
+          vws.append(parts[3])
+
+  viewdict = {'Z':0,
+              'E':1,
+              'W':2,
+              'N':3,
+              'S':4}    
+      
+  istep=12    
+    
+  print "Setting up for times ",nangs,"and views",vws
+  
+  os.system("cp "+top+"/plasim/output/"+jobname+"_snapshot.nc "+workdir+"/"+name+"_snapshot.nc")
+  data = nc.Dataset(workdir+"/"+name+"_snapshot.nc","r")  
+  
+  nlats = len(data.variables['lat'][:])
+  
+  os.system("mkdir "+workdir+"/source/")
+
+  os.system("rsync "+top+"/sbdart_earth/clean/source.tar.gz "+workdir+"/source/")
+  os.system("tar xvzf "+workdir+"/source/source.tar.gz -C "+workdir+"/source/")
+  os.system("rm "+workdir+"/source/source.tar.gz")
+
+  if star:
+      os.system("cp -r "+top+"/sbdart_earth/%s/"%jobname+star+" "+workdir+"/source/solar.dat")
+  
+      
+     
+  jobscript = "#!/bin/bash -l                                                  \n\n"
+  
+  #Set up the script that will iterate over and process the cells
+  n=0
+  for jlon in lons:
+    jlat = lats[n]
+    vw = vws[n]
+    nang = nangs[n]
+    n+=1
+    #print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
+    print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
+    os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
+    os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%1d_%s/"%(jlat,jlon,nang,vw))
+    
+    tag = "%02d_%02d"%(jlat,jlon)
+    
+    jobscript += ("cd "+workdir+"/sbdart-%02d_%02d_%1d_%s    \n"%(jlat,jlon,nang,vw)+
+                "./sbdart > "+workdir+"/sbout.%02d_%02d_%1d_%s   \n"%(jlat,jlon,nang,vw))
+    
+  jobscript += ("cp "+workdir+"/sbout* "+top+"/sbdart_earth/%s/     \n"%jobname+
+                "rm -rf "+workdir+"/ \n")
+  
+  with open(top+"/sbdart_earth/%s/subjob_%d.sh"%(name,jid),"w") as rf:
+      rf.write(jobscript)
+  os.system("chmod a+x "+top+"/sbdart_earth/%s/subjob_%d.sh"%(name,jid))
+  
+  views = [0.,90.,180.,270.]
+  
+  
+  #Prepare the boundary data for each cell
+  n=0
+  for jlon in lons:
+    jlat = lats[n]
+    vw = vws[n]
+    nang = nangs[n]
+    n+=1
+    csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,[vw,],jlat,jlon,
+                                                     workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),istep=istep,
+                                                     sol_lon = views[nang])
+    latitude = data.variables['lat'][jlat]
+    longitude = data.variables['lon'][jlon]
+    #vws = ['Z','N','E','S','W']
+    nv = viewdict[vw]
+    write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw),
+                    nv,nang,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
+                    wmin=0.35,wmax=80.0,sic=sic,flat=flat,spec=star)
+    print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
+
+  #Launch the script that iterates over these cells.
+  os.system("bash "+top+"/sbdart_earth/%s/subjob_%d.sh"%(jobname,jid)) 
+
+
+
+def do_plasim_earth(job,vws,nang,lons,lats):
+  name = job[0]
+  workdir = SCRATCH+"/fix_%s"%name
+  os.system("mkdir "+workdir)
+  with open("../.home","r") as homef:
+    top = homef.read().split('\n')[0]
+  
+  jobname = job[0]
+  jobncores = int(job[1])
+  jobqueue = job[2]
+  pco2 = float(job[3])
+  flux = float(job[4])
+  p0 = float(job[5])
+  grav = float(job[6])
+  views = job[8].split('^')
+  ntimes = job[7].split('^')
+  try:
+      star = job[9]
+  except:
+      star = False
+  
+  viewdict = {'Z':0,
+              'E':1,
+              'W':2,
+              'N':3,
+              'S':4}    
+  
+  istep=12
+  flat=False
+  print "Setting up for times ",nang,"and views",vws
+  
+  os.system("cp "+top+"/plasim/output/"+jobname+"_snapshot.nc "+workdir+"/"+name+"_snapshot.nc")
+  data = nc.Dataset(workdir+"/"+name+"_snapshot.nc","r")  
+  
+  nlats = len(data.variables['lat'][:])
+  
+  os.system("mkdir "+workdir+"/source/")
+  #os.system("tar cvzf /mnt/scratch-lustre/paradise/crawler2/sbdart_earth/"+source+"/source.tar.gz "+
+            #job.top+"/sbdart_earth/"+source+"/* ")
+  os.system("rsync "+top+"/sbdart_earth/clean/source.tar.gz "+workdir+"/source/")
+  #os.system("rm /mnt/scratch-lustre/paradise/crawler2/sbdart_earth/"+source+"/source.tar.gz ")
+  os.system("tar xvzf "+workdir+"/source/source.tar.gz -C "+workdir+"/source/")
+  os.system("rm "+workdir+"/source/source.tar.gz")
+  if star:
+      os.system("cp -r "+top+"/sbdart_earth/%s/"%jobname+star+" "+workdir+"/source/solar.dat")
+  
+      
+     
+  jobscript = "#!/bin/bash -l                                                  \n\n"
+  
+  #os.system("rsync /mnt/scratch-lustre/paradise/crawler2/sbdart_earth/clean/source.tar.gz "+workdir+"/source/")
+  #os.system("tar xvzf "+workdir+"/source/source.tar.gz -C "+workdir+"/source/")
+  #os.system("rm "+workdir+"/source/source.tar.gz")\n")
+  
+  n=0
+  for jlon in lons:
+    jlat = lats[n]
+    vw = vws[n]
+    n+=1
+    #print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
+    print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
+    os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
+    os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%1d_%s/"%(jlat,jlon,nang,vw))
+    
+    tag = "%02d_%02d"%(jlat,jlon)
+    
+    jobscript += ("cd "+workdir+"/sbdart-%02d_%02d_%1d_%s    \n"%(jlat,jlon,nang,vw)+
+                "./sbdart > "+workdir+"/sbout.%02d_%02d_%1d_%s   \n"%(jlat,jlon,nang,vw))
+    
+  jobscript += ("cp "+workdir+"/sbout* "+top+"/sbdart_earth/%s/     \n"%jobname+
+                "rm -rf "+workdir+"/ \n")
+  
+  with open(top+"/sbdart_earth/%s/fixsbdart.sh"%name,"w") as rf:
+      rf.write(jobscript)
+  os.system("chmod a+x "+top+"/sbdart_earth/%s/fixsbdart.sh"%name)
+  
+  
+  views = [28.125,118.125,196.875,275.625]
+  
+  n=0
+  for jlon in lons:
+    jlat = lats[n]
+    vw = vws[n]
+    n+=1
+    csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,[vw,],jlat,jlon,
+                                                     workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),istep=istep,
+                                                     sol_lon = views[nang])
+    latitude = data.variables['lat'][jlat]
+    longitude = data.variables['lon'][jlon]
+    #vws = ['Z','N','E','S','W']
+    nv = viewdict[vw]
+    write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw),
+                    nv,nang,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
+                    wmin=0.35,wmax=80.0,sic=sic,spec=star,flat=flat)
+    print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
+
+  os.system("bash "+top+"/sbdart_earth/%s/fixsbdart.sh"%jobname) 
+  lons,lats,nang,views = getbroken(job)
+  if len(lons)>0:
+      do_plasim_earth(job,views,nang,lons,lats)   #Recursive--risky, but this should run
+                                                   #we're all good.
+  
+if __name__=="__main__":
+    if len(sys.argv[:])==1:
+        job = np.load("jobdat.npy").item()
+        mode = "crawler2"
+        try:
+            top = job.top
+        except:
+            os.system("echo 'CRITICAL ERROR OPENING jobdat.npy'>sbdartfail.log")
+    else:
+        if sys.argv[1]=="FIX":
+            job = sys.argv[2:]
+            mode = "fixup"
+        elif sys.argv[1]=="PARFIX":
+            job = sys.argv[2:]
+            mode = "parfixup"
+        elif sys.argv[1]=="BATCHFIX":
+            jid = int(sys.argv[2])
+            job = sys.argv[3:]
+            mode = "batchfix"
+        else:
+            job = sys.argv[1:]
+            mode = "command"
+            c
+    if mode=="crawler2":
+        prep(job)
+        run(job)
+    elif mode=="command":
+        _prep(job)
+        _run(job)
+    elif mode=="fixup":
+        name = job[0]
+        lons,lats,nang,views = getbroken(job)
+        do_plasim_earth(job,views,nang,lons,lats)
+    elif mode=="parfixup":
+        name = job[0]
+        lons,lats,nang,views = getbroken(job)
+        par_do_plasim_earth(job,views,nang,lons,lats)
+    elif mode=="batchfix":
+        name = job[0]
+        #We don't need to get the broken jobs for this mode, because they
+        #were gotten and stored in the parfixup mode that ran previously
+        batch_plasim_earth(jid,job)
     #submit(job)

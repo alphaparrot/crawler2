@@ -9,6 +9,9 @@ SUB = "sbatch"
 
 USER = "t-98b023"
 
+def HOLD(jobs):
+    return SUB+" --dependency=afterany:"+":".join(jobs)
+
 def BATCHSCRIPT(job,notify):
     return _BATCHSCRIPT%(job.name,job.name,job.name,job.ncores,16,job.queue,
                          notify,job.top+"plasim/job"+str(job.home))

@@ -17,6 +17,7 @@ if __name__=="__main__":
   USER = getpass.getuser()
   EMAIL = ""
   ACCOUNT = ""
+  SCRATCH = "/mnt/node_scratch/"+USER
   GCCMOD = "gcc/4.9.1"             
   PYTHOMOD = "python/2.7.9"          
   INTELMOD = "intel/intel-17"        
@@ -45,6 +46,8 @@ if __name__=="__main__":
                   INTELMOD = m
               elif m.split('/')[0]=="openmpi":
                   MPIMOD = m
+      if k.split('=')[0]=="scratch":
+          SCRATCH = k.split('=')[1]+"/"+USER
           
           
           
@@ -55,6 +58,8 @@ if __name__=="__main__":
                 'EMAIL = "'+EMAIL+'"        \n'+
                 "        \n"+
                 'ACCOUNT = "'+ACCOUNT+'"        \n'+
+                "        \n"+
+                'SCRATCH = "'+SCRATCH+'"        \n'+
                 "        \n"+
                 'GCCMOD = "'+GCCMOD+'"          \n'+
                 "        \n"+
