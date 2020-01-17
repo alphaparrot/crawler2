@@ -73,6 +73,8 @@ if __name__=="__main__":
   with open("identity.py","w") as pyfile:
       pyfile.write(identitypy)
       
+  os.system("cd sbdart_earth/clean/ && make && cd ../../sbdart_locked/clean/ && make && cd ../../")
+      
     
                 
                 
