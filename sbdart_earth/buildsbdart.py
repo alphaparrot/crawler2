@@ -2908,7 +2908,6 @@ if __name__=="__main__":
         else:
             job = sys.argv[1:]
             mode = "command"
-            c
     if mode=="crawler2":
         prep(job)
         run(job)
