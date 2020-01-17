@@ -19,7 +19,7 @@ if __name__=="__main__":
   ACCOUNT = ""
   SCRATCH = "/mnt/node_scratch/"+USER
   GCCMOD = "gcc/4.9.1"             
-  PYTHOMOD = "python/2.7.9"          
+  PYTHONMOD = "python/2.7.9"          
   INTELMOD = "intel/intel-17"        
   MPIMOD = "openmpi/2.0.1-intel-17"
   for k in sys.argv[:]:
