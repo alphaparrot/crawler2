@@ -2353,7 +2353,7 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   rs.close()
   
   jobtag = ' '.join(job)
-  dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline pfix_%s 0 %d %s"%(-9999,jobname,1,jobqueue),-1)
+  dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline pfix_%s 0 %d %s"%(-9999,jobname,jobncores,jobqueue),-1)
   fixscript = (BATCHSCRIPT(dummyjob,'ae')+
                "cd "+top+"/sbdart_earth/     \n"+
                "python buildsbdart.py PARFIX %s  \n"%jobtag)
