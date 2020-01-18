@@ -731,7 +731,7 @@ def analyzecell_plasim_locked(data,views,lat,lon,workdir,grav=9.80665,sol_dec=0.
   else:
     #if (np.mean(data.variables['snd'][:,lat,lon])+np.mean(data.variables['glac'][:,lat,lon]))>=0.7:
     if ((data.variables['snd'][istep,lat,lon]+data.variables['glac'][istep,lat,lon])>=0 and 
-        data.variables['as'][istep,lat,lon]>0.2):
+        data.variables['as'][istep,lat,lon]>0.1):
         surf = "snow"
     else:
         surf = "sand"
