@@ -516,7 +516,7 @@ def prep(job):
       #edit_namelist(jid,"planet_namelist","SIDEREAL_YEAR","31536000.0")
       edit_namelist(jid,"radmod_namelist","NFIXED","1")
       edit_namelist(jid,"radmod_namelist","FIXEDLON",val1)
-      edit_namelist(jid,"plasim_namelist","N_DAYS_PER_YEAR",str(int(360.0/float(val0)/12+0.5)*12))
+      edit_namelist(jid,"plasim_namelist","N_DAYS_PER_YEAR",str(max(int(360.0/float(val0)/12+0.5),1)*12))
       
     if name=="restart":
       found=True
