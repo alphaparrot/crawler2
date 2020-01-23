@@ -230,13 +230,19 @@ def getphase(phasecurve,nphase,phase,ntime):
     color = phasecurve.variables['colors'][ntime,nphase,:,:,:]
     color /= 5.0*np.mean(color)
     atimes = np.array([28.125,118.125,196.875,275.625])
-    atimes[atimes>180] -= 360.0
     if phase=='N':
         p0 = 90.0
     elif phase=='S':
         p0 = -90.0
+    elif phase=="E":
+        atimes += 90.0
+        p0 = 0.0
+    elif phase=="W":
+        atimes += -90.0
+        p0 = 0.0
     else:
         p0 = 0.0
+    atimes[atimes>180] -= 360.0
     proj= orthographic(ln,lt,np.minimum(color,1.0),l0=atimes[ntime],p0=p0,nx=200,ny=200)
     return proj
 
