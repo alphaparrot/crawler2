@@ -215,6 +215,11 @@ def _prep(job):
                     "cd "+cwd+"/postprocess_locked/output/   \n"+
                     "python orthoprojection.py "+jobname+"_phases.nc 0 \n"+
                     "mv "+jobname+"*/*.png . \n"+
+                    "for p in $(ls "+jobname+"*.png)    \n"+
+                    "do   \n"
+                    "     mogrify -trim +repage $p    \n"+
+                    "     mogrify -shave 1x1 +repage $p   \n"+
+                    "done    \n"+
                     "rm -rf "+jobname+"*/   \n"+
                     "cp "+top+"/plasim/output/"+jobname+".nc .  \n"+
                     "cd "+workdir+"       \n"+
