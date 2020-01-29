@@ -720,6 +720,9 @@ def analyzecell_plasim_earth(data,views,lat,lon,workdir,grav=9.80665,sol_dec=0.0
   surf = "uniform"
   
   lsm = data.variables['lsm'][-1,lat,lon]
+  ts = data.variables['ts'][:]
+  istep = min(istep,ts.shape[0]-1)
+  
   if lsm < 0.5: #sea
     #sic = np.mean(data.variables['sic'][:,lat,lon])
     sic = data.variables['sic'][istep,lat,lon]
@@ -2183,29 +2186,34 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       
   print "Setting up for times ",itimes,"and views",vws
     
-  lats = [0,32]
-  lons = [0,64]
-    
   tempdest = workdir+"/output/"
   os.system("mkdir "+tempdest)
   
   finaldest = top+"/sbdart_earth/"+jobname
   os.system("mkdir "+finaldest)
+  
+  os.system("cp "+top+"/plasim/output/"+jobname+"_snapshot.nc "
+            +workdir+"/"+jobname+"_snapshot.nc")
     
+  data = nc.Dataset(workdir+"/"+jobname+"_snapshot.nc","r")  
+  
+  nlats = len(data.variables['lat'][:])
+  nlons = len(data.variables['lon'][:])
+  
+  lats = [0,nlats]
+  lons = [0,nlons]
     
   token_name = "token_%02d-%02d-%02d-%02d.crwl"%(lats[0],lats[1],lons[0],lons[1])
   
   os.system("mkdir "+finaldest+"/running")
   os.system("touch "+finaldest+"/running/"+token_name)
   
-  os.system("cp "+top+"/plasim/output/"+jobname+"_snapshot.nc "
-            +workdir+"/"+jobname+"_snapshot.nc")
-  data = nc.Dataset(workdir+"/"+jobname+"_snapshot.nc","r")  
-     
+  
+  
   lat1=0
-  lat2=32
+  lat2=nlats
   lon1=0
-  lon2=64
+  lon2=nlons
   
   if jobncores>1:
       mode="batch"
@@ -2245,10 +2253,10 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       if mode!="single":
           for n in range(len(latpairs)):
               for l in range(len(latpairs[n])):
-                  latpairs[n][l] = min(31,latpairs[n][l])
+                  latpairs[n][l] = min(nlons-1,latpairs[n][l])
           for n in range(len(lonpairs)):
               for l in range(len(lonpairs[n])):
-                  lonpairs[n][l] = min(63,lonpairs[n][l])
+                  lonpairs[n][l] = min(nlats-1,lonpairs[n][l])
   else:
       mode="single"
       
@@ -2476,31 +2484,46 @@ def getbroken(job):
       top = homef.read().split('\n')[0]
   
     namedir = top+"/sbdart_earth/%s"%name 
+    data = nc.Dataset(top+"/plasim/output/"+name+"_snapshot.nc","r")
+    
+    nlats = len(data.variables['lat'][:])
+    nlons = len(data.variables['lon'][:])
+    
     ofiles = sorted(glob.glob(namedir+"/sbout*"))
     broken = []
     reasons = []
+    rejigger = []
     
-    for nlt in range(0,32):
-        for nln in range(0,64):
+    for nlt in range(0,nlats):
+        for nln in range(0,nlons):
             for v in views:
                 if namedir+"/sbout.%02d_%02d_0_%s"%(nlt,nln,v) not in ofiles:
                     broken.append("sbout.%02d_%02d_0_%s"%(nlt,nln,v))
                     reasons.append("missing file")
+                    rejigger.append(False)
     
     for o in ofiles:
         size = os.path.getsize(o)
         if size<2.45e4:
             broken.append(o.split('/')[-1])
             reasons.append("incomplete file")
+            rejigger.append(False)
         else:
             try:
                 bundle = readradiance(o)
                 if np.nanmax(bundle["radiance"])<1.0 and bundle["zens"]<90.:
                     broken.append(o.split('/')[-1])
                     reasons.append("unphysically low output")
+                    rejigger.append(False)
             except:
                 broken.append(o.split('/')[-1])
                 reasons.append("parsing error")
+                with open(o,"r") as tmpo:
+                    ddt = tmpo.read()
+                if "gwk" in ddt:
+                    rejigger.append(True)
+                else:
+                    rejigger.append(False)
     lats = []
     lons = []
     angs = []
@@ -2509,7 +2532,7 @@ def getbroken(job):
     for b in broken:
         tag = b.split('sbout')[1][1:]
         parts = tag.split('_')
-        if parts[0]!='32' and parts[1]!='64':
+        if parts[0]!=str(nlats) and parts[1]!=str(nlons):
             lats.append(int(parts[0]))
             lons.append(int(parts[1]))
             angs.append(int(parts[2]))
@@ -2519,12 +2542,12 @@ def getbroken(job):
             os.system("rm "+top+"/sbdart_earth/%s/%s"%(name,b))
         kb += 1
     if len(angs)>0:
-        return lons,lats,angs[-1],vws  
+        return lons,lats,angs[-1],vws,rejigger  
     else:
-        return lons,lats,angs,vws
+        return lons,lats,angs,vws,rejigger
 
 
-def par_do_plasim_earth(job,vws,nang,lons,lats):
+def par_do_plasim_earth(job,vws,nang,lons,lats,rejigger):
   name = job[0]
   with open("../.home","r") as homef:
     top = homef.read().split('\n')[0]
@@ -2580,7 +2603,7 @@ def par_do_plasim_earth(job,vws,nang,lons,lats):
             jlat = lats[j*ncells+n]
             jlon = lons[j*ncells+n]
             vw = vws[j*ncells+n]
-            jobtask += "%d %d %d %s \n"%(jlat,jlon,nang,vw)
+            jobtask += "%d %d %d %s %d\n"%(jlat,jlon,nang,vw,rejigger[n]*1.0)
             
         jobscript += "cd "+top+"/sbdart_earth/  \n"
         
@@ -2608,7 +2631,7 @@ def par_do_plasim_earth(job,vws,nang,lons,lats):
           jlat = lats[n]
           jlon = lons[n]
           vw = vws[n]
-          jobtask += "%d %d %d %s \n"%(jlat,jlon,nang,vw)
+          jobtask += "%d %d %d %s %d\n"%(jlat,jlon,nang,vw,rejigger[n]*1.0)
           
       jobscript += "cd "+top+"/sbdart_earth/  \n"
       jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
@@ -2642,7 +2665,7 @@ def par_do_plasim_earth(job,vws,nang,lons,lats):
         jlon = lons[j]
         vw = vws[j]
         
-        jobtask += "%d %d %d %s \n"%(jlat,jlon,nang,vw)
+        jobtask += "%d %d %d %s %d\n"%(jlat,jlon,nang,vw,rejigger[n]*1.0)
     
         jobscript += "cd "+top+"/sbdart_earth/  \n"
         jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
@@ -2693,6 +2716,7 @@ def batch_plasim_earth(jid,job):
   lons = []
   vws = []
   nangs = []
+  rejigger = []
   #Get the list of cells we need to do
   with open(top+"/sbdart_earth/%s/laundry%d"%(name,jid),"r") as laundry:
       jlist = laundry.read().split('\n')
@@ -2704,6 +2728,7 @@ def batch_plasim_earth(jid,job):
           lons.append(int(parts[1]))
           nangs.append(int(parts[2]))
           vws.append(parts[3])
+          rejigger.append(int(parts[4])>0.5)
 
   viewdict = {'Z':0,
               'E':1,
@@ -2757,7 +2782,7 @@ def batch_plasim_earth(jid,job):
       rf.write(jobscript)
   os.system("chmod a+x "+top+"/sbdart_earth/%s/subjob_%d.sh"%(name,jid))
   
-  views = [0.,90.,180.,270.]
+  views = [28.125,118.125,196.875,275.625]
   
   
   #Prepare the boundary data for each cell
@@ -2766,12 +2791,24 @@ def batch_plasim_earth(jid,job):
     jlat = lats[n]
     vw = vws[n]
     nang = nangs[n]
+    offset=0
+    yoffset=0
+    if rejigger[n]: #Sometimes we get a failure mode at the terminator at the poles
+        os.system("touch rejigger_%02d_%02d_%d_%s"%(jlat,jlon,nang,vw))
+        if jlon>0:
+            offset = -1
+        else:
+            offset =  1
+        if jlat>0:
+            yoffset = -1
+        else:
+            yoffset =  1
     n+=1
-    csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,[vw,],jlat,jlon,
+    csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,[vw,],jlat+yoffset,jlon+offset,
                                                      workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),istep=istep,
                                                      sol_lon = views[nang])
-    latitude = data.variables['lat'][jlat]
-    longitude = data.variables['lon'][jlon]
+    latitude = data.variables['lat'][jlat+yoffset]
+    longitude = data.variables['lon'][jlon+offset]
     #vws = ['Z','N','E','S','W']
     nv = viewdict[vw]
     write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw),
@@ -2819,6 +2856,7 @@ def do_plasim_earth(job,vws,nang,lons,lats):
   data = nc.Dataset(workdir+"/"+name+"_snapshot.nc","r")  
   
   nlats = len(data.variables['lat'][:])
+  nlons = len(data.variables['lon'][:])
   
   os.system("mkdir "+workdir+"/source/")
   #os.system("tar cvzf /mnt/scratch-lustre/paradise/crawler2/sbdart_earth/"+source+"/source.tar.gz "+
@@ -2867,12 +2905,24 @@ def do_plasim_earth(job,vws,nang,lons,lats):
   for jlon in lons:
     jlat = lats[n]
     vw = vws[n]
+    offset=0
+    yoffset=0
+    if rejigger[n]: #Sometimes we get a failure mode at the terminator at the poles
+        os.system("touch rejigger_%02d_%02d_%d_%s"%(jlat,jlon,nang,vw))
+        if jlon>0:
+            offset = -1
+        else:
+            offset =  1
+        if jlat>0:
+            yoffset = -1
+        else:
+            yoffset =  1
     n+=1
-    csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,[vw,],jlat,jlon,
+    csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_earth(data,[vw,],jlat+yoffset,jlon+offset,
                                                      workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),istep=istep,
                                                      sol_lon = views[nang])
-    latitude = data.variables['lat'][jlat]
-    longitude = data.variables['lon'][jlon]
+    latitude = data.variables['lat'][jlat+yoffset]
+    longitude = data.variables['lon'][jlon+offset]
     #vws = ['Z','N','E','S','W']
     nv = viewdict[vw]
     write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw),
@@ -2881,9 +2931,9 @@ def do_plasim_earth(job,vws,nang,lons,lats):
     print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
 
   os.system("bash "+top+"/sbdart_earth/%s/fixsbdart.sh"%jobname) 
-  lons,lats,nang,views = getbroken(job)
+  lons,lats,nang,views,rejigger = getbroken(job)
   if len(lons)>0:
-      do_plasim_earth(job,views,nang,lons,lats)   #Recursive--risky, but this should run
+      do_plasim_earth(job,views,nang,lons,lats,rejigger)   #Recursive--risky, but this should run
                                                    #we're all good.
   
 if __name__=="__main__":
@@ -2916,12 +2966,12 @@ if __name__=="__main__":
         _run(job)
     elif mode=="fixup":
         name = job[0]
-        lons,lats,nang,views = getbroken(job)
-        do_plasim_earth(job,views,nang,lons,lats)
+        lons,lats,nang,views,rejigger = getbroken(job)
+        do_plasim_earth(job,views,nang,lons,lats,rejigger)
     elif mode=="parfixup":
         name = job[0]
-        lons,lats,nang,views = getbroken(job)
-        par_do_plasim_earth(job,views,nang,lons,lats)
+        lons,lats,nang,views,rejigger = getbroken(job)
+        par_do_plasim_earth(job,views,nang,lons,lats,rejigger)
     elif mode=="batchfix":
         name = job[0]
         #We don't need to get the broken jobs for this mode, because they
