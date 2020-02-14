@@ -1369,7 +1369,7 @@ def _prep_lmdz(job):
                   "done \n"+
                   "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
                   './release.sh "'+dest+'"                                \n'+
-                  "python checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 32 "+job.top+
+                  "python -B checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 32 "+job.top+
                   " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
       
   
@@ -1726,7 +1726,7 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   #"cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
                   #'./release.sh "'+finaldest+'"                                \n'+
                   #"rm -rf "+workdir+"/*/                                  \n"+
-                  #"python checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  #"python -B checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
                   #" "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
   
   
@@ -1830,7 +1830,7 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
                   './release.sh "'+finaldest+'"                                \n'+
                   "rm -rf "+workdir+"/*/                                  \n"+
-                  "#python checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  "#python -B checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
                   " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
       else:
           runscript = ("#!/bin/bash \n\n"+
@@ -1872,10 +1872,10 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
                   './release.sh "'+finaldest+'"                                \n'+
                   "rm -rf "+workdir+"/*/                                  \n"+
-                  "#python checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  "#python -B checkprogress_earth.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
                   " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n"+
                   "cd $PBS_O_WORKDIR   \n"+
-                  "python release.py   \n")
+                  "python -B release.py   \n")
   
   
   rs = open(workdir+"/runsbdart","w")
@@ -2097,7 +2097,7 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   "done \n"+
                   "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
                   './release.sh "'+dest+'"                                \n'+
-                  "python checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  "python -B checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
                   " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
   
   rs = open(workdir+"/runsbdart","w")
@@ -2364,7 +2364,7 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline pfix_%s 0 %d %s"%(-9999,jobname,jobncores,jobqueue),-1)
   fixscript = (BATCHSCRIPT(dummyjob,'ae')+
                "cd "+top+"/sbdart_earth/     \n"+
-               "python buildsbdart.py PARFIX %s  \n"%jobtag)
+               "python -B buildsbdart.py PARFIX %s  \n"%jobtag)
   with open(finaldest+"/runparfix","w") as fixf:
       fixf.write(fixscript)
   
@@ -2372,9 +2372,9 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline fix_%s 0 1 %s"%(-9999,jobname,jobqueue),-1)
   fixscript = (BATCHSCRIPT(dummyjob,'ae')+
                "cd "+top+"/sbdart_earth/     \n"+
-               "python buildsbdart.py FIX %s  \n"%jobtag+
+               "python -B buildsbdart.py FIX %s  \n"%jobtag+
                "cd "+top+"                    \n"+
-               "python setpostprocess_earth.py "+top+"/sbdart_earth/"+jobname+" "+
+               "python -B setpostprocess_earth.py "+top+"/sbdart_earth/"+jobname+" "+
                 jobname+" "+'^'.join(ntimes[1:-1].split(','))+" "+'^'.join(lviews[1:-1].split(','))+" "+jobqueue+" \n")
   with open(finaldest+"/runfix","w") as fixf:
       fixf.write(fixscript)
@@ -2607,7 +2607,7 @@ def par_do_plasim_earth(job,vws,nang,lons,lats,rejigger):
             
         jobscript += "cd "+top+"/sbdart_earth/  \n"
         
-        jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
+        jobscript += "python -B buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
         
         #Write the control script that will run these cells
         with open(top+"/sbdart_earth/%s/fixsbdart_%d.sh"%(name,j),"w") as rf:
@@ -2634,7 +2634,7 @@ def par_do_plasim_earth(job,vws,nang,lons,lats,rejigger):
           jobtask += "%d %d %d %s %d\n"%(jlat,jlon,nang,vw,rejigger[n]*1.0)
           
       jobscript += "cd "+top+"/sbdart_earth/  \n"
-      jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
+      jobscript += "python -B buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
       
       with open(top+"/sbdart_earth/%s/fixsbdart_%d.sh"%(name,j),"w") as rf:
           rf.write(jobscript)
@@ -2668,7 +2668,7 @@ def par_do_plasim_earth(job,vws,nang,lons,lats,rejigger):
         jobtask += "%d %d %d %s %d\n"%(jlat,jlon,nang,vw,rejigger[n]*1.0)
     
         jobscript += "cd "+top+"/sbdart_earth/  \n"
-        jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
+        jobscript += "python -B buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
         
         with open(top+"/sbdart_earth/%s/fixsbdart_%d.sh"%(name,j),"w") as rf:
             rf.write(jobscript)

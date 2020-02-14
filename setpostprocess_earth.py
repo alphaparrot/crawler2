@@ -104,7 +104,7 @@ def prep(job):
                     "cd "+SCRATCH+"/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "tar xvzf stuff.tar.gz                \n"+
                     "rm -rf stuff.tar.gz                   \n"+
-                    "python postprocess_earth.py "+times+" "+angles+" "+tag+"                           \n"+
+                    "python -B postprocess_earth.py "+times+" "+angles+" "+tag+"                           \n"+
                     "tar cvzf stuff.tar.gz *                 \n"+
                     "rsync -avzhur stuff.tar.gz "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
@@ -113,7 +113,7 @@ def prep(job):
                     "rm stuff.tar.gz          \n"+
                     "cp spectra.nc "+cwd+"/postprocess_earth/output/"+job.name+"_spectra.nc \n"+
                     "cp phases.nc "+cwd+"/postprocess_earth/output/"+job.name+"_phases.nc \n"+
-                    "python release.py \n")
+                    "python -B release.py \n")
     else:
         tag+="phases "
         jobscript =(BATCHSCRIPT(job,notify)+
@@ -129,7 +129,7 @@ def prep(job):
                     "cd "+SCRATCH+"/postprocess_earth/job"+str(job.home)+"/  \n"+
                     "tar xvzf stuff.tar.gz                \n"+
                     "rm -rf stuff.tar.gz                   \n"+
-                    "python postprocess_earth.py "+times+" "+angles+" "+tag+"                                    \n"+
+                    "python -B postprocess_earth.py "+times+" "+angles+" "+tag+"                                    \n"+
                     "tar cvzf stuff.tar.gz *                 \n"+
                     "rsync -avzhur stuff.tar.gz "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
@@ -137,7 +137,7 @@ def prep(job):
                     "tar xvzf stuff.tar.gz                                \n"+
                     "rm stuff.tar.gz          \n"+
                     "cp phases.nc "+cwd+"/postprocess_earth/output/"+job.name+"_phases.nc \n"+
-                    "python release.py \n")
+                    "python -B release.py \n")
         
     
      
@@ -217,7 +217,7 @@ def _prep(job):
                     "cd "+SCRATCH+"/postprocess_earth/"+jobname+"/  \n"+
                     "tar xvzf stuff.tar.gz                \n"+
                     "rm -rf stuff.tar.gz                   \n"+
-                    "python postprocess_earth.py "+times+" "+angles+" "+tag+"                           \n"+
+                    "python -B postprocess_earth.py "+times+" "+angles+" "+tag+"                           \n"+
                     "tar cvzf stuff.tar.gz *                 \n"+
                     "rsync -avzhur stuff.tar.gz "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
@@ -227,7 +227,7 @@ def _prep(job):
                     "cp spectra.nc "+cwd+"/postprocess_earth/output/"+jobname+"_spectra.nc \n"+
                     "cp phases.nc "+cwd+"/postprocess_earth/output/"+jobname+"_phases.nc \n\n"+
                     "cd "+cwd+"/postprocess_earth/output/   \n"+
-                    "python orthoprojection.py "+jobname+"_phases.nc 0 \n"+
+                    "python -B orthoprojection.py "+jobname+"_phases.nc 0 \n"+
                     "mv "+jobname+"*/*.png . \n"+
                     "for p in $(ls "+jobname+"*.png)    \n"+
                     "do   \n"
@@ -237,7 +237,7 @@ def _prep(job):
                     "rm -rf "+jobname+"*/   \n"
                     "cp "+top+"/plasim/output/"+jobname+".nc .  \n"+
                     "cd "+workdir+"       \n"+
-                    "python release.py     \n")
+                    "python -B release.py     \n")
 
     rs = open(workdir+"/runpostprocess_earth","w")
     rs.write(jobscript)

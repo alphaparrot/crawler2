@@ -37,7 +37,8 @@ MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale 
           "postprocess_earth":8,
           "postprocess_locked":8,
           "lmdz":8,
-          "mitgcm":6}             
+          "mitgcm":6,
+          "pipeline":8}             
 
 def getjobs(rude=False):
     print "Checking jobs"

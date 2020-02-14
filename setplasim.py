@@ -518,6 +518,10 @@ def prep(job):
       edit_namelist(jid,"radmod_namelist","FIXEDLON",val1)
       edit_namelist(jid,"plasim_namelist","N_DAYS_PER_YEAR",str(max(int(360.0/float(val0)/12+0.5),1)*12))
       
+    if name=="sbdart_type": #Whether to use SBDART in tidally-locked or Earth configuration
+      found=True
+      sbdvar = val
+      
     if name=="restart":
       found=True
       if val!="none":
@@ -650,6 +654,10 @@ def prep(job):
       found=True
       if source=="gibbs":
         edit_namelist(jid,"plasim_namelist","LANDHOSKN0",val)
+        
+    if name=="frictionmod":
+      found=True
+      edit_namelist(jid,"plasim_namelist","FRCMOD",val)
         
     if name=="nsupply":
       found=True

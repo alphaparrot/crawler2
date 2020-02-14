@@ -2,9 +2,12 @@ import numpy as np
 import netCDF4 as nc
 import os, sys, glob
 import time
-from identity import USER, SCRATCH
-from batch_system import BATCHSCRIPT, SUB, HOLD
-from crawldefs import Job
+#from identity import ide.USER, ide.SCRATCH
+import identity as ide
+#from batch_system import bts.BATCHSCRIPT, bts.SUB, bts.HOLD
+import batch_system as bts
+#from crawldefs import crd.Job
+import crawldefs as crd
 
 def write_input_locked(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,surface,pCO2,p0,
                 tsurf,altz,flux,wmin=0.55,wmax=19.0,albedo=0.35,smooth=False,flat=True,sic=0.0,
@@ -280,6 +283,9 @@ def write_input_locked(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,s
     os.system("cp %s/%s %s/albedo.dat"%(workdir,waterfile,workdir))
   elif surface == "sand":
     input_text[35] = " ISALB= 5  , "
+  elif surface == "soil":
+    input_text[35] = " ISALB = 10, "
+    input_text[37] = " SC = 0.000,0.1,0.85,0.05  , "
   elif surface == "vegetation":
     input_text[35] = " ISALB= 6  , "
   elif surface == "seamix":
@@ -733,11 +739,11 @@ def analyzecell_plasim_locked(data,views,lat,lon,workdir,grav=9.80665,sol_dec=0.
       surf = "seamix"
   else:
     #if (np.mean(data.variables['snd'][:,lat,lon])+np.mean(data.variables['glac'][:,lat,lon]))>=0.7:
-    if ((data.variables['snd'][istep,lat,lon]+data.variables['glac'][istep,lat,lon])>=0 and 
-        data.variables['as'][istep,lat,lon]>0.1):
+    if ((data.variables['snd'][istep,lat,lon]+data.variables['glac'][istep,lat,lon])>=0.005 and 
+        data.variables['as'][istep,lat,lon]>0.2):
         surf = "snow"
     else:
-        surf = "sand"
+        surf = "soil"
     sic = 0.0
     #We could put in an actual algorithm to get albedo given soil wetness, or combine sand, veg, etc
     
@@ -1290,7 +1296,7 @@ def _prep_lmdz(job):
       tag+="map "  
   
   if role == "sub":
-      jobscript =(BATCHSCRIPT(job,notify)+
+      jobscript =(bts.BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
@@ -1309,7 +1315,7 @@ def _prep_lmdz(job):
                   "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
                   './release.sh "'+dest+'"                                \n')
   else:
-      jobscript =(BATCHSCRIPT(job,notify)+
+      jobscript =(bts.BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
@@ -1327,7 +1333,7 @@ def _prep_lmdz(job):
                   "done \n"+
                   "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
                   './release.sh "'+dest+'"                                \n'+
-                  "python checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 32 "+job.top+
+                  "python -B checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 32 "+job.top+
                   " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
       
   
@@ -1356,7 +1362,7 @@ def _prep_lmdz(job):
 def _prep_plasim_locked(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   os.system("rm "+job.top+"/sbdart_locked/job"+str(job.home)+"/*.e*")
   os.system("rm "+job.top+"/sbdart_locked/job"+str(job.home)+"/*.o*")
-  workdir = SCRATCH+"/sbdart_locked_job"+str(job.home)
+  workdir = ide.SCRATCH+"/sbdart_locked_job"+str(job.home)
   os.system("mkdir "+workdir)
   os.system("rm "+workdir+"/*.e* "+workdir+"/*.o*")
   if "source" in job.parameters:
@@ -1623,7 +1629,7 @@ def _prep_plasim_locked(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   
   if role=="sub":
       if mode=="single":
-        jobscript =(BATCHSCRIPT(job,notify)+
+        jobscript =(bts.BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for al in "+ntimes+";                         \n"+
@@ -1677,7 +1683,7 @@ def _prep_plasim_locked(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
           with open(workdir+"/sbdart_batch.sh","w") as rs:
               rs.write(runscript)
           os.system("chmod a+x "+workdir+"/sbdart_batch.sh")
-          jobscript =(BATCHSCRIPT(job,notify)+
+          jobscript =(bts.BATCHSCRIPT(job,notify)+
                       "module load gcc/4.9.1 \n"+
                       "module load python/2.7.9 \n"+
                       "cd "+workdir+" \n"+
@@ -1694,7 +1700,7 @@ def _prep_plasim_locked(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       
   else:
       if mode=="single":
-        jobscript =(BATCHSCRIPT(job,notify)+
+        jobscript =(bts.BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for al in "+ntimes+";                          \n"+
@@ -1721,7 +1727,7 @@ def _prep_plasim_locked(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
                   './release.sh "'+finaldest+'"                                \n'+
                   "rm -rf "+workdir+"/*/                                  \n"+
-                  "#python checkprogress_locked.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  "#python -B checkprogress_locked.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
                   " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
       else:
           runscript = ("#!/bin/bash \n\n"+
@@ -1750,7 +1756,7 @@ def _prep_plasim_locked(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
           with open(workdir+"/sbdart_batch.sh","w") as rs:
               rs.write(runscript)
           os.system("chmod a+x "+workdir+"/sbdart_batch.sh")
-          jobscript =(BATCHSCRIPT(job,notify)+
+          jobscript =(bts.BATCHSCRIPT(job,notify)+
                       "module load gcc/4.9.1 \n"+
                       "module load python/2.7.9 \n"+
                       "cd "+workdir+" \n"+
@@ -1763,10 +1769,10 @@ def _prep_plasim_locked(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   "cp "+finaldest+"/running/"+token_name+" "+finaldest+"/finished/ \n"+
                   './release.sh "'+finaldest+'"                                \n'+
                   "rm -rf "+workdir+"/*/                                  \n"+
-                  "#python checkprogress_locked.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  "#python -B checkprogress_locked.py "+finaldest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
                   " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n"+
                   "cd $PBS_O_WORKDIR   \n"+
-                  "python release.py   \n")
+                  "python -B release.py   \n")
   
   
   #print jobscript
@@ -1951,7 +1957,7 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       tag+="map "
   
   if role=="sub":
-      jobscript =(BATCHSCRIPT(job,notify)+
+      jobscript =(bts.BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
@@ -1971,7 +1977,7 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   './release.sh "'+dest+'"                                \n')
       
   else:
-      jobscript =(BATCHSCRIPT(job,notify)+
+      jobscript =(bts.BATCHSCRIPT(job,notify)+
                   "module load gcc/4.9.1                                          \n"+
                   "module load python/2.7.9                                       \n"+
                   "for jl in {%02d..%02d};                                  \n"%(lats[0],lats[1]-1)+
@@ -1989,7 +1995,7 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                   "done \n"+
                   "cp "+dest+"/running/"+token_name+" "+dest+"/finished/ \n"+
                   './release.sh "'+dest+'"                                \n'+
-                  "python checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
+                  "python -B checkprogress.py "+dest+" "+lat1+" "+lat2+" "+lon1+" "+lon2+" 0 "+job.top+
                   " "+job.parameters["type"]+" "+job.parameters["gcm"]+" "+tag+"         \n")
   
   rs = open(workdir+"/runsbdart","w")
@@ -2016,10 +2022,10 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
 def submit(job):
   workdir = job.top+"/sbdart_locked/job"+str(job.home)
   
-  os.system("cd "+workdir+" && "+SUB+" runsbdart && cd "+job.top)
+  os.system("cd "+workdir+" && "+bts.SUB+" runsbdart && cd "+job.top)
   
 def run(job):
-  workdir = SCRATCH+"/sbdart_locked_job"+str(job.home)
+  workdir = ide.SCRATCH+"/sbdart_locked_job"+str(job.home)
   os.system("cd "+workdir+" && bash runsbdart")
    
 def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
@@ -2028,6 +2034,7 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   with open("../.home","r") as homef:
       top = homef.read().split('\n')[0]
   
+  #os.system("rm "+top+"/sbdart_locked/*.pyc")
   os.system("cp "+top+"/identity.py "+top+"/sbdart_locked/")
   os.system("cp "+top+"/crawldefs.py "+top+"/sbdart_locked/")
   os.system("cp "+top+"/torque.py "+top+"/sbdart_locked/")
@@ -2050,7 +2057,7 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   except:
       star = False
   
-  workdir = SCRATCH+"/sbdart_locked_"+jobname
+  workdir = ide.SCRATCH+"/sbdart_locked_"+jobname
   os.system("mkdir "+workdir)
 
   source = "clean"
@@ -2242,7 +2249,7 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
           './release.sh "'+finaldest+'"                                \n'+
           "rm -rf "+workdir+"/                                  \n"+
           "cd "+finaldest+"  \n"+
-          SUB+" runparfix  \n")
+          bts.SUB+" runparfix  \n")
   
   
   rs = open(workdir+"/runsbdart","w")
@@ -2250,20 +2257,20 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   rs.close()
   
   jobtag = ' '.join(job)
-  dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline pfix_%s 0 %d %s"%(-9999,jobname,jobncores,jobqueue),-1)
-  fixscript = (BATCHSCRIPT(dummyjob,'ae')+
+  dummyjob = crd.Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline pfix_%s 0 %d %s"%(-9999,jobname,jobncores,jobqueue),-1)
+  fixscript = (bts.BATCHSCRIPT(dummyjob,'ae')+
                "cd "+top+"/sbdart_locked/     \n"+
-               "python buildsbdart.py PARFIX %s  \n"%jobtag)
+               "python -B buildsbdart.py PARFIX %s  \n"%jobtag)
   with open(finaldest+"/runparfix","w") as fixf:
       fixf.write(fixscript)
   
   jobtag = ' '.join(job)
-  dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline fix_%s 0 1 %s"%(-9999,jobname,jobqueue),-1)
-  fixscript = (BATCHSCRIPT(dummyjob,'ae')+
+  dummyjob = crd.Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline fix_%s 0 1 %s"%(-9999,jobname,jobqueue),-1)
+  fixscript = (bts.BATCHSCRIPT(dummyjob,'ae')+
                "cd "+top+"/sbdart_locked/     \n"+
-               "python buildsbdart.py FIX %s  \n"%jobtag+
+               "python -B buildsbdart.py FIX %s  \n"%jobtag+
                "cd "+top+"                    \n"+
-               "python setpostprocess_locked.py "+top+"/sbdart_locked/"+jobname+" "+
+               "python -B setpostprocess_locked.py "+top+"/sbdart_locked/"+jobname+" "+
                 jobname+" "+'^'.join(ntimes[1:-1].split(','))+" "+'^'.join(lviews[1:-1].split(','))+" "+jobqueue+" \n")
   with open(finaldest+"/runfix","w") as fixf:
       fixf.write(fixscript)
@@ -2299,7 +2306,7 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
         
 def _run(job):
   jobname = job[0]
-  workdir = SCRATCH+"/sbdart_locked_"+jobname
+  workdir = ide.SCRATCH+"/sbdart_locked_"+jobname
   os.system("cd "+workdir+" && bash runsbdart")
 
 def readradiance(filename):
@@ -2479,8 +2486,8 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
       
       for j in range(jobncores-1):
         
-        dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline %s 0 1 %s"%(-9999,"fixsbdart_%d_%s"%(j,name),jobqueue),-1)
-        jobscript = BATCHSCRIPT(dummyjob,'a')
+        dummyjob = crd.Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline %s 0 1 %s"%(-9999,"fixsbdart_%d_%s"%(j,name),jobqueue),-1)
+        jobscript = bts.BATCHSCRIPT(dummyjob,'a')
         jobtask = ''
         
         #Build the list of cells this job will have to do
@@ -2492,7 +2499,7 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
             
         jobscript += "cd "+top+"/sbdart_locked/  \n"
         
-        jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
+        jobscript += "python -B buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
         
         #Write the control script that will run these cells
         with open(top+"/sbdart_locked/%s/fixsbdart_%d.sh"%(name,j),"w") as rf:
@@ -2503,13 +2510,13 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
             jf.write(jobtask)
         
         #This will submit and spawn the job, and store the job id in '$JOB%d'%j
-        pjobscript += "JOB%d=$("%j+SUB+" fixsbdart_%d.sh)     \n"%j
+        pjobscript += "JOB%d=$("%j+bts.SUB+" fixsbdart_%d.sh)     \n"%j
         subjobs.append("$JOB%d"%j)
         
       #We couldn't do this one in the loop because it may have fewer elements  
       j=jobncores-1
-      dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline %s 0 1 %s"%(-9999,"fixsbdart_%d_%s"%(j,name),jobqueue),-1)
-      jobscript = BATCHSCRIPT(dummyjob,'a')
+      dummyjob = crd.Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline %s 0 1 %s"%(-9999,"fixsbdart_%d_%s"%(j,name),jobqueue),-1)
+      jobscript = bts.BATCHSCRIPT(dummyjob,'a')
       jobtask = ''
       
       for n in range(j*ncells,len(lons)): #may be less than ncells
@@ -2519,19 +2526,19 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
           jobtask += "%d %d %d %s %d\n"%(jlat,jlon,nang,vw,rejigger[n]*1.0)
           
       jobscript += "cd "+top+"/sbdart_locked/  \n"
-      jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
+      jobscript += "python -B buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
       
       with open(top+"/sbdart_locked/%s/fixsbdart_%d.sh"%(name,j),"w") as rf:
           rf.write(jobscript)
       with open(top+"/sbdart_locked/%s/laundry%d"%(name,j),"w") as jf:
           jf.write(jobtask)
           
-      pjobscript += "JOB%d=$("%j+SUB+" fixsbdart_%d.sh)     \n\n"%j
+      pjobscript += "JOB%d=$("%j+bts.SUB+" fixsbdart_%d.sh)     \n\n"%j
       subjobs.append("$JOB%d"%j)
       
       #Now that we've spawned all child jobs, submit the follow-up job, but specifying that
       #it should be held until the previous jobs finish.
-      pjobscript += HOLD(subjobs)+" runfix  \n"
+      pjobscript += bts.HOLD(subjobs)+" runfix  \n"
       with open(top+"/sbdart_locked/%s/fixsbdart.sh"%name,"w") as prf:
           prf.write(pjobscript)
   else:    
@@ -2543,8 +2550,8 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
       jobtag = ' '.join(job)
       for j in range(len(lats)):
         
-        dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline %s 0 1 %s"%(-9999,"fixsbdart_%d_%s"%(j,name),jobqueue),-1)
-        jobscript = BATCHSCRIPT(dummyjob,'a')
+        dummyjob = crd.Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline %s 0 1 %s"%(-9999,"fixsbdart_%d_%s"%(j,name),jobqueue),-1)
+        jobscript = bts.BATCHSCRIPT(dummyjob,'a')
         jobtask = ''
         jlat = lats[j]
         jlon = lons[j]
@@ -2553,7 +2560,7 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
         jobtask += "%d %d %d %s %d\n"%(jlat,jlon,nang,vw,rejigger[j]*1.0)
     
         jobscript += "cd "+top+"/sbdart_locked/  \n"
-        jobscript += "python buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
+        jobscript += "python -B buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
         
         with open(top+"/sbdart_locked/%s/fixsbdart_%d.sh"%(name,j),"w") as rf:
             rf.write(jobscript)
@@ -2561,11 +2568,11 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
         with open(top+"/sbdart_locked/%s/laundry%d"%(name,j),"w") as jf:
             jf.write(jobtask)
         
-        pjobscript += "JOB%d=$("%j+SUB+" fixsbdart_%d.sh)     \n"%j
+        pjobscript += "JOB%d=$("%j+bts.SUB+" fixsbdart_%d.sh)     \n"%j
         subjobs.append("$JOB%d"%j)
       
       #When those previous jobs are finished, submit the single-core fixer
-      pjobscript += HOLD(subjobs)+" runfix  \n"
+      pjobscript += bts.HOLD(subjobs)+" runfix  \n"
       with open(top+"/sbdart_locked/%s/fixsbdart.sh"%name,"w") as prf:
           prf.write(pjobscript)
   
@@ -2576,7 +2583,7 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
 def batch_plasim_locked(jid,job):
   #SBDART-process the cells given in laundry<jid>.
   name = job[0]
-  workdir = SCRATCH+"/fix_%s_%d"%(name,jid)
+  workdir = ide.SCRATCH+"/fix_%s_%d"%(name,jid)
   os.system("mkdir "+workdir)
   with open("../.home","r") as homef:
     top = homef.read().split('\n')[0]
@@ -2707,7 +2714,7 @@ def batch_plasim_locked(jid,job):
 
 def do_plasim_locked(job,vws,nang,lons,lats,rejigger):
   name = job[0]
-  workdir = SCRATCH+"/fix_%s"%name
+  workdir = ide.SCRATCH+"/fix_%s"%name
   os.system("mkdir "+workdir)
   with open("../.home","r") as homef:
     top = homef.read().split('\n')[0]

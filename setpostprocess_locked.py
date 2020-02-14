@@ -100,13 +100,13 @@ def prep(job):
                     "mkdir "+SCRATCH+"/postprocess_locked/job"+str(job.home)+"/  \n"+
                     "cp -a * "+SCRATCH+"/postprocess_locked/job"+str(job.home)+"/  \n"+
                     "cd "+SCRATCH+"/postprocess_locked/job"+str(job.home)+"/  \n"+
-                    "python postprocess_locked.py "+times+" "+angles+" "+tag+"                           \n"+
+                    "python -B postprocess_locked.py "+times+" "+angles+" "+tag+"                           \n"+
                     "cp -a "+SCRATCH+"/postprocess_locked/job"+str(job.home)+"/* "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
                     "cd "+workdir+"                                                \n"+
                     "cp spectra.nc "+cwd+"/postprocess_locked/output/"+job.name+"_spectra.nc \n"+
                     "cp phases.nc "+cwd+"/postprocess_locked/output/"+job.name+"_phases.nc \n"+
-                    "python release.py \n")
+                    "python -B release.py \n")
     else:
         tag+="phases "
         jobscript =(BATCHSCRIPT(job,notify)+
@@ -118,12 +118,12 @@ def prep(job):
                     "mkdir "+SCRATCH+"/postprocess_locked/job"+str(job.home)+"/  \n"+
                     "cp -a * "+SCRATCH+"/postprocess_locked/job"+str(job.home)+"/  \n"+
                     "cd "+SCRATCH+"/postprocess_locked/job"+str(job.home)+"/  \n"+
-                    "python postprocess_locked.py "+times+" "+angles+" "+tag+"                                    \n"+
+                    "python -B postprocess_locked.py "+times+" "+angles+" "+tag+"                                    \n"+
                     "cp -a "+SCRATCH+"/postprocess_locked/job"+str(job.home)+"/* "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
                     "cd "+workdir+"                                                \n"+
                     "cp phases.nc "+cwd+"/postprocess_locked/output/"+job.name+"_phases.nc \n"+
-                    "python release.py \n")
+                    "python -B release.py \n")
         
     
      
@@ -203,7 +203,7 @@ def _prep(job):
                     "cd "+SCRATCH+"/postprocess_locked/"+jobname+"/  \n"+
                     "tar xvzf stuff.tar.gz                \n"+
                     "rm -rf stuff.tar.gz                   \n"+
-                    "python postprocess_locked.py "+times+" "+angles+" "+tag+"                           \n"+
+                    "python -B postprocess_locked.py "+times+" "+angles+" "+tag+"                           \n"+
                     "tar cvzf stuff.tar.gz *                 \n"+
                     "rsync -avzhur stuff.tar.gz "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
@@ -213,7 +213,7 @@ def _prep(job):
                     "cp spectra.nc "+cwd+"/postprocess_locked/output/"+jobname+"_spectra.nc \n"+
                     "cp phases.nc "+cwd+"/postprocess_locked/output/"+jobname+"_phases.nc \n\n"+
                     "cd "+cwd+"/postprocess_locked/output/   \n"+
-                    "python orthoprojection.py "+jobname+"_phases.nc 0 \n"+
+                    "python -B orthoprojection.py "+jobname+"_phases.nc 0 \n"+
                     "mv "+jobname+"*/*.png . \n"+
                     "for p in $(ls "+jobname+"*.png)    \n"+
                     "do   \n"
@@ -223,7 +223,7 @@ def _prep(job):
                     "rm -rf "+jobname+"*/   \n"+
                     "cp "+top+"/plasim/output/"+jobname+".nc .  \n"+
                     "cd "+workdir+"       \n"+
-                    "python release.py     \n")
+                    "python -B release.py     \n")
 
     rs = open(workdir+"/runpostprocess_locked","w")
     rs.write(jobscript)
