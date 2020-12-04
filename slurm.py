@@ -35,7 +35,8 @@ _BATCHSCRIPT = ("#!/bin/bash                                                  \n
 
 
 MODELS = {"rossby-block":8,     #tasks per node (1 workq node on Sunnyvale has 8 threads)
-          "plasim":1}           #Here we use 'task' to mean a Sunnyvale job, as opposed to the
+          "plasim":1,
+          "exoplasim":1}           #Here we use 'task' to mean a Sunnyvale job, as opposed to the
                                 #HPC convention of a task being a thread or process. This way our
                                 #code is MPI/OpenMP-agnostic.
 

@@ -30,6 +30,7 @@ def HOLD(jobs):
 
 
 MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale has 8 threads)
+          "exoplasim":1,
           "sbdart":8,           #Here we use 'task' to mean a Sunnyvale job, as opposed to the
           "sbdart_earth":8,     #HPC convention of a task being a thread or process. This way our
           "sbdart_locked":8,    #code is MPI/OpenMP-agnostic.
