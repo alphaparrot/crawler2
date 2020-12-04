@@ -186,11 +186,14 @@ if __name__=="__main__":
     f=open("tasks.crwl","r")
     tasks=f.read().split('\n')
     f.close()
+    while tasks[-1]=="":
+        tasks = tasks[:-1]
     queued=False
     ready=False
     while not ready:       #Search for a job to run 
       for i in range(0,len(tasks)-1):
         if tasks[i]!='':
+          #print tasks[i]
           if tasks[i][0]!="#":
             task = tasks[i].split()
             if int(task[3])==0:

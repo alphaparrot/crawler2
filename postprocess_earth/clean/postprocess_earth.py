@@ -4,10 +4,10 @@ import netCDF4 as nc
 import time
 import colormatch
   
-def postprocess(lats,lons,times,angles,makemap=True,color=True):
-  collect(lats,lons,times,angles)
+def postprocess(lats,lons,times,angles,imxz,makemap=True,color=True):
+  collect(lats,lons,times,angles,imxz)
   specs = nc.Dataset("spectra.nc","r")
-  makephase(specs,times,angles=angles,makemap=makemap,color=color)
+  makephase(specs,times,imxz,angles=angles,makemap=makemap,color=color)
 
 def postphases(lats,lons,times,angles,makemap=True,color=True):  
   specs = nc.Dataset("spectra.nc","r")
@@ -121,9 +121,10 @@ def readradiance(filename):
   else:
     return {"type":-1}
 
-def collect(lats,lons,times,angles,modelfile="spectra.nc"):
+def collect(lats,lons,times,angles,imxz,modelfile="spectra.nc"):
   
-  views = np.array([28.125,118.125,196.875,275.625])
+  lmxz = lons[imxz]
+  views = np.array([lmxz,(lmxz+90.0)%360.0,(lmxz+180.0)%360.0,(lmxz+270.0)%360.0])
   
   lon0 = views[times[0]]
   nlon0 = np.where(abs(lons-lon0) == np.amin(abs(lons-lon0)))[0][0]
@@ -325,7 +326,7 @@ def lognorm(x):
     v/=vmax
     return v
 
-def diskintegrate(spectra,ntime,ndir,planet_radius=1.0,makemap=True,colorize=True):
+def diskintegrate(spectra,ntime,ndir,nlon0=0,planet_radius=1.0,makemap=True,colorize=True):
   lts = spectra.variables['lat'][:]
   lns = spectra.variables['lon'][:]
   
@@ -387,7 +388,7 @@ def diskintegrate(spectra,ntime,ndir,planet_radius=1.0,makemap=True,colorize=Tru
   else:
     colors = None
   
-  va = 180.0-view-lns #if view=0, lon=0 should be facing away, at 180 degrees.
+  va = 180.0-view-lns-lns[nlon0] #if view=0, lon=0 should be facing away, at 180 degrees.
                             #if view=120, lon=0 is 60 degrees from zenith.
                             #if view=40, lon=0 is 50 degrees past the terminator (140 degrees)
                             #if view=200, lon=0 is 20 degrees from zenith.
@@ -490,7 +491,7 @@ def diskintegrate(spectra,ntime,ndir,planet_radius=1.0,makemap=True,colorize=Tru
 
 
 
-def makephase(spectra,times,angles=['Z',],outfile="phases.nc",planet_radius=1,color=True,makemap=True):
+def makephase(spectra,times,imxz,angles=['Z',],outfile="phases.nc",planet_radius=1,color=True,makemap=True):
   nlats = len(spectra.variables['lat'][:])
   nlons = len(spectra.variables['lon'][:])
   if "alt" in spectra.variables:
@@ -600,7 +601,7 @@ def makephase(spectra,times,angles=['Z',],outfile="phases.nc",planet_radius=1,co
   
   for t in times:
     for d in range(0,nangles):
-      di,pm,colors,ii,pim = diskintegrate(spectra,t,d,planet_radius=planet_radius,makemap=makemap,colorize=color)
+      di,pm,colors,ii,pim = diskintegrate(spectra,t,d,nlon0=imxz,planet_radius=planet_radius,makemap=makemap,colorize=color)
       if zflux:
         synthspec[t,d,:,:] = di[:]
       else:
@@ -634,6 +635,7 @@ if __name__=="__main__":
     
     times = sys.argv[1]
     angles = sys.argv[2]
+    imxz = int(sys.argv[3])
     
     times = times.split('^')
     if times[-1]=='':
@@ -652,4 +654,4 @@ if __name__=="__main__":
     if "phases" in sys.argv[:]:
         postphases(lat,lon,times,angles,color=color,makemap=makemap)
     else:
-        postprocess(lat,lon,times,angles,color=color,makemap=makemap)
+        postprocess(lat,lon,times,angles,imxz,color=color,makemap=makemap)

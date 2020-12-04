@@ -1267,7 +1267,13 @@ def _prep_lmdz(job):
       os.system("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
       os.system("cp -r "+job.top+"/sbdart_locked/"+source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
       if star:
-          os.system("cp -r "+job.top+"/sbdart_locked/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
+          #os.system("cp -r "+job.top+"/sbdart_locked/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
+          w,f = np.loadtxt(job.top+"/sbdart_locked/"+star,unpack=True)
+          ffac = flux/np.trapz(f,x=w)
+          f*=ffac
+          data = np.array([w,f])
+          data = data.T
+         np.savetxt(workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon),data,fmt=['%f','%f'])
   
   role = "dom"
   if "ROLE" in job.parameters:
@@ -1573,7 +1579,13 @@ def _prep_plasim_locked(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   os.system("tar xvzf "+workdir+"/source/source.tar.gz -C "+workdir+"/source/")
   os.system("rm "+workdir+"/source/source.tar.gz")
   if star:
-      os.system("cp -r "+job.top+"/sbdart_locked/"+star+" "+workdir+"/source/solar.dat")
+      #os.system("cp -r "+job.top+"/sbdart_locked/"+star+" "+workdir+"/source/solar.dat")
+      w,f = np.loadtxt(job.top+"/sbdart_locked/"+star,unpack=True)
+      ffac = flux/np.trapz(f,x=w)
+      f*=ffac
+      data = np.array([w,f])
+      data = data.T
+      np.savetxt(workdir+"/source/solar.dat",data,fmt=['%f','%f'])
   
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
@@ -1927,7 +1939,13 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       os.system("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
       os.system("cp -r "+job.top+"/sbdart_locked/"+source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
       if star:
-          os.system("cp -r "+job.top+"/sbdart_locked/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
+          #os.system("cp -r "+job.top+"/sbdart_locked/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
+          w,f = np.loadtxt(ob.top+"/sbdart_locked/"+star,unpack=True)
+          ffac = flux/np.trapz(f,x=w)
+          f*=ffac
+          data = np.array([w,f])
+          data = data.T
+          np.savetxt(workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon),data,fmt=['%f','%f'])
   
   
   role = "dom"
@@ -2052,8 +2070,12 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   lviews = '{'+','.join(job[8].split('^'))+"}"
   #ntimes = '{0,1,2,3}'
   #lviews = '{Z,E,W,N,S}'
+  if job[9]=="True":
+      highcadence=True
+  else:
+      highcadence=False
   try:
-      star = job[9]
+      star = job[10]
   except:
       star = False
   
@@ -2080,11 +2102,15 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
               'S':4}    
       
   print "Setting up for times ",itimes,"and views",vws
+  
+  outtag = "snapshot"
+  if highcadence:
+      outtag="highcadence"
+  
     
-    
-  os.system("cp "+top+"/plasim/output/"+jobname+"_snapshot.nc "
-            +workdir+"/"+jobname+"_snapshot.nc")
-  data = nc.Dataset(workdir+"/"+jobname+"_snapshot.nc","r")  
+  os.system("cp "+top+"/plasim/output/"+jobname+"_%s.nc "%outtag
+            +workdir+"/"+jobname+"_%s.nc"%outtag)
+  data = nc.Dataset(workdir+"/"+jobname+"_%s.nc"%outtag,"r")  
   
   nlats = len(data.variables['lat'][:])
   nlons = len(data.variables['lon'][:])
@@ -2166,8 +2192,13 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   clouds=True
     
   notify = 'ae'
-      
-  istep=12
+  
+  if highcadence:
+      isteps = range(len(data.variables['time'][:]))
+      ntimes = '{'+','.join(np.array(isteps).astype(str))+'}'
+  else:
+      isteps= [12,]
+      ntimes = '{'+str(isteps[0])+",}"
       
   uniform=False     
   unialb = 0.35
@@ -2189,17 +2220,23 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   os.system("tar xvzf "+workdir+"/source/source.tar.gz -C "+workdir+"/source/")
   os.system("rm "+workdir+"/source/source.tar.gz")
   if star:
-      os.system("cp -r "+finaldest+"/"+star+" "+workdir+"/source/solar.dat")
+      #os.system("cp -r "+finaldest+"/"+star+" "+workdir+"/source/solar.dat")
+      w,f = np.loadtxt(finaldest+"/"+star,unpack=True)
+      ffac = flux/np.trapz(f,x=w)
+      f*=ffac
+      data = np.array([w,f])
+      data = data.T
+      np.savetxt(workdir+"/source/solar.dat",data,fmt=['%f','%f'])
   
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
-      for nang in itimes:
+      for istep in isteps:
         for vw in vws:
             #print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
             #print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
-            os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
-            print "made directory "+workdir+"/sbdart-%02d-%02d-%1d_%s"%(jlat,jlon,nang,vw)
-            os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%1d_%s/"%(jlat,jlon,nang,vw))
+            os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%03d_%s"%(jlat,jlon,istep,vw))
+            print "made directory "+workdir+"/sbdart-%02d-%02d-%03d_%s"%(jlat,jlon,istep,vw)
+            os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%03d_%s/"%(jlat,jlon,istep,vw))
 
   icefile='seaice.dat'
   waterfile='seawater.dat'
@@ -2223,7 +2260,7 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
           "               do \n"+
           "                    ILAT=`printf '%02d' $(( 10#$jl ))`           \n"+
           "                    ILON=`printf '%02d' $(( 10#$il ))`           \n"+
-          "                    IANG=`printf '%1d' $al`           \n"+
+          "                    IANG=`printf '%03d' $al`           \n"+
           "                    echo $ILAT $ILON $IANG $vw              \n"+
           "                    TAG=${ILAT}_${ILON}_${IANG}_$vw                    \n"+
           "                    cd "+workdir+"/sbdart-$TAG                          \n"+
@@ -2281,12 +2318,13 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   
   #views = [28.125,118.125,196.875,275.625]
   views = [0.,90.,180.,270.]
+  nang = itimes[0]
   
   for jlon in range(lons[0],lons[1]):
     for jlat in range(lats[0],lats[1]):
-      for nang in itimes:
+      for istep in isteps:
         csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_locked(data,vws,jlat,jlon,
-                                                         workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),
+                                                         workdir+"/sbdart-%02d_%02d_%03d"%(jlat,jlon,istep),
                                                          sol_lon = views[nang],
                                                          grav=grav,smooth=smooth,clouds=clouds,
                                                          istep=istep)
@@ -2297,12 +2335,12 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
         #vws = ['Z','N','E','S','W']
         for vv in range(0,len(vws)):
             nv = viewdict[vws[vv]]
-            write_input_locked(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
+            write_input_locked(workdir+"/sbdart-%02d_%02d_%03d_%s"%(jlat,jlon,istep,vws[vv]),
                               nv,nang,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
                               wmin=wmin,wmax=wmax,albedo=unialb,flat=flat,sic=sic,spec=star,
                               smooth=smooth,iout=iout,zout=zout,waterfile=waterfile,
                               icefile=icefile)
-        print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[vv])
+        print "Prepped lat %02d lon %02d Time %03d View %s"%(jlat,jlon,istep,vws[vv])
         
 def _run(job):
   jobname = job[0]
@@ -2374,12 +2412,22 @@ def getbroken(job):
     if views[-1]=='':
         views = views[:-1]
     
+    if job[9]=="True":
+        highcadence=True
+    else:
+        highcadence=False
+        
     with open("../.home","r") as homef:
       top = homef.read().split('\n')[0]
   
     namedir = top+"/sbdart_locked/%s"%name 
     
     data = nc.Dataset(top+"/plasim/output/"+name+"_snapshot.nc","r")
+    
+    if highcadence:
+        isteps = range(len(data.variables['time'][:]))
+    else:
+        isteps= [12,]
     
     nlats = len(data.variables['lat'][:])
     nlons = len(data.variables['lon'][:])
@@ -2389,13 +2437,14 @@ def getbroken(job):
     reasons = []
     rejigger = []
     
-    for nlt in range(0,nlats):
-        for nln in range(0,nlons):
-            for v in views:
-                if namedir+"/sbout.%02d_%02d_0_%s"%(nlt,nln,v) not in ofiles:
-                    broken.append("sbout.%02d_%02d_0_%s"%(nlt,nln,v))
-                    reasons.append("missing file")
-                    rejigger.append(False)
+    for istep in isteps:
+        for nlt in range(0,nlats):
+            for nln in range(0,nlons):
+                for v in views:
+                    if namedir+"/sbout.%02d_%02d_%03d_%s"%(nlt,nln,istep,v) not in ofiles:
+                        broken.append("sbout.%02d_%02d_%03d_%s"%(nlt,nln,istep,v))
+                        reasons.append("missing file")
+                        rejigger.append(False)
     for o in ofiles:
         size = os.path.getsize(o)
         if size<2.45e4:
@@ -2420,7 +2469,7 @@ def getbroken(job):
                     rejigger.append(False)
     lats = []
     lons = []
-    angs = []
+    steps = []
     vws = []
     kb = 0
     for b in broken:
@@ -2429,19 +2478,20 @@ def getbroken(job):
         if parts[0]!=str(nlats) and parts[1]!=str(nlons):
             lats.append(int(parts[0]))
             lons.append(int(parts[1]))
-            angs.append(int(parts[2]))
+            steps.append(int(parts[2]))
             vws.append(parts[3])
-            print "Found broken output file: sbout_%02d_%02d_%d_%s --- reason: %s"%(lats[-1],lons[-1],angs[-1],vws[-1],reasons[kb])
+            print "Found broken output file: sbout_%02d_%02d_%03d_%s --- reason: %s"%(lats[-1],lons[-1],steps[-1],vws[-1],reasons[kb])
         else:
             os.system("rm "+top+"/sbdart_locked/%s/%s"%(name,b))
         kb += 1
-    if len(angs)>0:
-        return lons,lats,angs[-1],vws,rejigger  
-    else:
-        return lons,lats,angs,vws,rejigger
+    #if len(steps)>0:
+        #return lons,lats,steps[-1],vws,rejigger  
+    #else:
+        #return lons,lats,steps,vws,rejigger
+    return lons,lats,steps,vws,rejigger
 
 
-def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
+def par_do_plasim_locked(job,vws,isteps,lons,lats,rejigger):
   name = job[0]
   with open("../.home","r") as homef:
     top = homef.read().split('\n')[0]
@@ -2455,8 +2505,12 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
   grav = float(job[6])
   ntimes = job[7].split('^')
   views = job[8].split('^')
+  if job[9]=="True":
+      highcadence=True
+  else:
+      highcadence=False
   try:
-      star = job[9]
+      star = job[10]
   except:
       star = False
   
@@ -2465,10 +2519,14 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
               'W':2,
               'N':3,
               'S':4}    
-      
-  istep=12    
+  
+  nang = 0
     
   print "Setting up for times ",nang,"and views",vws
+  
+  outtag = "snapshot"
+  if highcadence:
+      outtag="highcadence"
   
   
   
@@ -2495,7 +2553,8 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
             jlat = lats[j*ncells+n]
             jlon = lons[j*ncells+n]
             vw = vws[j*ncells+n]
-            jobtask += "%d %d %d %s %d\n"%(jlat,jlon,nang,vw,rejigger[n]*1.0)
+            istep = isteps[j*ncells+n]
+            jobtask += "%d %d %d %s %d\n"%(jlat,jlon,istep,vw,rejigger[n]*1.0)
             
         jobscript += "cd "+top+"/sbdart_locked/  \n"
         
@@ -2523,7 +2582,8 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
           jlat = lats[n]
           jlon = lons[n]
           vw = vws[n]
-          jobtask += "%d %d %d %s %d\n"%(jlat,jlon,nang,vw,rejigger[n]*1.0)
+          istep = isteps[n]
+          jobtask += "%d %d %d %s %d\n"%(jlat,jlon,istep,vw,rejigger[n]*1.0)
           
       jobscript += "cd "+top+"/sbdart_locked/  \n"
       jobscript += "python -B buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
@@ -2556,8 +2616,9 @@ def par_do_plasim_locked(job,vws,nang,lons,lats,rejigger):
         jlat = lats[j]
         jlon = lons[j]
         vw = vws[j]
+        istep = isteps[j]
         
-        jobtask += "%d %d %d %s %d\n"%(jlat,jlon,nang,vw,rejigger[j]*1.0)
+        jobtask += "%d %d %d %s %d\n"%(jlat,jlon,istep,vw,rejigger[j]*1.0)
     
         jobscript += "cd "+top+"/sbdart_locked/  \n"
         jobscript += "python -B buildsbdart.py BATCHFIX %d %s  \n"%(j,jobtag)
@@ -2597,8 +2658,12 @@ def batch_plasim_locked(jid,job):
   grav = float(job[6])
   views = job[8].split('^')
   ntimes = job[7].split('^')
+  if job[9]=="True":
+      highcadence=True
+  else:
+      highcadence=False
   try:
-      star = job[9]
+      star = job[10]
   except:
       star = False
     
@@ -2607,7 +2672,7 @@ def batch_plasim_locked(jid,job):
   lats = []
   lons = []
   vws = []
-  nangs = []
+  steps = []
   rejigger = []
   #Get the list of cells we need to do
   with open(top+"/sbdart_locked/%s/laundry%d"%(name,jid),"r") as laundry:
@@ -2618,7 +2683,7 @@ def batch_plasim_locked(jid,job):
           parts = j.split()
           lats.append(int(parts[0]))
           lons.append(int(parts[1]))
-          nangs.append(int(parts[2]))
+          steps.append(int(parts[2]))
           vws.append(parts[3])
           rejigger.append(int(parts[4])>0.5)
 
@@ -2627,16 +2692,27 @@ def batch_plasim_locked(jid,job):
               'W':2,
               'N':3,
               'S':4}    
-      
-  istep=12    
-    
-  print "Setting up for times ",nangs,"and views",vws
   
-  os.system("cp "+top+"/plasim/output/"+jobname+"_snapshot.nc "+workdir+"/"+name+"_snapshot.nc")
-  data = nc.Dataset(workdir+"/"+name+"_snapshot.nc","r")  
+  print "Setting up for times ",steps,"and views",vws
+  
+  outtag = "snapshot"
+  if highcadence:
+      outtag="highcadence"
+  
+    
+  os.system("cp "+top+"/plasim/output/"+jobname+"_%s.nc "%outtag+
+            workdir+"/"+name+"_%s.nc"%outtag)
+  data = nc.Dataset(workdir+"/"+name+"_%s.nc"%outtag,"r")  
   
   nlats = len(data.variables['lat'][:])
   
+  if highcadence:
+      isteps = range(len(data.variables['time'][:]))
+      ntimes = '{'+','.join(np.array(isteps).astype(str))+'}'
+  else:
+      isteps= [12,]
+      ntimes = '{'+str(isteps[0])+",}"
+    
   os.system("mkdir "+workdir+"/source/")
 
   os.system("rsync "+top+"/sbdart_locked/clean/source.tar.gz "+workdir+"/source/")
@@ -2644,7 +2720,13 @@ def batch_plasim_locked(jid,job):
   os.system("rm "+workdir+"/source/source.tar.gz")
 
   if star:
-      os.system("cp -r "+top+"/sbdart_locked/%s/"%jobname+star+" "+workdir+"/source/solar.dat")
+      #os.system("cp -r "+top+"/sbdart_locked/%s/"%jobname+star+" "+workdir+"/source/solar.dat")
+      w,f = np.loadtxt(top+"/sbdart_locked/%s/"%jobname+star,unpack=True)
+      ffac = flux/np.trapz(f,x=w)
+      f*=ffac
+      data = np.array([w,f])
+      data = data.T
+      np.savetxt(workdir+"/source/solar.dat",data,fmt=['%f','%f'])
   
       
      
@@ -2655,17 +2737,17 @@ def batch_plasim_locked(jid,job):
   for jlon in lons:
     jlat = lats[n]
     vw = vws[n]
-    nang = nangs[n]
+    istep = steps[n]
     n+=1
     #print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
-    print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
-    os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
-    os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%1d_%s/"%(jlat,jlon,nang,vw))
+    print "mkdir "+workdir+"/sbdart-%02d_%02d_%03d_%s"%(jlat,jlon,istep,vw)
+    os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%03d_%s"%(jlat,jlon,istep,vw))
+    os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%03d_%s/"%(jlat,jlon,istep,vw))
     
     tag = "%02d_%02d"%(jlat,jlon)
     
-    jobscript += ("cd "+workdir+"/sbdart-%02d_%02d_%1d_%s    \n"%(jlat,jlon,nang,vw)+
-                "./sbdart > "+workdir+"/sbout.%02d_%02d_%1d_%s   \n"%(jlat,jlon,nang,vw))
+    jobscript += ("cd "+workdir+"/sbdart-%02d_%02d_%03d_%s    \n"%(jlat,jlon,istep,vw)+
+                "./sbdart > "+workdir+"/sbout.%02d_%02d_%03d_%s   \n"%(jlat,jlon,istep,vw))
     
   jobscript += ("cp "+workdir+"/sbout* "+top+"/sbdart_locked/%s/     \n"%jobname+
                 "rm -rf "+workdir+"/ \n")
@@ -2676,17 +2758,17 @@ def batch_plasim_locked(jid,job):
   
   views = [0.,90.,180.,270.]
   
-  
+  nang = 0
   #Prepare the boundary data for each cell
   n=0
   for jlon in lons:
     jlat = lats[n]
     vw = vws[n]
-    nang = nangs[n]
+    istep = steps[n]
     offset=0
     yoffset=0
     if rejigger[n]: #Sometimes we get a failure mode at the terminator at the poles
-        os.system("touch rejigger_%02d_%02d_%d_%s"%(jlat,jlon,nang,vw))
+        os.system("touch rejigger_%02d_%02d_%03d_%s"%(jlat,jlon,istep,vw))
         if jlon>0:
             offset = -1
         else:
@@ -2697,22 +2779,22 @@ def batch_plasim_locked(jid,job):
             yoffset = 1
     n+=1
     csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_locked(data,[vw,],jlat+yoffset,jlon+offset,
-                                                     workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),istep=istep,
+                                                     workdir+"/sbdart-%02d_%02d_%03d"%(jlat,jlon,istep),istep=istep,
                                                      sol_lon = views[nang])
     latitude = data.variables['lat'][jlat+yoffset]
     longitude = data.variables['lon'][jlon+offset]
     #vws = ['Z','N','E','S','W']
     nv = viewdict[vw]
-    write_input_locked(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw),
+    write_input_locked(workdir+"/sbdart-%02d_%02d_%03d_%s"%(jlat,jlon,istep,vw),
                     nv,nang,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
                     wmin=0.35,wmax=80.0,sic=sic,spec=star,flat=flat)
-    print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
+    print "Prepped lat %02d lon %02d Time %03d View %s"%(jlat,jlon,istep,vw)
 
   #Launch the script that iterates over these cells.
   os.system("bash "+top+"/sbdart_locked/%s/subjob_%d.sh"%(jobname,jid)) 
 
 
-def do_plasim_locked(job,vws,nang,lons,lats,rejigger):
+def do_plasim_locked(job,vws,isteps,lons,lats,rejigger):
   name = job[0]
   workdir = ide.SCRATCH+"/fix_%s"%name
   os.system("mkdir "+workdir)
@@ -2728,8 +2810,12 @@ def do_plasim_locked(job,vws,nang,lons,lats,rejigger):
   grav = float(job[6])
   views = job[8].split('^')
   ntimes = job[7].split('^')
+  if job[9]=="True":
+      highcadence=True
+  else:
+      highcadence=False
   try:
-      star = job[9]
+      star = job[10]
   except:
       star = False
   
@@ -2738,15 +2824,18 @@ def do_plasim_locked(job,vws,nang,lons,lats,rejigger):
               'W':2,
               'N':3,
               'S':4}    
-      
-  istep=12
   
   flat = False
     
-  print "Setting up for times ",nang,"and views",vws
+  print "Setting up for times ",isteps,"and views",vws
   
-  os.system("cp "+top+"/plasim/output/"+jobname+"_snapshot.nc "+workdir+"/"+name+"_snapshot.nc")
-  data = nc.Dataset(workdir+"/"+name+"_snapshot.nc","r")  
+  outtag = "snapshot"
+  if highcadence:
+      outtag="highcadence"
+  
+  os.system("cp "+top+"/plasim/output/"+jobname+"_%s.nc "%outtag
+            +workdir+"/"+name+"_%s.nc"%outtag)
+  data = nc.Dataset(workdir+"/"+name+"_%s.nc"%outtag,"r")  
   
   nlats = len(data.variables['lat'][:])
   
@@ -2759,7 +2848,13 @@ def do_plasim_locked(job,vws,nang,lons,lats,rejigger):
   os.system("rm "+workdir+"/source/source.tar.gz")
 
   if star:
-      os.system("cp -r "+top+"/sbdart_locked/%s/"%jobname+star+" "+workdir+"/source/solar.dat")
+      #os.system("cp -r "+top+"/sbdart_locked/%s/"%jobname+star+" "+workdir+"/source/solar.dat")
+      w,f = np.loadtxt(top+"/sbdart_locked/%s/"%jobname+star,unpack=True)
+      ffac = flux/np.trapz(f,x=w)
+      f*=ffac
+      data = np.array([w,f])
+      data = data.T
+      np.savetxt(workdir+"/source/solar.dat",data,fmt=['%f','%f'])
   
       
      
@@ -2773,16 +2868,17 @@ def do_plasim_locked(job,vws,nang,lons,lats,rejigger):
   for jlon in lons:
     jlat = lats[n]
     vw = vws[n]
+    istep = isteps[n]
     n+=1
     #print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
-    print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
-    os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
-    os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%1d_%s/"%(jlat,jlon,nang,vw))
+    print "mkdir "+workdir+"/sbdart-%02d_%02d_%03d_%s"%(jlat,jlon,istep,vw)
+    os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%03d_%s"%(jlat,jlon,istep,vw))
+    os.system("cp -r "+workdir+"/source/* "+workdir+"/sbdart-%02d_%02d_%03d_%s/"%(jlat,jlon,istep,vw))
     
     tag = "%02d_%02d"%(jlat,jlon)
     
-    jobscript += ("cd "+workdir+"/sbdart-%02d_%02d_%1d_%s    \n"%(jlat,jlon,nang,vw)+
-                "./sbdart > "+workdir+"/sbout.%02d_%02d_%1d_%s   \n"%(jlat,jlon,nang,vw))
+    jobscript += ("cd "+workdir+"/sbdart-%02d_%02d_%03d_%s    \n"%(jlat,jlon,istep,vw)+
+                "./sbdart > "+workdir+"/sbout.%02d_%02d_%03d_%s   \n"%(jlat,jlon,istep,vw))
     
   jobscript += ("cp "+workdir+"/sbout* "+top+"/sbdart_locked/%s/     \n"%jobname+
                 "rm -rf "+workdir+"/ \n")
@@ -2793,14 +2889,17 @@ def do_plasim_locked(job,vws,nang,lons,lats,rejigger):
   
   views = [0.,90.,180.,270.]
   
+  nang = 0
+  
   n=0
   for jlon in lons:
     jlat = lats[n]
     vw = vws[n]
+    istep = isteps[n]
     offset=0
     yoffset=0
     if rejigger[n]: #Sometimes we get a failure mode at the terminator at the poles
-        os.system("touch rejigger_%02d_%02d_%d_%s"%(jlat,jlon,nang,vw))
+        os.system("touch rejigger_%02d_%02d_%03d_%s"%(jlat,jlon,istep,vw))
         if jlon>0:
             offset = -1
         else:
@@ -2811,21 +2910,21 @@ def do_plasim_locked(job,vws,nang,lons,lats,rejigger):
             yoffset =  1
     n+=1
     csz,azm,surf,sic,tsurf,altz = analyzecell_plasim_locked(data,[vw,],jlat+yoffset,jlon+offset,
-                                                     workdir+"/sbdart-%02d_%02d_%1d"%(jlat,jlon,nang),istep=istep,
+                                                     workdir+"/sbdart-%02d_%02d_%03d"%(jlat,jlon,istep),istep=istep,
                                                      sol_lon = views[nang])
     latitude = data.variables['lat'][jlat+yoffset]
     longitude = data.variables['lon'][jlon+offset]
     #vws = ['Z','N','E','S','W']
     nv = viewdict[vw]
-    write_input_locked(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw),
+    write_input_locked(workdir+"/sbdart-%02d_%02d_%03d_%s"%(jlat,jlon,istep,vw),
                     nv,nang,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
                     wmin=0.35,wmax=80.0,sic=sic,flat=flat,spec=star)
-    print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
+    print "Prepped lat %02d lon %02d Time %03d View %s"%(jlat,jlon,istep,vw)
 
   os.system("bash "+top+"/sbdart_locked/%s/fixsbdart.sh"%jobname) 
-  lons,lats,nang,views,rejigger = getbroken(job)
+  lons,lats,isteps,views,rejigger = getbroken(job)
   if len(lons)>0:
-      do_plasim_locked(job,views,nang,lons,lats,rejigger)   #Recursive--risky, but this should run
+      do_plasim_locked(job,views,isteps,lons,lats,rejigger) #Recursive--risky, but this should run
                                                    #we're all good.
   
 if __name__=="__main__":
@@ -2859,12 +2958,12 @@ if __name__=="__main__":
         _run(job)
     elif mode=="fixup":
         name = job[0]
-        lons,lats,nang,views,rejigger = getbroken(job)
-        do_plasim_locked(job,views,nang,lons,lats,rejigger)
+        lons,lats,isteps,views,rejigger = getbroken(job)
+        do_plasim_locked(job,views,isteps,lons,lats,rejigger)
     elif mode=="parfixup":
         name = job[0]
-        lons,lats,nang,views,rejigger = getbroken(job)
-        par_do_plasim_locked(job,views,nang,lons,lats,rejigger)
+        lons,lats,isteps,views,rejigger = getbroken(job)
+        par_do_plasim_locked(job,views,isteps,lons,lats,rejigger)
     elif mode=="batchfix":
         name = job[0]
         #We don't need to get the broken jobs for this mode, because they

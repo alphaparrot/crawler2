@@ -190,7 +190,9 @@ def _prep(job):
     
     ncpu = '1'
     
-    queue = job[4]
+    imxz = int(job[4])
+    
+    queue = job[5]
     
     notify = 'ae'
     
@@ -217,7 +219,7 @@ def _prep(job):
                     "cd "+SCRATCH+"/postprocess_earth/"+jobname+"/  \n"+
                     "tar xvzf stuff.tar.gz                \n"+
                     "rm -rf stuff.tar.gz                   \n"+
-                    "python -B postprocess_earth.py "+times+" "+angles+" "+tag+"                           \n"+
+                    "python -B postprocess_earth.py "+times+" "+angles+" %d "%imxz+tag+"                           \n"+
                     "tar cvzf stuff.tar.gz *                 \n"+
                     "rsync -avzhur stuff.tar.gz "+workdir+"/ \n"+
                     "rm -rf *                                                         \n"+
@@ -227,7 +229,7 @@ def _prep(job):
                     "cp spectra.nc "+cwd+"/postprocess_earth/output/"+jobname+"_spectra.nc \n"+
                     "cp phases.nc "+cwd+"/postprocess_earth/output/"+jobname+"_phases.nc \n\n"+
                     "cd "+cwd+"/postprocess_earth/output/   \n"+
-                    "python -B orthoprojection.py "+jobname+"_phases.nc 0 \n"+
+                    "python -B orthoprojection.py "+jobname+"_phases.nc 0 %d \n"%imxz+
                     "mv "+jobname+"*/*.png . \n"+
                     "for p in $(ls "+jobname+"*.png)    \n"+
                     "do   \n"

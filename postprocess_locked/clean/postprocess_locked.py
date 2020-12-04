@@ -125,19 +125,19 @@ def collect(lats,lons,times,angles,modelfile="spectra.nc"):
   
   views = np.array([0.0,90.0,180.0,270.0])
   
-  lon0 = views[times[0]]
+  lon0 = views[0]
   nlon0 = np.where(abs(lons-lon0) == np.amin(abs(lons-lon0)))[0][0]
   
   t1 = time.time()
   
   nlats = len(lats)
   nlons = len(lons)
-  ntimes = max(len(times),times.max()+1)
+  ntimes = len(times)
   nangles = len(angles)
   
   print nlats,nlons
   
-  bundle = readradiance("sbout.%02d_%02d_%1d_%s"%(nlats/2,nlon0,times[0],angles[0]))    #substellar
+  bundle = readradiance("sbout.%02d_%02d_%03d_%s"%(nlats/2,nlon0,times[0],angles[0]))    #substellar
   if bundle["type"]=="tbf":
     phis = bundle["phis"]
     zens = bundle["zens"]
@@ -157,7 +157,7 @@ def collect(lats,lons,times,angles,modelfile="spectra.nc"):
       return bundle["type"]
   nwvs = len(wvls)
   for nln in range(0,3*nlons/4):
-      bundle = readradiance("sbout.%02d_%02d_%1d_%s"%(nlats/2,nln,times[0],angles[0]))
+      bundle = readradiance("sbout.%02d_%02d_%03d_%s"%(nlats/2,nln,times[0],angles[0]))
       if bundle["type"]=="tbf":
         p = bundle["phis"]
         z = bundle["zens"]
@@ -260,10 +260,10 @@ def collect(lats,lons,times,angles,modelfile="spectra.nc"):
     for ka in range(0,nangles):
       for jlat in range(0,nlats):
         for jlon in range(0,nlons):
-          print "Collecting lat %02d and lon %02d from view %s of time %1d"%(jlat,jlon,angles[ka],kt)
+          print "Collecting lat %02d and lon %02d from view %s of time %03d"%(jlat,jlon,angles[ka],kt)
           try:
               phis,zens,wvls,fluxes,insol 
-              bundle = readradiance("sbout.%02d_%02d_%1d_%s"%(jlat,jlon,kt,angles[ka]))
+              bundle = readradiance("sbout.%02d_%02d_%03d_%s"%(jlat,jlon,kt,angles[ka]))
               if bundle["type"]=="tbf":
                 phis = bundle["phis"]
                 zens = bundle["zens"]
@@ -279,7 +279,7 @@ def collect(lats,lons,times,angles,modelfile="spectra.nc"):
           except:
               fluxes[:] = 0.0
               insol[:] = 0.0
-              print "Spectrum %02d_%02d_%1d_%s is missing!"%(jlat,jlon,kt,angles[ka])
+              print "Spectrum %02d_%02d_%03d_%s is missing!"%(jlat,jlon,kt,angles[ka])
           n_init=0
           n_end =len(wavelengths[:])
           if len(wvls)<len(wavelengths[:]):
@@ -484,7 +484,8 @@ def diskintegrate(spectra,ntime,ndir,planet_radius=1.0,makemap=True,colorize=Tru
 
 
 
-def makephase(spectra,times,angles=['Z',],outfile="phases.nc",planet_radius=1,color=True,makemap=True):
+def makephase(spectra,times,angles=['Z',],outfile="phases.nc",
+              planet_radius=1,color=True,makemap=True):
   nlats = len(spectra.variables['lat'][:])
   nlons = len(spectra.variables['lon'][:])
   if "alt" in spectra.variables:
@@ -493,7 +494,7 @@ def makephase(spectra,times,angles=['Z',],outfile="phases.nc",planet_radius=1,co
       zflux=True
   else:
       zflux=False
-  ntimes = max(len(times),times.max()+1)
+  ntimes = len(times)
   nangles = len(angles)
   phasecurve = nc.Dataset(outfile,"w", format="NETCDF4")
   time = phasecurve.createDimension("time",ntimes)

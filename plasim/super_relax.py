@@ -201,6 +201,7 @@ if __name__=="__main__":
     year+=1
     dataname=EXP+".%04d"%year
     snapname=EXP+"_SNAP.%04d"%year
+    hcname  =EXP+"_HC.%04d"%year
     diagname=EXP+"_DIAG.%04d"%year
     restname=EXP+"_REST.%03d"%year
     snowname=EXP+"_SNOW_%1d"%(year%5)
@@ -210,16 +211,20 @@ if __name__=="__main__":
     os.system("[ -e Abort_Message ] && exit 1")
     os.system("[ -e plasim_output ] && mv plasim_output "+dataname)
     os.system("[ -e plasim_snapshot ] && mv plasim_snapshot "+snapname)
+    os.system("[ -e plasim_hcadence ] && mv plasim_hcadence "+hcname)
     os.system("[ -e plasim_diag ] && mv plasim_diag "+diagname)
     os.system("[ -e plasim_status ] && cp plasim_status plasim_restart")
     os.system("[ -e plasim_status ] && mv plasim_status "+restname)
     os.system("[ -e restart_snow ] && mv restart_snow "+snowname)
     os.system("[ -e "+dataname+" ] && ./burn7.x -n <example.nl>burnout "+dataname+" "+dataname+".nc")
     os.system("[ -e "+snapname+" ] && ./burn7.x -n <snapshot.nl>snapout "+snapname+" "+snapname+".nc")
+    os.system("[ -e "+hcname+" ] && ./burn7.x -n <snapshot.nl>hcout "+hcname+" "+hcname+".nc")
     os.system("[ -e "+dataname+" ] && cp "+dataname+" "+EXP+"_OUT.%04d"%year)
     os.system("[ -e "+dataname+".nc ] && rm "+dataname)
     os.system("[ -e "+snapname+".nc ] && rm "+snapname)
     os.system("[ -e "+snapname+".nc ] && mv "+snapname+".nc snapshots/")
+    os.system("[ -e "+hcname+".nc ] && rm "+hcname)
+    os.system("[ -e "+hcname+".nc ] && mv "+hcname+".nc highcadence/")
     if hasnans():
         os.system("echo 'NAN ENCOUNTERED'>>weathering.pso")
         break

@@ -243,21 +243,26 @@ def getphase(phasecurve,nphase,phase,ntime):
     else:
         p0 = 0.0
     atimes[atimes>180] -= 360.0
-    proj= orthographic(ln,lt,np.minimum(color,1.0),l0=atimes[ntime],p0=p0,nx=200,ny=200)
+    proj= orthographic(ln,lt,np.minimum(color,1.0),l0=atimes[0],p0=p0,nx=200,ny=200)
     return proj
 
 if __name__=="__main__":
     filename = sys.argv[1]
-    ntime = int(sys.argv[2])
+    times = sys.argv[2]
+    times = times.split('^')
+    if times[-1]=='':
+        times = times[:-1]
+    times = np.array(times).astype(int)
     pc = nc.Dataset(filename,"r")
     tag = filename.split("_phases.nc")[0]
     os.system("mkdir "+tag)
     phases = pc.variables['phase'][:]
-    for p in range(0,len(phases)):
-        proj = getphase(pc,p,phases[p],ntime)
-        f,a=plt.subplots(figsize=(14,12))
-        plt.imshow(proj,interpolation='gaussian',origin='lower')
-        plt.xticks([])
-        plt.yticks([])
-        plt.savefig(tag+"/"+tag+"_%d_%s.png"%(ntime,phases[p]),bbox_inches='tight')
+    for ntime in times:
+        for p in range(0,len(phases)):
+            proj = getphase(pc,p,phases[p],ntime)
+            f,a=plt.subplots(figsize=(14,12))
+            plt.imshow(proj,interpolation='gaussian',origin='lower')
+            plt.xticks([])
+            plt.yticks([])
+            plt.savefig(tag+"/"+tag+"_%03d_%s.png"%(ntime,phases[p]),bbox_inches='tight')
         plt.close('all')

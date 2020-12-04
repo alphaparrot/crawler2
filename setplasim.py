@@ -111,6 +111,23 @@ def edit_postnamelist(home,filename,arg,val):
   with open(home+"/"+filename,"w") as f:
       f.write('\n'.join(pnl))
 
+def add_postcodes(home,filename,newcodes):
+    with open(home+"/"+filename,"r") as f:
+        pnl = f.read().split('\n')
+    pnl = [y for y in pnl if y!='']
+    for n in range(len(pnl)):
+        if pnl[n].split('=')[0].strip()=="code":
+            codes = pnl[n].split('=')[1].strip().split(',')
+            lineno=n
+            break
+    ncodes = [int(n) for n in codes]
+    for n in newcodes:
+        if n not in ncodes:
+            ncodes.append(n)
+    pnl[lineno]+=','+','.join([str(n) for n in ncodes])
+    #print "Writing to %s/%s: \n"%(home,filename)+'\n'.join(pnl)+"\n"
+    with open(home+"/"+filename,"w") as f:
+        f.write('\n'.join(pnl)+"\n")
 
 
 def prep(job):
@@ -148,7 +165,7 @@ def prep(job):
   #os.system("rm plasim/job"+jid+"/*.sh")
   os.system("mkdir plasim/errorlogs/")
   os.system("cp plasim/job"+jid+"/*.e* plasim/errorlogs/")
-  os.system("rm plasim/job"+jid+"/*")
+  os.system("rm -rf plasim/job"+jid+"/*")
   os.system("cp plasim/"+source+"/* plasim/job"+jid+"/")
   os.system("rm plasim/job"+jid+"/plasim_restart")
   os.system("cp plasim/"+scriptfile+" plasim/job"+jid+"/")
@@ -175,7 +192,11 @@ def prep(job):
   setgasx=False
   maketransit = False
   makesbdart = False
+  hcout = False
+  highcadence = False
+  stormclim = False
   prescgascon = False
+  
   sbdvar = "earth"
   plarad = 1.0
   grav = 9.80665
@@ -233,6 +254,30 @@ def prep(job):
   au = 1.496e11
   adjfac = 3.1011857558763545
   
+  resolution = "21"
+  nlats = 32
+  
+  if "resolution" in job.fields[2:]:
+    val = job.parameters["resolution"]
+    if val=="T21" or val=="t21" or val=="21" or val=="32":
+        resolutions="21"
+        nlats=32
+    if val=="T42" or val=="t42" or val=="42" or val=="64":
+        resolutions="42"
+        nlats=64
+    if val=="T63" or val=="t63" or val=="63" or val=="63":
+        resolutions="63"
+        nlats=96
+    if val=="T85" or val=="t85" or val=="85" or val=="128":
+        resolutions="85"
+        nlats=128
+    if val=="T127" or val=="t127" or val=="127" or val=="192":
+        resolutions="127"
+        nlats=192
+    if val=="T170" or val=="t170" or val=="170" or val=="256":
+        resolutions="170"
+        nlats=256
+  
   for name in job.fields[2:]:
     val = job.parameters[name]
     found=False    
@@ -269,9 +314,18 @@ def prep(job):
       
     if name=="sbdart":
       makesbdart=True
+      hcout=False
       found=True
       ntimes = val.split('|')[0]
       lviews = val.split('|')[1]
+      
+    if name=="sbdart_hc":
+      makesbdart=True
+      found=True
+      hcout=True
+      ntimes = "{0,}"
+      lviews = val
+      
       
     if name=='pH2u': #in ubars
       found=True
@@ -516,7 +570,8 @@ def prep(job):
       #edit_namelist(jid,"planet_namelist","SIDEREAL_YEAR","31536000.0")
       edit_namelist(jid,"radmod_namelist","NFIXED","1")
       edit_namelist(jid,"radmod_namelist","FIXEDLON",val1)
-      edit_namelist(jid,"plasim_namelist","N_DAYS_PER_YEAR",str(max(int(360.0/float(val0)/12+0.5),1)*12))
+      edit_namelist(jid,"plasim_namelist","N_DAYS_PER_YEAR",
+                    str(max(int(360.0/float(val0)/12+0.5),1)*12))
       
     if name=="sbdart_type": #Whether to use SBDART in tidally-locked or Earth configuration
       found=True
@@ -598,7 +653,8 @@ def prep(job):
     if name=="nseaice": #Toggle whether sea ice and snow are allowed (1=yes,0=no, 1 is default)
       found=True
       #edit_namelist(jid,"icemod_namelist","NICE",val)
-      edit_namelist(jid,"icemod_namelist","NSEAICE",val)
+      #edit_namelist(jid,"seamod_namelist","NSEAICE",val)
+      edit_namelist(jid,"radmod_namelist","NRADICE",val)
       #edit_namelist(jid,"icemod_namelist","NSNOW",val)
     
     if name=="ncarbon":
@@ -609,12 +665,12 @@ def prep(job):
       found=True
       edit_namelist(jid,"carbonmod_namelist","NCO2EVOLVE",val)
       
-    if name=="filtertype":
+    if name=="filtertype": ## unused
       found=True
       if source == "gibbs":
         edit_namelist(jid,"plasim_namelist","NSPFILTER",val)
         
-    if name=="filtervars":
+    if name=="filtervars": ## unused
       found=True
       if source == "gibbs":
         vals = val.split(',')
@@ -635,29 +691,64 @@ def prep(job):
         else:
           edit_namelist(jid,"plasim_namelist","FILTERT","0")
           
-    if name=="filterpower":
+    if name=="filterpower": ##will work with physfilter and 'exp'
       found=True
-      if source=="gibbs":
-        edit_namelist(jid,"plasim_namelist","NFILTEREXP",val)
+      edit_namelist(jid,"plasim_namelist","NFILTEREXP",val)
         
-    if name=="filterkappa":
+    if name=="filterkappa": ##will work with physfilter and 'exp'
       found=True
-      if source=="gibbs":
-        edit_namelist(jid,"plasim_namelist","FILTERKAPPA",val)
+      edit_namelist(jid,"plasim_namelist","FILTERKAPPA",val)
       
     if name=="filtertime":
       found=True
       if source=="gibbs":
         edit_namelist(jid,"plasim_namelist","FILTERTIME",val)
         
-    if name=="filterLHN0":
+    if name=="filterLHN0": ##will work with physfilter and 'lh'
       found=True
-      if source=="gibbs":
-        edit_namelist(jid,"plasim_namelist","LANDHOSKN0",val)
+      edit_namelist(jid,"plasim_namelist","LANDHOSKN0",val)
+        
+    if name=="physfilter":
+      found=True
+      vals = val.split('|')
+      if "gp" in vals:
+          edit_namelist(jid,"plasim_namelist","NGPTFILTER","1")
+      if "sp" in vals:
+          edit_namelist(jid,"plasim_namelist","NSPVFILTER","1")
+      if "none" in vals:
+          edit_namelist(jid,"plasim_namelist","NFILTER","0")
+      if "cesaro" in vals:
+          edit_namelist(jid,"plasim_namelist","NFILTER","1")
+      if "exp" in vals:
+          edit_namelist(jid,"plasim_namelist","NFILTER","2")
+      if "lh" in vals:
+          edit_namelist(jid,"plasim_namelist","NFILTER","3")
+      if "riesz2" in vals: #NOT RECOMMENDED
+          edit_namelist(jid,"plasim_namelist","NFILTER","4")
         
     if name=="frictionmod":
       found=True
       edit_namelist(jid,"plasim_namelist","FRCMOD",val)
+      
+    if name=="qdiff": #spec humiditiy diffusion timescale in days (default=0.1)
+      found=True
+      edit_namelist(jid,"plasim_namelist","TDISSQ","%d*"%nlevs+val)
+        
+    if name=="tdiff": #temperature diffusion timescale in days (default=5.6)
+      found=True
+      edit_namelist(jid,"plasim_namelist","TDISST","%d*"%nlevs+val)
+        
+    if name=="zdiff": #vorticity diffusion timescale in days (default=1.1)
+      found=True
+      edit_namelist(jid,"plasim_namelist","TDISSZ","%d*"%nlevs+val)
+        
+    if name=="ddiff": #divergence diffusion timescale in days (default=0.2)
+      found=True
+      edit_namelist(jid,"plasim_namelist","TDISSD","%d*"%nlevs+val)
+      
+    if name=="diffpower": #power for wavelength cutoff diffusion (default=2 for T21, 4 for T42)
+      found=True
+      edit_namelist(jid,"plasim_namelist","NDEL","%d*"%nlevs+val)
         
     if name=="nsupply":
       found=True
@@ -674,8 +765,19 @@ def prep(job):
     if name=="snowicealbedo":
       found=True
       edit_namelist(jid,"seamod_namelist","ALBICE",val)
-      edit_namelist(jid,"landmod_namelist","ALBSMIN",val)
-      edit_namelist(jid,"landmod_namelist","ALBSMAX",val)
+      edit_namelist(jid,"seamod_namelist","DICEALBMN","%s,%s"%(val,val))
+      edit_namelist(jid,"seamod_namelist","DICEALBMX","%s,%s"%(val,val))
+      edit_namelist(jid,"landmod_namelist","DSNOWALBMN","%s,%s"%(val,val))
+      edit_namelist(jid,"landmod_namelist","DSNOWALBMX","%s,%s"%(val,val))
+      edit_namelist(jid,"landmod_namelist","DGLACALBMN","%s,%s"%(val,val))
+      edit_namelist(jid,"landmod_namelist","DSNOWALB","%s,%s"%(val,val))
+      
+    if name=="nbandalbedo":
+      found=True
+      if int(val)==1:
+          edit_namelist(jid,"radmod_namelist","NSIMPLEALBEDO","0")
+      else:
+          edit_namelist(jid,"radmod_namelist","NSIMPLEALBEDO","1")
       
     if name=="snowmax":
       found=True
@@ -685,8 +787,28 @@ def prep(job):
       found=True
       os.system("rm plasim/job"+str(job.home)+"/*0174.sra")
       edit_namelist(jid,"landmod_namelist","ALBLAND",val)
+      edit_namelist(jid,"landmod_namelist","DGROUNDALB","%s,%s"%(val,val))
       #edit_namelist(jid,"landmod_namelist","NEWSURF","2") #Ignore surface files
       
+    if name=="oceanalbedo":
+      found=True
+      edit_namelist(jid,"seamod_namelist","ALBSEA",val)
+      edit_namelist(jid,"seamod_namelist","DOCEANALB","%s,%s"%(val,val))
+      #edit_namelist(jid,"radmod_namelist","NECHAM","0")
+      
+    if name=="oceanalbzad": #zenith-angle dependence for the ocean direct beam reflectivity
+      found=True
+      if val=="lambertian" or val=="Lambertian" or val=="uniform":
+          edit_namelist(jid,"radmod_namelist","NECHAM","0")
+          edit_namelist(jid,"radmod_namelist","NECHAM6","0")
+      elif val=="default" or val=="plasim" or val=="ECHAM-3":
+          edit_namelist(jid,"radmod_namelist","NECHAM","1")
+          edit_namelist(jid,"radmod_namelist","NECHAM6","0")
+      elif val=="ECHAM-6":
+          edit_namelist(jid,"radmod_namelist","NECHAM","0")
+          edit_namelist(jid,"radmod_namelist","NECHAM6","1")
+          
+          
     if name=="wetsoil":
       found=True
       edit_namelist(jid,"landmod_namelist","NWETSOIL",val)
@@ -808,6 +930,17 @@ def prep(job):
       found=True
       notify = val
 
+    if name=="highcadence":
+      found=True
+      highcadence=True
+      vals = val.split('|')
+      hcstart = vals[0]
+      hcend   = vals[1]
+      hcint   = vals[2]
+      edit_namelist(jid,"plasim_namelist","NHCADENCE","1")
+      edit_namelist(jid,"plasim_namelist","HCSTARTSTEP",hcstart)
+      edit_namelist(jid,"plasim_namelist","HCENDSTEP",hcend)
+      edit_namelist(jid,"plasim_namelist","HCINTERVAL",hcint)
       
     if name=="columnmode":
       found=True
@@ -842,7 +975,6 @@ def prep(job):
       f=open("plasim/job"+jid+"/most_plasim_run","w")
       f.write(fnl)
       f.close()
-      
       
     if name=="fixedlon":
       found=True
@@ -895,9 +1027,33 @@ def prep(job):
       found=True
       prescgascon=True
       edit_namelist(jid,"planet_namelist","GASCON",val)
-      
+         
     if name=="landmap":
       found=True
+    
+    if name=="storms":
+      found=True
+      stormclim=True
+      if val=="True" or val=="true" or val=="1":
+          edit_namelist(jid,"hurricane_namelist","NSTORMDIAG","1")
+          add_postcodes(workdir,"example.nl",[322,323,324,325,326,327,328,329])
+      else:
+          edit_namelist(jid,"hurricane_namelist","NSTORMDIAG","0")
+    
+    if name=="nstorms":
+      found=True
+      edit_namelist(jid,"hurricane_namelist","NSTORMS",str(int(val)))
+      
+    if name=="stormtrigger":
+      found=True
+      vals = val.split('|')
+      edit_namelist(jid,"hurricane_namelist","HC_CAPTURE","1")
+      triggers = {}
+      for v in vals:
+          keys = v.split("=")
+          triggers[keys[0]]=keys[1]
+      for k in triggers.keys():
+          edit_namelist(jid,"hurricane_namelist",k.upper(),triggers[k])
     
     if name=="topomap":
       found=True
@@ -916,10 +1072,10 @@ def prep(job):
       os.system("rm plasim/job"+jid+"/*.sra")
   if "landmap" in job.fields:
       mapname = job.parameters["landmap"]
-      os.system("cp hopper/%s plasim/job%s/N032_surf_0172.sra"%(mapname,jid))
+      os.system("cp hopper/%s plasim/job%s/N%03d_surf_0172.sra"%(mapname,jid,nlats))
   if "topomap" in job.fields:
       mapname = job.parameters["topomap"]
-      os.system("cp hopper/%s plasim/job%s/N032_surf_0129.sra"%(mapname,jid))
+      os.system("cp hopper/%s plasim/job%s/N%03d_surf_0129.sra"%(mapname,jid,nlats))
     
     
   if setgas:
@@ -1014,6 +1170,12 @@ def prep(job):
   sbdarttag = ''
   if makesbdart:
       
+      #ensure that we only output in high-cadence mode if both flags are enabled
+      if not highcadence:
+          hcout=False
+      if not hcout:
+          highcadence=False
+    
       sbdparams = [job.name,job.ncores]
       if setgas:
           _pco2 = gases['pCO2']*1.0e3
@@ -1030,6 +1192,7 @@ def prep(job):
       sbdparams.append(grav)
       sbdparams.append('^'.join(ntimes[1:-1].split(',')))
       sbdparams.append('^'.join(lviews[1:-1].split(',')))
+      sbdparams.append(str(highcadence))
       
       print tuple(sbdparams),sbdvar
       os.system("mkdir "+job.top+"/sbdart_%s/%s"%(sbdvar,job.name))
@@ -1072,7 +1235,7 @@ def prep(job):
       sbdjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%s sbdart_%s sbd_%s 0 %d sandyq"%(job.pid,sbdvar,job.name,job.ncores),-1)
       sbdfw = (BATCHSCRIPT(sbdjob,"abe")+
                "cd "+job.top+"/sbdart_%s    \n"%sbdvar+
-               "python buildsbdart.py %s %d sandyq %f %f %f %f %s %s "%tuple(sbdparams)+sbdtag+"    \n")
+               "python buildsbdart.py %s %d sandyq %f %f %f %f %s %s %s "%tuple(sbdparams)+sbdtag+"    \n")
       with open(job.top+"/sbdart_%s/"%sbdvar+job.name+"/autosbdart","w") as sbdf:
           sbdf.write(sbdfw)
       sbdarttag = ("   cd "+job.top+"/sbdart_%s/"%sbdvar+job.name+"/   \n"+
@@ -1092,13 +1255,15 @@ def prep(job):
               "rm keepgoing                                                     \n"+
               "mkdir "+SCRATCH+"/job"+jid+"            \n")
   jobscript+=("mkdir "+SCRATCH+"/job"+jid+"/snapshots         \n"+
-                  "tar cvzf stuff.tar.gz --exclude='*_OUT*' --exclude='*_REST*' --exclude='*.nc' --exclude='snapshots/' ./* \n")
+              "mkdir "+SCRATCH+"/job"+jid+"/highcadence         \n"+
+                  "tar cvzf stuff.tar.gz --exclude='*_OUT*' --exclude='*_REST*' --exclude='*.nc' --exclude='snapshots/' --exclude='highcadence/' ./* \n")
   jobscript +=("rsync -avzhur stuff.tar.gz "+SCRATCH+"/job"+jid+"/         \n"+
               "rm -rf stuff.tar.gz                     \n"+
               "cd "+SCRATCH+"/job"+jid+"/              \n"+
               "tar xvzf stuff.tar.gz                   \n"+
               "rm stuff.tar.gz          \n"+
               "./"+scriptfile+" "+str(job.ncores)+" "+str(nlevs)+" "+histargs+"   \n"+
+              "rm ice_output ocean_output    \n"+
               "tar cvzf stuff.tar.gz *                                          \n"+
               "rsync -avzhur stuff.tar.gz $PBS_O_WORKDIR/                                          \n"+
               "cd ../ \n"+
@@ -1115,6 +1280,7 @@ def prep(job):
               "else        \n")
   if keeprs:
       jobscript+= "cp plasim_restart ../output/"+job.name+"_restart            \n"
+      tag+=" restart"
   if monitor:
       jobscript+= "python monitor_balance.py                                   \n"
       

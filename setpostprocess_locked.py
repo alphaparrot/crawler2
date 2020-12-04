@@ -213,7 +213,7 @@ def _prep(job):
                     "cp spectra.nc "+cwd+"/postprocess_locked/output/"+jobname+"_spectra.nc \n"+
                     "cp phases.nc "+cwd+"/postprocess_locked/output/"+jobname+"_phases.nc \n\n"+
                     "cd "+cwd+"/postprocess_locked/output/   \n"+
-                    "python -B orthoprojection.py "+jobname+"_phases.nc 0 \n"+
+                    "python -B orthoprojection.py "+jobname+"_phases.nc %s \n"%times+
                     "mv "+jobname+"*/*.png . \n"+
                     "for p in $(ls "+jobname+"*.png)    \n"+
                     "do   \n"

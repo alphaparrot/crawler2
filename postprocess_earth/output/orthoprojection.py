@@ -224,12 +224,13 @@ def orthographic_single(lon,lat,imap,l0=0,p0=0,ny=36,nx=36,interp='bilinear'):
                     
     return xymap
 
-def getphase(phasecurve,nphase,phase,ntime):
+def getphase(phasecurve,nphase,phase,ntime,imxz):
     ln = phasecurve.variables['lon'][:]
     lt = phasecurve.variables['lat'][:]
     color = phasecurve.variables['colors'][ntime,nphase,:,:,:]
     color /= 5.0*np.mean(color)
-    atimes = np.array([28.125,118.125,196.875,275.625])
+    lmxz = ln[imxz]
+    atimes = np.array([lmxz,(lmxz+90.0)%360.0,(lmxz+180.0)%360.0,(lmxz+270.0)%360.0])
     if phase=='N':
         p0 = 90.0
     elif phase=='S':
@@ -249,12 +250,13 @@ def getphase(phasecurve,nphase,phase,ntime):
 if __name__=="__main__":
     filename = sys.argv[1]
     ntime = int(sys.argv[2])
+    imxz = int(sys.argv[3])
     pc = nc.Dataset(filename,"r")
     tag = filename.split("_phases.nc")[0]
     os.system("mkdir "+tag)
     phases = pc.variables['phase'][:]
     for p in range(0,len(phases)):
-        proj = getphase(pc,p,phases[p],ntime)
+        proj = getphase(pc,p,phases[p],ntime,imxz)
         f,a=plt.subplots(figsize=(14,12))
         plt.imshow(proj,interpolation='gaussian',origin='lower')
         plt.xticks([])

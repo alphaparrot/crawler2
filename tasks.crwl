@@ -820,206 +820,206 @@
 790 plasim rotgrid2_5.88_193.7 2 16 sandyq 1275.0 193.739434 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
 791 plasim rotgrid2_5.88_264.1 2 16 sandyq 1275.0 264.095052 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
 792 plasim rotgrid2_5.88_360.0 2 16 sandyq 1275.0 360.000000 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-853 plasim rotgrid2c_1.19_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-854 plasim rotgrid2c_1.19_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-855 plasim rotgrid2c_1.19_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-856 plasim rotgrid2c_1.19_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-857 plasim rotgrid2c_1.19_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-858 plasim rotgrid2c_1.19_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-859 plasim rotgrid2c_1.19_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-860 plasim rotgrid2c_1.19_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-861 plasim rotgrid2c_1.19_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-862 plasim rotgrid2c_1.19_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-863 plasim rotgrid2c_1.19_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-864 plasim rotgrid2c_1.19_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-865 plasim rotgrid2c_1.19_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-866 plasim rotgrid2c_1.19_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-867 plasim rotgrid2c_1.19_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-868 plasim rotgrid2c_1.19_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-869 plasim rotgrid2c_1.19_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-870 plasim rotgrid2c_1.19_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-871 plasim rotgrid2c_1.19_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-872 plasim rotgrid2c_1.19_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-873 plasim rotgrid2c_1.43_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-874 plasim rotgrid2c_1.43_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-875 plasim rotgrid2c_1.43_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-876 plasim rotgrid2c_1.43_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-877 plasim rotgrid2c_1.43_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-878 plasim rotgrid2c_1.43_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-879 plasim rotgrid2c_1.43_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-880 plasim rotgrid2c_1.43_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-881 plasim rotgrid2c_1.43_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-882 plasim rotgrid2c_1.43_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-883 plasim rotgrid2c_1.43_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-884 plasim rotgrid2c_1.43_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-885 plasim rotgrid2c_1.43_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-886 plasim rotgrid2c_1.43_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-887 plasim rotgrid2c_1.43_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-888 plasim rotgrid2c_1.43_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-889 plasim rotgrid2c_1.43_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-890 plasim rotgrid2c_1.43_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-891 plasim rotgrid2c_1.43_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-892 plasim rotgrid2c_1.43_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-893 plasim rotgrid2c_1.70_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-894 plasim rotgrid2c_1.70_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-895 plasim rotgrid2c_1.70_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-896 plasim rotgrid2c_1.70_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-897 plasim rotgrid2c_1.70_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-898 plasim rotgrid2c_1.70_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-899 plasim rotgrid2c_1.70_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-900 plasim rotgrid2c_1.70_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-901 plasim rotgrid2c_1.70_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-902 plasim rotgrid2c_1.70_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-903 plasim rotgrid2c_1.70_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-904 plasim rotgrid2c_1.70_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-905 plasim rotgrid2c_1.70_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-906 plasim rotgrid2c_1.70_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-907 plasim rotgrid2c_1.70_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-908 plasim rotgrid2c_1.70_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-909 plasim rotgrid2c_1.70_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-910 plasim rotgrid2c_1.70_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-911 plasim rotgrid2c_1.70_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-912 plasim rotgrid2c_1.70_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-913 plasim rotgrid2c_2.03_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-914 plasim rotgrid2c_2.03_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-915 plasim rotgrid2c_2.03_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-916 plasim rotgrid2c_2.03_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-917 plasim rotgrid2c_2.03_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-918 plasim rotgrid2c_2.03_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-919 plasim rotgrid2c_2.03_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-920 plasim rotgrid2c_2.03_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-921 plasim rotgrid2c_2.03_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-922 plasim rotgrid2c_2.03_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-923 plasim rotgrid2c_2.03_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-924 plasim rotgrid2c_2.03_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-925 plasim rotgrid2c_2.03_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-926 plasim rotgrid2c_2.03_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-927 plasim rotgrid2c_2.03_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-928 plasim rotgrid2c_2.03_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-929 plasim rotgrid2c_2.03_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-930 plasim rotgrid2c_2.03_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-931 plasim rotgrid2c_2.03_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-932 plasim rotgrid2c_2.03_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-933 plasim rotgrid2c_2.42_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-934 plasim rotgrid2c_2.42_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-935 plasim rotgrid2c_2.42_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-936 plasim rotgrid2c_2.42_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-937 plasim rotgrid2c_2.42_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-938 plasim rotgrid2c_2.42_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-939 plasim rotgrid2c_2.42_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-940 plasim rotgrid2c_2.42_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-941 plasim rotgrid2c_2.42_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-942 plasim rotgrid2c_2.42_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-943 plasim rotgrid2c_2.42_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-944 plasim rotgrid2c_2.42_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-945 plasim rotgrid2c_2.42_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-946 plasim rotgrid2c_2.42_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-947 plasim rotgrid2c_2.42_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-948 plasim rotgrid2c_2.42_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-949 plasim rotgrid2c_2.42_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-950 plasim rotgrid2c_2.42_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-951 plasim rotgrid2c_2.42_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-952 plasim rotgrid2c_2.42_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-953 plasim rotgrid2c_2.89_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-954 plasim rotgrid2c_2.89_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-955 plasim rotgrid2c_2.89_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-956 plasim rotgrid2c_2.89_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-957 plasim rotgrid2c_2.89_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-958 plasim rotgrid2c_2.89_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-959 plasim rotgrid2c_2.89_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-960 plasim rotgrid2c_2.89_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-961 plasim rotgrid2c_2.89_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-962 plasim rotgrid2c_2.89_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-963 plasim rotgrid2c_2.89_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-964 plasim rotgrid2c_2.89_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-965 plasim rotgrid2c_2.89_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-966 plasim rotgrid2c_2.89_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-967 plasim rotgrid2c_2.89_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-968 plasim rotgrid2c_2.89_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-969 plasim rotgrid2c_2.89_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-970 plasim rotgrid2c_2.89_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-971 plasim rotgrid2c_2.89_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-972 plasim rotgrid2c_2.89_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-973 plasim rotgrid2c_3.46_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-974 plasim rotgrid2c_3.46_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-975 plasim rotgrid2c_3.46_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-976 plasim rotgrid2c_3.46_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-977 plasim rotgrid2c_3.46_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-978 plasim rotgrid2c_3.46_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-979 plasim rotgrid2c_3.46_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-980 plasim rotgrid2c_3.46_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-981 plasim rotgrid2c_3.46_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-982 plasim rotgrid2c_3.46_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-983 plasim rotgrid2c_3.46_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-984 plasim rotgrid2c_3.46_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-985 plasim rotgrid2c_3.46_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-986 plasim rotgrid2c_3.46_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-987 plasim rotgrid2c_3.46_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-988 plasim rotgrid2c_3.46_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-989 plasim rotgrid2c_3.46_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-990 plasim rotgrid2c_3.46_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-991 plasim rotgrid2c_3.46_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-992 plasim rotgrid2c_3.46_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-993 plasim rotgrid2c_4.12_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-994 plasim rotgrid2c_4.12_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-995 plasim rotgrid2c_4.12_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-996 plasim rotgrid2c_4.12_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-997 plasim rotgrid2c_4.12_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-998 plasim rotgrid2c_4.12_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-999 plasim rotgrid2c_4.12_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1000 plasim rotgrid2c_4.12_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1001 plasim rotgrid2c_4.12_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1002 plasim rotgrid2c_4.12_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1003 plasim rotgrid2c_4.12_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1004 plasim rotgrid2c_4.12_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1005 plasim rotgrid2c_4.12_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1006 plasim rotgrid2c_4.12_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1007 plasim rotgrid2c_4.12_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1008 plasim rotgrid2c_4.12_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1009 plasim rotgrid2c_4.12_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1010 plasim rotgrid2c_4.12_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1011 plasim rotgrid2c_4.12_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1012 plasim rotgrid2c_4.12_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1013 plasim rotgrid2c_4.92_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1014 plasim rotgrid2c_4.92_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1015 plasim rotgrid2c_4.92_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1016 plasim rotgrid2c_4.92_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1017 plasim rotgrid2c_4.92_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1018 plasim rotgrid2c_4.92_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1019 plasim rotgrid2c_4.92_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1020 plasim rotgrid2c_4.92_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1021 plasim rotgrid2c_4.92_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1022 plasim rotgrid2c_4.92_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1023 plasim rotgrid2c_4.92_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1024 plasim rotgrid2c_4.92_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1025 plasim rotgrid2c_4.92_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1026 plasim rotgrid2c_4.92_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1027 plasim rotgrid2c_4.92_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1028 plasim rotgrid2c_4.92_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1029 plasim rotgrid2c_4.92_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1030 plasim rotgrid2c_4.92_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1031 plasim rotgrid2c_4.92_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1032 plasim rotgrid2c_4.92_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1033 plasim rotgrid2c_5.88_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1034 plasim rotgrid2c_5.88_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1035 plasim rotgrid2c_5.88_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1036 plasim rotgrid2c_5.88_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1037 plasim rotgrid2c_5.88_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1038 plasim rotgrid2c_5.88_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1039 plasim rotgrid2c_5.88_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1040 plasim rotgrid2c_5.88_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1041 plasim rotgrid2c_5.88_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1042 plasim rotgrid2c_5.88_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1043 plasim rotgrid2c_5.88_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1044 plasim rotgrid2c_5.88_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1045 plasim rotgrid2c_5.88_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1046 plasim rotgrid2c_5.88_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1047 plasim rotgrid2c_5.88_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1048 plasim rotgrid2c_5.88_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1049 plasim rotgrid2c_5.88_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1050 plasim rotgrid2c_5.88_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1051 plasim rotgrid2c_5.88_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1052 plasim rotgrid2c_5.88_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+853 plasim rotgrid2c_1.19_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+854 plasim rotgrid2c_1.19_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+855 plasim rotgrid2c_1.19_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+856 plasim rotgrid2c_1.19_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+857 plasim rotgrid2c_1.19_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+858 plasim rotgrid2c_1.19_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+859 plasim rotgrid2c_1.19_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+860 plasim rotgrid2c_1.19_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+861 plasim rotgrid2c_1.19_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+862 plasim rotgrid2c_1.19_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+863 plasim rotgrid2c_1.19_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+864 plasim rotgrid2c_1.19_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+865 plasim rotgrid2c_1.19_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+866 plasim rotgrid2c_1.19_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+867 plasim rotgrid2c_1.19_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+868 plasim rotgrid2c_1.19_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+869 plasim rotgrid2c_1.19_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+870 plasim rotgrid2c_1.19_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+871 plasim rotgrid2c_1.19_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+872 plasim rotgrid2c_1.19_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 1.193777 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+873 plasim rotgrid2c_1.43_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+874 plasim rotgrid2c_1.43_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+875 plasim rotgrid2c_1.43_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+876 plasim rotgrid2c_1.43_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+877 plasim rotgrid2c_1.43_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+878 plasim rotgrid2c_1.43_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+879 plasim rotgrid2c_1.43_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+880 plasim rotgrid2c_1.43_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+881 plasim rotgrid2c_1.43_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+882 plasim rotgrid2c_1.43_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+883 plasim rotgrid2c_1.43_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+884 plasim rotgrid2c_1.43_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+885 plasim rotgrid2c_1.43_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+886 plasim rotgrid2c_1.43_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+887 plasim rotgrid2c_1.43_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+888 plasim rotgrid2c_1.43_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+889 plasim rotgrid2c_1.43_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+890 plasim rotgrid2c_1.43_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+891 plasim rotgrid2c_1.43_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+892 plasim rotgrid2c_1.43_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 1.425103 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+893 plasim rotgrid2c_1.70_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+894 plasim rotgrid2c_1.70_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+895 plasim rotgrid2c_1.70_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+896 plasim rotgrid2c_1.70_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+897 plasim rotgrid2c_1.70_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+898 plasim rotgrid2c_1.70_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+899 plasim rotgrid2c_1.70_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+900 plasim rotgrid2c_1.70_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+901 plasim rotgrid2c_1.70_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+902 plasim rotgrid2c_1.70_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+903 plasim rotgrid2c_1.70_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+904 plasim rotgrid2c_1.70_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+905 plasim rotgrid2c_1.70_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+906 plasim rotgrid2c_1.70_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+907 plasim rotgrid2c_1.70_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+908 plasim rotgrid2c_1.70_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+909 plasim rotgrid2c_1.70_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+910 plasim rotgrid2c_1.70_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+911 plasim rotgrid2c_1.70_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+912 plasim rotgrid2c_1.70_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 1.701254 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+913 plasim rotgrid2c_2.03_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+914 plasim rotgrid2c_2.03_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+915 plasim rotgrid2c_2.03_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+916 plasim rotgrid2c_2.03_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+917 plasim rotgrid2c_2.03_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+918 plasim rotgrid2c_2.03_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+919 plasim rotgrid2c_2.03_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+920 plasim rotgrid2c_2.03_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+921 plasim rotgrid2c_2.03_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+922 plasim rotgrid2c_2.03_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+923 plasim rotgrid2c_2.03_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+924 plasim rotgrid2c_2.03_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+925 plasim rotgrid2c_2.03_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+926 plasim rotgrid2c_2.03_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+927 plasim rotgrid2c_2.03_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+928 plasim rotgrid2c_2.03_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+929 plasim rotgrid2c_2.03_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+930 plasim rotgrid2c_2.03_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+931 plasim rotgrid2c_2.03_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+932 plasim rotgrid2c_2.03_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 2.030918 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+933 plasim rotgrid2c_2.42_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+934 plasim rotgrid2c_2.42_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+935 plasim rotgrid2c_2.42_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+936 plasim rotgrid2c_2.42_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+937 plasim rotgrid2c_2.42_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+938 plasim rotgrid2c_2.42_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+939 plasim rotgrid2c_2.42_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+940 plasim rotgrid2c_2.42_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+941 plasim rotgrid2c_2.42_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+942 plasim rotgrid2c_2.42_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+943 plasim rotgrid2c_2.42_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+944 plasim rotgrid2c_2.42_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+945 plasim rotgrid2c_2.42_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+946 plasim rotgrid2c_2.42_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+947 plasim rotgrid2c_2.42_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+948 plasim rotgrid2c_2.42_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+949 plasim rotgrid2c_2.42_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+950 plasim rotgrid2c_2.42_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+951 plasim rotgrid2c_2.42_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+952 plasim rotgrid2c_2.42_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 2.424462 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+953 plasim rotgrid2c_2.89_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+954 plasim rotgrid2c_2.89_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+955 plasim rotgrid2c_2.89_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+956 plasim rotgrid2c_2.89_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+957 plasim rotgrid2c_2.89_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+958 plasim rotgrid2c_2.89_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+959 plasim rotgrid2c_2.89_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+960 plasim rotgrid2c_2.89_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+961 plasim rotgrid2c_2.89_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+962 plasim rotgrid2c_2.89_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+963 plasim rotgrid2c_2.89_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+964 plasim rotgrid2c_2.89_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+965 plasim rotgrid2c_2.89_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+966 plasim rotgrid2c_2.89_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+967 plasim rotgrid2c_2.89_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+968 plasim rotgrid2c_2.89_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+969 plasim rotgrid2c_2.89_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+970 plasim rotgrid2c_2.89_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+971 plasim rotgrid2c_2.89_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+972 plasim rotgrid2c_2.89_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 2.894266 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+973 plasim rotgrid2c_3.46_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+974 plasim rotgrid2c_3.46_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+975 plasim rotgrid2c_3.46_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+976 plasim rotgrid2c_3.46_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+977 plasim rotgrid2c_3.46_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+978 plasim rotgrid2c_3.46_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+979 plasim rotgrid2c_3.46_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+980 plasim rotgrid2c_3.46_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+981 plasim rotgrid2c_3.46_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+982 plasim rotgrid2c_3.46_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+983 plasim rotgrid2c_3.46_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+984 plasim rotgrid2c_3.46_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+985 plasim rotgrid2c_3.46_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+986 plasim rotgrid2c_3.46_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+987 plasim rotgrid2c_3.46_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+988 plasim rotgrid2c_3.46_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+989 plasim rotgrid2c_3.46_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+990 plasim rotgrid2c_3.46_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+991 plasim rotgrid2c_3.46_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+992 plasim rotgrid2c_3.46_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 3.455107 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+993 plasim rotgrid2c_4.12_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+994 plasim rotgrid2c_4.12_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+995 plasim rotgrid2c_4.12_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+996 plasim rotgrid2c_4.12_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+997 plasim rotgrid2c_4.12_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+998 plasim rotgrid2c_4.12_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+999 plasim rotgrid2c_4.12_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1000 plasim rotgrid2c_4.12_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1001 plasim rotgrid2c_4.12_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1002 plasim rotgrid2c_4.12_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1003 plasim rotgrid2c_4.12_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1004 plasim rotgrid2c_4.12_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1005 plasim rotgrid2c_4.12_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1006 plasim rotgrid2c_4.12_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1007 plasim rotgrid2c_4.12_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1008 plasim rotgrid2c_4.12_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1009 plasim rotgrid2c_4.12_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1010 plasim rotgrid2c_4.12_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1011 plasim rotgrid2c_4.12_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1012 plasim rotgrid2c_4.12_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 4.124626 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1013 plasim rotgrid2c_4.92_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1014 plasim rotgrid2c_4.92_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1015 plasim rotgrid2c_4.92_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1016 plasim rotgrid2c_4.92_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1017 plasim rotgrid2c_4.92_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1018 plasim rotgrid2c_4.92_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1019 plasim rotgrid2c_4.92_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1020 plasim rotgrid2c_4.92_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1021 plasim rotgrid2c_4.92_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1022 plasim rotgrid2c_4.92_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1023 plasim rotgrid2c_4.92_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1024 plasim rotgrid2c_4.92_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1025 plasim rotgrid2c_4.92_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1026 plasim rotgrid2c_4.92_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1027 plasim rotgrid2c_4.92_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1028 plasim rotgrid2c_4.92_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1029 plasim rotgrid2c_4.92_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1030 plasim rotgrid2c_4.92_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1031 plasim rotgrid2c_4.92_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1032 plasim rotgrid2c_4.92_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 4.923883 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1033 plasim rotgrid2c_5.88_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1034 plasim rotgrid2c_5.88_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1035 plasim rotgrid2c_5.88_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1036 plasim rotgrid2c_5.88_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1037 plasim rotgrid2c_5.88_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1038 plasim rotgrid2c_5.88_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1039 plasim rotgrid2c_5.88_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1040 plasim rotgrid2c_5.88_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1041 plasim rotgrid2c_5.88_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1042 plasim rotgrid2c_5.88_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1043 plasim rotgrid2c_5.88_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1044 plasim rotgrid2c_5.88_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1045 plasim rotgrid2c_5.88_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1046 plasim rotgrid2c_5.88_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1047 plasim rotgrid2c_5.88_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1048 plasim rotgrid2c_5.88_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1049 plasim rotgrid2c_5.88_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1050 plasim rotgrid2c_5.88_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1051 plasim rotgrid2c_5.88_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1052 plasim rotgrid2c_5.88_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 5.878016 15.0 1440 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
 793 plasim rotgrid2_7.02_1.0 1 16 sandyq 1275.0 1.000000 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
 794 plasim rotgrid2_7.02_1.4 1 16 sandyq 1275.0 1.363146 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
 795 plasim rotgrid2_7.02_1.9 1 16 sandyq 1275.0 1.858166 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
@@ -1053,92 +1053,681 @@
 823 plasim rotgrid2_8.38_22.2 1 16 sandyq 1275.0 22.152481 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
 824 plasim rotgrid2_8.38_30.2 1 16 sandyq 1275.0 30.197056 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
 825 plasim rotgrid2_8.38_41.2 1 16 sandyq 1275.0 41.162983 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-826 plasim rotgrid2_8.38_56.1 0 16 sandyq 1275.0 56.111138 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-827 plasim rotgrid2_8.38_76.5 0 16 sandyq 1275.0 76.487650 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-828 plasim rotgrid2_8.38_104.3 0 16 sandyq 1275.0 104.263801 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-829 plasim rotgrid2_8.38_142.1 0 16 sandyq 1275.0 142.126739 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-830 plasim rotgrid2_8.38_193.7 0 16 sandyq 1275.0 193.739434 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-831 plasim rotgrid2_8.38_264.1 0 16 sandyq 1275.0 264.095052 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-832 plasim rotgrid2_8.38_360.0 0 16 sandyq 1275.0 360.000000 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-833 plasim rotgrid2_10.00_1.0 0 16 sandyq 1275.0 1.000000 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-834 plasim rotgrid2_10.00_1.4 0 16 sandyq 1275.0 1.363146 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-835 plasim rotgrid2_10.00_1.9 0 16 sandyq 1275.0 1.858166 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-836 plasim rotgrid2_10.00_2.5 0 16 sandyq 1275.0 2.532951 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-837 plasim rotgrid2_10.00_3.5 0 16 sandyq 1275.0 3.452780 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-838 plasim rotgrid2_10.00_4.7 0 16 sandyq 1275.0 4.706642 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-839 plasim rotgrid2_10.00_6.4 0 16 sandyq 1275.0 6.415838 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-840 plasim rotgrid2_10.00_8.7 0 16 sandyq 1275.0 8.745722 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-841 plasim rotgrid2_10.00_11.9 0 16 sandyq 1275.0 11.921692 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-842 plasim rotgrid2_10.00_16.3 0 16 sandyq 1275.0 16.251002 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-843 plasim rotgrid2_10.00_22.2 0 16 sandyq 1275.0 22.152481 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-844 plasim rotgrid2_10.00_30.2 0 16 sandyq 1275.0 30.197056 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-845 plasim rotgrid2_10.00_41.2 0 16 sandyq 1275.0 41.162983 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-846 plasim rotgrid2_10.00_56.1 0 16 sandyq 1275.0 56.111138 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-847 plasim rotgrid2_10.00_76.5 0 16 sandyq 1275.0 76.487650 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-848 plasim rotgrid2_10.00_104.3 0 16 sandyq 1275.0 104.263801 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-849 plasim rotgrid2_10.00_142.1 0 16 sandyq 1275.0 142.126739 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-850 plasim rotgrid2_10.00_193.7 0 16 sandyq 1275.0 193.739434 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-851 plasim rotgrid2_10.00_264.1 0 16 sandyq 1275.0 264.095052 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-852 plasim rotgrid2_10.00_360.0 0 16 sandyq 1275.0 360.000000 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+826 plasim rotgrid2_8.38_56.1 2 16 sandyq 1275.0 56.111138 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+827 plasim rotgrid2_8.38_76.5 2 16 sandyq 1275.0 76.487650 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+828 plasim rotgrid2_8.38_104.3 2 16 sandyq 1275.0 104.263801 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+829 plasim rotgrid2_8.38_142.1 2 16 sandyq 1275.0 142.126739 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+830 plasim rotgrid2_8.38_193.7 2 16 sandyq 1275.0 193.739434 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+831 plasim rotgrid2_8.38_264.1 2 16 sandyq 1275.0 264.095052 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+832 plasim rotgrid2_8.38_360.0 2 16 sandyq 1275.0 360.000000 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+833 plasim rotgrid2_10.00_1.0 2 16 sandyq 1275.0 1.000000 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+834 plasim rotgrid2_10.00_1.4 2 16 sandyq 1275.0 1.363146 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+835 plasim rotgrid2_10.00_1.9 2 16 sandyq 1275.0 1.858166 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+836 plasim rotgrid2_10.00_2.5 2 16 sandyq 1275.0 2.532951 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+837 plasim rotgrid2_10.00_3.5 2 16 sandyq 1275.0 3.452780 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+838 plasim rotgrid2_10.00_4.7 2 16 sandyq 1275.0 4.706642 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+839 plasim rotgrid2_10.00_6.4 2 16 sandyq 1275.0 6.415838 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+840 plasim rotgrid2_10.00_8.7 2 16 sandyq 1275.0 8.745722 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+841 plasim rotgrid2_10.00_11.9 2 16 sandyq 1275.0 11.921692 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+842 plasim rotgrid2_10.00_16.3 2 16 sandyq 1275.0 16.251002 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+843 plasim rotgrid2_10.00_22.2 2 16 sandyq 1275.0 22.152481 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+844 plasim rotgrid2_10.00_30.2 2 16 sandyq 1275.0 30.197056 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+845 plasim rotgrid2_10.00_41.2 2 16 sandyq 1275.0 41.162983 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+846 plasim rotgrid2_10.00_56.1 2 16 sandyq 1275.0 56.111138 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+847 plasim rotgrid2_10.00_76.5 2 16 sandyq 1275.0 76.487650 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+848 plasim rotgrid2_10.00_104.3 2 16 sandyq 1275.0 104.263801 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+849 plasim rotgrid2_10.00_142.1 2 16 sandyq 1275.0 142.126739 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+850 plasim rotgrid2_10.00_193.7 2 16 sandyq 1275.0 193.739434 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+851 plasim rotgrid2_10.00_264.1 2 16 sandyq 1275.0 264.095052 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+852 plasim rotgrid2_10.00_360.0 1 16 sandyq 1275.0 360.000000 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
 
 # PID MODEL JOBNAME STATE NCORES QUEUE flux pCO2u pN2b naqua obliq eccen nfixorb rotspd timestep snapshots sbdart script extra alloutput notify
-1053 plasim rotgrid2c_7.02_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1054 plasim rotgrid2c_7.02_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1055 plasim rotgrid2c_7.02_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1056 plasim rotgrid2c_7.02_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1057 plasim rotgrid2c_7.02_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1058 plasim rotgrid2c_7.02_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1059 plasim rotgrid2c_7.02_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1060 plasim rotgrid2c_7.02_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1061 plasim rotgrid2c_7.02_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1062 plasim rotgrid2c_7.02_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1063 plasim rotgrid2c_7.02_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1064 plasim rotgrid2c_7.02_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1065 plasim rotgrid2c_7.02_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1066 plasim rotgrid2c_7.02_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1067 plasim rotgrid2c_7.02_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1068 plasim rotgrid2c_7.02_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1069 plasim rotgrid2c_7.02_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1070 plasim rotgrid2c_7.02_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1071 plasim rotgrid2c_7.02_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1072 plasim rotgrid2c_7.02_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1073 plasim rotgrid2c_8.38_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1074 plasim rotgrid2c_8.38_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1075 plasim rotgrid2c_8.38_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1076 plasim rotgrid2c_8.38_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1077 plasim rotgrid2c_8.38_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1078 plasim rotgrid2c_8.38_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1079 plasim rotgrid2c_8.38_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1080 plasim rotgrid2c_8.38_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1081 plasim rotgrid2c_8.38_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1082 plasim rotgrid2c_8.38_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1083 plasim rotgrid2c_8.38_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1084 plasim rotgrid2c_8.38_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1085 plasim rotgrid2c_8.38_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1086 plasim rotgrid2c_8.38_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1087 plasim rotgrid2c_8.38_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1088 plasim rotgrid2c_8.38_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1089 plasim rotgrid2c_8.38_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1090 plasim rotgrid2c_8.38_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1091 plasim rotgrid2c_8.38_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1092 plasim rotgrid2c_8.38_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1093 plasim rotgrid2c_10.00_1.0 0 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1094 plasim rotgrid2c_10.00_1.4 0 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1095 plasim rotgrid2c_10.00_1.9 0 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1096 plasim rotgrid2c_10.00_2.5 0 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1097 plasim rotgrid2c_10.00_3.5 0 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1098 plasim rotgrid2c_10.00_4.7 0 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1099 plasim rotgrid2c_10.00_6.4 0 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1100 plasim rotgrid2c_10.00_8.7 0 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1101 plasim rotgrid2c_10.00_11.9 0 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1102 plasim rotgrid2c_10.00_16.3 0 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1103 plasim rotgrid2c_10.00_22.2 0 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1104 plasim rotgrid2c_10.00_30.2 0 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1105 plasim rotgrid2c_10.00_41.2 0 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1106 plasim rotgrid2c_10.00_56.1 0 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1107 plasim rotgrid2c_10.00_76.5 0 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1108 plasim rotgrid2c_10.00_104.3 0 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1109 plasim rotgrid2c_10.00_142.1 0 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1110 plasim rotgrid2c_10.00_193.7 0 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1111 plasim rotgrid2c_10.00_264.1 0 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
-1112 plasim rotgrid2c_10.00_360.0 0 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1053 plasim rotgrid2c_7.02_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1054 plasim rotgrid2c_7.02_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1055 plasim rotgrid2c_7.02_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1056 plasim rotgrid2c_7.02_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1057 plasim rotgrid2c_7.02_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1058 plasim rotgrid2c_7.02_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1059 plasim rotgrid2c_7.02_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1060 plasim rotgrid2c_7.02_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1061 plasim rotgrid2c_7.02_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1062 plasim rotgrid2c_7.02_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1063 plasim rotgrid2c_7.02_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1064 plasim rotgrid2c_7.02_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1065 plasim rotgrid2c_7.02_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1066 plasim rotgrid2c_7.02_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1067 plasim rotgrid2c_7.02_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1068 plasim rotgrid2c_7.02_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1069 plasim rotgrid2c_7.02_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1070 plasim rotgrid2c_7.02_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1071 plasim rotgrid2c_7.02_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1072 plasim rotgrid2c_7.02_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 7.017038 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1073 plasim rotgrid2c_8.38_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1074 plasim rotgrid2c_8.38_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1075 plasim rotgrid2c_8.38_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1076 plasim rotgrid2c_8.38_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1077 plasim rotgrid2c_8.38_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1078 plasim rotgrid2c_8.38_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1079 plasim rotgrid2c_8.38_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1080 plasim rotgrid2c_8.38_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1081 plasim rotgrid2c_8.38_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1082 plasim rotgrid2c_8.38_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1083 plasim rotgrid2c_8.38_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1084 plasim rotgrid2c_8.38_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1085 plasim rotgrid2c_8.38_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1086 plasim rotgrid2c_8.38_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1087 plasim rotgrid2c_8.38_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1088 plasim rotgrid2c_8.38_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1089 plasim rotgrid2c_8.38_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1090 plasim rotgrid2c_8.38_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1091 plasim rotgrid2c_8.38_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1092 plasim rotgrid2c_8.38_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 8.376776 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1093 plasim rotgrid2c_10.00_1.0 2 16 sandyq 1225.0 1.000000 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1094 plasim rotgrid2c_10.00_1.4 2 16 sandyq 1225.0 1.363146 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1095 plasim rotgrid2c_10.00_1.9 2 16 sandyq 1225.0 1.858166 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1096 plasim rotgrid2c_10.00_2.5 2 16 sandyq 1225.0 2.532951 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1097 plasim rotgrid2c_10.00_3.5 2 16 sandyq 1225.0 3.452780 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1098 plasim rotgrid2c_10.00_4.7 2 16 sandyq 1225.0 4.706642 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1099 plasim rotgrid2c_10.00_6.4 2 16 sandyq 1225.0 6.415838 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1100 plasim rotgrid2c_10.00_8.7 2 16 sandyq 1225.0 8.745722 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1101 plasim rotgrid2c_10.00_11.9 2 16 sandyq 1225.0 11.921692 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1102 plasim rotgrid2c_10.00_16.3 2 16 sandyq 1225.0 16.251002 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1103 plasim rotgrid2c_10.00_22.2 2 16 sandyq 1225.0 22.152481 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1104 plasim rotgrid2c_10.00_30.2 2 16 sandyq 1225.0 30.197056 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1105 plasim rotgrid2c_10.00_41.2 2 16 sandyq 1225.0 41.162983 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1106 plasim rotgrid2c_10.00_56.1 2 16 sandyq 1225.0 56.111138 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1107 plasim rotgrid2c_10.00_76.5 2 16 sandyq 1225.0 76.487650 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1108 plasim rotgrid2c_10.00_104.3 2 16 sandyq 1225.0 104.263801 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1109 plasim rotgrid2c_10.00_142.1 2 16 sandyq 1225.0 142.126739 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1110 plasim rotgrid2c_10.00_193.7 2 16 sandyq 1225.0 193.739434 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1111 plasim rotgrid2c_10.00_264.1 2 16 sandyq 1225.0 264.095052 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+1112 plasim rotgrid2c_10.00_360.0 2 16 sandyq 1225.0 360.000000 1.0 1 0.0 0.0 1 10.000000 5.0 4320 {0,}|{Z,} super-equil.sh super_relax.py 0 ae
+
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pCO2u pN2b landmap obliq eccen nfixorb timestep snapshots script extra alloutput notify sbdart sbdart_type
+1113 plasim randland_0.1_1_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.1_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1114 plasim randland_0.1_1_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.1_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1115 plasim randland_0.1_1_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.1_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1116 plasim randland_0.1_1_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.1_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1117 plasim randland_0.1_1_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.1_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1118 plasim randland_0.1_1_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.1_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1119 plasim randland_0.1_1_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.1_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1120 plasim randland_0.1_1_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.1_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1121 plasim randland_0.1_1_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.1_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1122 plasim randland_0.1_1_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.1_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1123 plasim randland_0.1_2_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.1_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1124 plasim randland_0.1_2_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.1_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1125 plasim randland_0.1_2_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.1_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1126 plasim randland_0.1_2_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.1_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1127 plasim randland_0.1_2_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.1_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1128 plasim randland_0.1_2_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.1_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1129 plasim randland_0.1_2_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.1_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1130 plasim randland_0.1_2_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.1_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1131 plasim randland_0.1_2_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.1_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1132 plasim randland_0.1_2_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.1_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1133 plasim randland_0.1_3_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.1_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1134 plasim randland_0.1_3_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.1_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1135 plasim randland_0.1_3_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.1_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1136 plasim randland_0.1_3_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.1_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1137 plasim randland_0.1_3_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.1_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1138 plasim randland_0.1_3_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.1_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1139 plasim randland_0.1_3_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.1_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1140 plasim randland_0.1_3_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.1_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1141 plasim randland_0.1_3_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.1_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1142 plasim randland_0.1_3_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.1_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1143 plasim randland_0.1_4_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.1_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1144 plasim randland_0.1_4_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.1_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1145 plasim randland_0.1_4_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.1_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1146 plasim randland_0.1_4_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.1_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1147 plasim randland_0.1_4_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.1_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1148 plasim randland_0.1_4_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.1_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1149 plasim randland_0.1_4_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.1_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1150 plasim randland_0.1_4_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.1_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1151 plasim randland_0.1_4_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.1_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1152 plasim randland_0.1_4_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.1_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1153 plasim randland_0.1_5_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.1_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1154 plasim randland_0.1_5_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.1_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1155 plasim randland_0.1_5_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.1_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1156 plasim randland_0.1_5_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.1_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1157 plasim randland_0.1_5_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.1_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1158 plasim randland_0.1_5_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.1_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1159 plasim randland_0.1_5_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.1_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1160 plasim randland_0.1_5_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.1_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1161 plasim randland_0.1_5_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.1_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1162 plasim randland_0.1_5_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.1_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1163 plasim randland_0.2_1_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.2_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1164 plasim randland_0.2_1_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.2_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1165 plasim randland_0.2_1_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.2_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1166 plasim randland_0.2_1_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.2_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1167 plasim randland_0.2_1_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.2_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1168 plasim randland_0.2_1_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.2_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1169 plasim randland_0.2_1_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.2_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1170 plasim randland_0.2_1_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.2_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1171 plasim randland_0.2_1_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.2_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1172 plasim randland_0.2_1_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.2_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1173 plasim randland_0.2_2_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.2_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1174 plasim randland_0.2_2_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.2_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1175 plasim randland_0.2_2_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.2_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1176 plasim randland_0.2_2_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.2_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1177 plasim randland_0.2_2_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.2_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1178 plasim randland_0.2_2_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.2_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1179 plasim randland_0.2_2_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.2_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1180 plasim randland_0.2_2_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.2_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1181 plasim randland_0.2_2_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.2_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1182 plasim randland_0.2_2_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.2_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1183 plasim randland_0.2_3_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.2_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1184 plasim randland_0.2_3_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.2_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1185 plasim randland_0.2_3_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.2_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1186 plasim randland_0.2_3_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.2_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1187 plasim randland_0.2_3_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.2_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1188 plasim randland_0.2_3_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.2_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1189 plasim randland_0.2_3_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.2_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1190 plasim randland_0.2_3_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.2_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1191 plasim randland_0.2_3_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.2_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1192 plasim randland_0.2_3_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.2_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1193 plasim randland_0.2_4_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.2_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1194 plasim randland_0.2_4_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.2_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1195 plasim randland_0.2_4_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.2_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1196 plasim randland_0.2_4_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.2_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1197 plasim randland_0.2_4_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.2_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1198 plasim randland_0.2_4_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.2_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1199 plasim randland_0.2_4_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.2_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1200 plasim randland_0.2_4_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.2_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1201 plasim randland_0.2_4_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.2_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1202 plasim randland_0.2_4_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.2_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1203 plasim randland_0.2_5_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.2_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1204 plasim randland_0.2_5_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.2_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1205 plasim randland_0.2_5_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.2_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1206 plasim randland_0.2_5_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.2_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1207 plasim randland_0.2_5_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.2_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1208 plasim randland_0.2_5_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.2_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1209 plasim randland_0.2_5_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.2_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1210 plasim randland_0.2_5_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.2_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1211 plasim randland_0.2_5_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.2_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1212 plasim randland_0.2_5_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.2_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1213 plasim randland_0.3_1_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.3_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1214 plasim randland_0.3_1_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.3_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1215 plasim randland_0.3_1_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.3_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1216 plasim randland_0.3_1_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.3_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1217 plasim randland_0.3_1_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.3_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1218 plasim randland_0.3_1_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.3_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1219 plasim randland_0.3_1_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.3_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1220 plasim randland_0.3_1_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.3_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1221 plasim randland_0.3_1_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.3_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1222 plasim randland_0.3_1_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.3_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1223 plasim randland_0.3_2_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.3_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1224 plasim randland_0.3_2_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.3_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1225 plasim randland_0.3_2_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.3_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1226 plasim randland_0.3_2_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.3_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1227 plasim randland_0.3_2_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.3_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1228 plasim randland_0.3_2_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.3_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1229 plasim randland_0.3_2_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.3_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1230 plasim randland_0.3_2_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.3_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1231 plasim randland_0.3_2_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.3_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1232 plasim randland_0.3_2_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.3_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1233 plasim randland_0.3_3_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.3_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1234 plasim randland_0.3_3_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.3_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1235 plasim randland_0.3_3_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.3_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1236 plasim randland_0.3_3_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.3_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1237 plasim randland_0.3_3_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.3_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1238 plasim randland_0.3_3_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.3_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1239 plasim randland_0.3_3_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.3_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1240 plasim randland_0.3_3_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.3_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1241 plasim randland_0.3_3_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.3_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1242 plasim randland_0.3_3_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.3_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1243 plasim randland_0.3_4_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.3_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1244 plasim randland_0.3_4_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.3_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1245 plasim randland_0.3_4_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.3_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1246 plasim randland_0.3_4_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.3_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1247 plasim randland_0.3_4_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.3_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1248 plasim randland_0.3_4_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.3_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1249 plasim randland_0.3_4_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.3_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1250 plasim randland_0.3_4_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.3_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1251 plasim randland_0.3_4_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.3_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1252 plasim randland_0.3_4_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.3_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1253 plasim randland_0.3_5_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.3_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1254 plasim randland_0.3_5_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.3_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1255 plasim randland_0.3_5_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.3_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1256 plasim randland_0.3_5_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.3_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1257 plasim randland_0.3_5_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.3_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1258 plasim randland_0.3_5_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.3_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1259 plasim randland_0.3_5_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.3_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1260 plasim randland_0.3_5_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.3_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1261 plasim randland_0.3_5_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.3_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1262 plasim randland_0.3_5_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.3_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1263 plasim randland_0.4_1_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.4_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1264 plasim randland_0.4_1_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.4_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1265 plasim randland_0.4_1_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.4_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1266 plasim randland_0.4_1_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.4_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1267 plasim randland_0.4_1_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.4_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1268 plasim randland_0.4_1_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.4_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1269 plasim randland_0.4_1_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.4_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1270 plasim randland_0.4_1_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.4_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1271 plasim randland_0.4_1_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.4_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1272 plasim randland_0.4_1_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.4_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1273 plasim randland_0.4_2_1.0 1 16 sandyq 1250.0 1.000000 1.0 randland_0.4_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1274 plasim randland_0.4_2_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.4_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1275 plasim randland_0.4_2_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.4_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1276 plasim randland_0.4_2_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.4_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1277 plasim randland_0.4_2_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.4_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1278 plasim randland_0.4_2_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.4_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1279 plasim randland_0.4_2_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.4_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1280 plasim randland_0.4_2_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.4_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1281 plasim randland_0.4_2_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.4_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1282 plasim randland_0.4_2_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.4_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1283 plasim randland_0.4_3_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.4_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1284 plasim randland_0.4_3_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.4_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1285 plasim randland_0.4_3_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.4_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1286 plasim randland_0.4_3_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.4_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1287 plasim randland_0.4_3_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.4_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1288 plasim randland_0.4_3_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.4_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1289 plasim randland_0.4_3_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.4_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1290 plasim randland_0.4_3_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.4_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1291 plasim randland_0.4_3_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.4_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1292 plasim randland_0.4_3_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.4_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1293 plasim randland_0.4_4_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.4_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1294 plasim randland_0.4_4_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.4_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1295 plasim randland_0.4_4_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.4_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1296 plasim randland_0.4_4_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.4_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1297 plasim randland_0.4_4_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.4_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1298 plasim randland_0.4_4_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.4_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1299 plasim randland_0.4_4_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.4_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1300 plasim randland_0.4_4_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.4_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1301 plasim randland_0.4_4_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.4_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1302 plasim randland_0.4_4_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.4_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1303 plasim randland_0.4_5_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.4_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1304 plasim randland_0.4_5_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.4_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1305 plasim randland_0.4_5_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.4_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1306 plasim randland_0.4_5_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.4_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1307 plasim randland_0.4_5_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.4_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1308 plasim randland_0.4_5_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.4_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1309 plasim randland_0.4_5_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.4_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1310 plasim randland_0.4_5_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.4_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1311 plasim randland_0.4_5_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.4_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1312 plasim randland_0.4_5_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.4_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1313 plasim randland_0.5_1_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.5_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1314 plasim randland_0.5_1_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.5_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1315 plasim randland_0.5_1_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.5_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1316 plasim randland_0.5_1_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.5_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1317 plasim randland_0.5_1_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.5_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1318 plasim randland_0.5_1_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.5_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1319 plasim randland_0.5_1_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.5_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1320 plasim randland_0.5_1_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.5_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1321 plasim randland_0.5_1_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.5_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1322 plasim randland_0.5_1_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.5_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1323 plasim randland_0.5_2_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.5_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1324 plasim randland_0.5_2_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.5_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1325 plasim randland_0.5_2_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.5_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1326 plasim randland_0.5_2_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.5_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1327 plasim randland_0.5_2_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.5_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1328 plasim randland_0.5_2_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.5_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1329 plasim randland_0.5_2_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.5_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1330 plasim randland_0.5_2_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.5_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1331 plasim randland_0.5_2_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.5_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1332 plasim randland_0.5_2_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.5_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1333 plasim randland_0.5_3_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.5_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1334 plasim randland_0.5_3_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.5_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1335 plasim randland_0.5_3_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.5_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1336 plasim randland_0.5_3_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.5_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1337 plasim randland_0.5_3_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.5_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1338 plasim randland_0.5_3_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.5_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1339 plasim randland_0.5_3_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.5_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1340 plasim randland_0.5_3_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.5_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1341 plasim randland_0.5_3_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.5_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1342 plasim randland_0.5_3_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.5_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1343 plasim randland_0.5_4_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.5_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1344 plasim randland_0.5_4_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.5_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1345 plasim randland_0.5_4_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.5_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1346 plasim randland_0.5_4_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.5_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1347 plasim randland_0.5_4_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.5_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1348 plasim randland_0.5_4_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.5_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1349 plasim randland_0.5_4_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.5_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1350 plasim randland_0.5_4_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.5_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1351 plasim randland_0.5_4_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.5_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1352 plasim randland_0.5_4_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.5_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1353 plasim randland_0.5_5_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.5_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1354 plasim randland_0.5_5_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.5_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1355 plasim randland_0.5_5_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.5_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1356 plasim randland_0.5_5_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.5_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1357 plasim randland_0.5_5_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.5_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1358 plasim randland_0.5_5_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.5_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1359 plasim randland_0.5_5_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.5_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1360 plasim randland_0.5_5_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.5_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1361 plasim randland_0.5_5_27825.6 1 16 sandyq 1250.0 27825.594022 1.0 randland_0.5_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1362 plasim randland_0.5_5_100000.0 1 16 sandyq 1250.0 100000.000000 1.0 randland_0.5_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1363 plasim randland_0.6_1_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.6_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1364 plasim randland_0.6_1_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.6_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1365 plasim randland_0.6_1_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.6_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1366 plasim randland_0.6_1_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.6_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1367 plasim randland_0.6_1_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.6_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1368 plasim randland_0.6_1_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.6_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1369 plasim randland_0.6_1_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.6_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1370 plasim randland_0.6_1_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.6_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1371 plasim randland_0.6_1_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.6_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1372 plasim randland_0.6_1_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.6_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1373 plasim randland_0.6_2_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.6_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1374 plasim randland_0.6_2_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.6_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1375 plasim randland_0.6_2_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.6_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1376 plasim randland_0.6_2_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.6_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1377 plasim randland_0.6_2_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.6_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1378 plasim randland_0.6_2_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.6_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1379 plasim randland_0.6_2_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.6_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1380 plasim randland_0.6_2_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.6_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1381 plasim randland_0.6_2_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.6_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1382 plasim randland_0.6_2_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.6_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1383 plasim randland_0.6_3_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.6_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1384 plasim randland_0.6_3_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.6_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1385 plasim randland_0.6_3_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.6_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1386 plasim randland_0.6_3_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.6_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1387 plasim randland_0.6_3_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.6_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1388 plasim randland_0.6_3_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.6_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1389 plasim randland_0.6_3_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.6_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1390 plasim randland_0.6_3_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.6_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1391 plasim randland_0.6_3_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.6_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1392 plasim randland_0.6_3_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.6_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1393 plasim randland_0.6_4_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.6_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1394 plasim randland_0.6_4_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.6_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1395 plasim randland_0.6_4_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.6_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1396 plasim randland_0.6_4_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.6_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1397 plasim randland_0.6_4_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.6_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1398 plasim randland_0.6_4_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.6_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1399 plasim randland_0.6_4_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.6_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1400 plasim randland_0.6_4_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.6_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1401 plasim randland_0.6_4_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.6_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1402 plasim randland_0.6_4_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.6_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1403 plasim randland_0.6_5_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.6_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1404 plasim randland_0.6_5_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.6_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1405 plasim randland_0.6_5_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.6_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1406 plasim randland_0.6_5_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.6_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1407 plasim randland_0.6_5_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.6_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1408 plasim randland_0.6_5_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.6_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1409 plasim randland_0.6_5_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.6_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1410 plasim randland_0.6_5_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.6_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1411 plasim randland_0.6_5_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.6_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1412 plasim randland_0.6_5_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.6_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1413 plasim randland_0.7_1_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.7_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1414 plasim randland_0.7_1_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.7_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1415 plasim randland_0.7_1_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.7_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1416 plasim randland_0.7_1_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.7_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1417 plasim randland_0.7_1_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.7_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1418 plasim randland_0.7_1_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.7_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1419 plasim randland_0.7_1_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.7_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1420 plasim randland_0.7_1_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.7_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1421 plasim randland_0.7_1_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.7_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1422 plasim randland_0.7_1_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.7_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1423 plasim randland_0.7_2_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.7_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1424 plasim randland_0.7_2_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.7_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1425 plasim randland_0.7_2_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.7_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1426 plasim randland_0.7_2_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.7_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1427 plasim randland_0.7_2_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.7_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1428 plasim randland_0.7_2_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.7_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1429 plasim randland_0.7_2_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.7_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1430 plasim randland_0.7_2_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.7_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1431 plasim randland_0.7_2_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.7_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1432 plasim randland_0.7_2_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.7_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1433 plasim randland_0.7_3_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.7_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1434 plasim randland_0.7_3_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.7_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1435 plasim randland_0.7_3_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.7_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1436 plasim randland_0.7_3_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.7_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1437 plasim randland_0.7_3_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.7_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1438 plasim randland_0.7_3_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.7_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1439 plasim randland_0.7_3_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.7_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1440 plasim randland_0.7_3_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.7_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1441 plasim randland_0.7_3_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.7_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1442 plasim randland_0.7_3_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.7_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1443 plasim randland_0.7_4_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.7_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1444 plasim randland_0.7_4_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.7_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1445 plasim randland_0.7_4_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.7_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1446 plasim randland_0.7_4_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.7_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1447 plasim randland_0.7_4_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.7_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1448 plasim randland_0.7_4_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.7_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1449 plasim randland_0.7_4_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.7_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1450 plasim randland_0.7_4_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.7_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1451 plasim randland_0.7_4_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.7_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1452 plasim randland_0.7_4_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.7_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1453 plasim randland_0.7_5_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.7_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1454 plasim randland_0.7_5_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.7_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1455 plasim randland_0.7_5_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.7_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1456 plasim randland_0.7_5_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.7_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1457 plasim randland_0.7_5_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.7_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1458 plasim randland_0.7_5_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.7_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1459 plasim randland_0.7_5_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.7_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1460 plasim randland_0.7_5_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.7_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1461 plasim randland_0.7_5_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.7_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1462 plasim randland_0.7_5_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.7_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1463 plasim randland_0.8_1_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.8_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1464 plasim randland_0.8_1_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.8_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1465 plasim randland_0.8_1_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.8_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1466 plasim randland_0.8_1_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.8_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1467 plasim randland_0.8_1_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.8_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1468 plasim randland_0.8_1_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.8_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1469 plasim randland_0.8_1_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.8_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1470 plasim randland_0.8_1_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.8_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1471 plasim randland_0.8_1_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.8_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1472 plasim randland_0.8_1_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.8_1_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1473 plasim randland_0.8_2_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.8_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1474 plasim randland_0.8_2_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.8_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1475 plasim randland_0.8_2_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.8_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1476 plasim randland_0.8_2_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.8_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1477 plasim randland_0.8_2_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.8_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1478 plasim randland_0.8_2_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.8_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1479 plasim randland_0.8_2_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.8_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1480 plasim randland_0.8_2_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.8_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1481 plasim randland_0.8_2_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.8_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1482 plasim randland_0.8_2_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.8_2_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1483 plasim randland_0.8_3_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.8_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1484 plasim randland_0.8_3_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.8_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1485 plasim randland_0.8_3_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.8_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1486 plasim randland_0.8_3_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.8_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1487 plasim randland_0.8_3_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.8_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1488 plasim randland_0.8_3_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.8_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1489 plasim randland_0.8_3_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.8_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1490 plasim randland_0.8_3_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.8_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1491 plasim randland_0.8_3_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.8_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1492 plasim randland_0.8_3_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.8_3_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1493 plasim randland_0.8_4_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.8_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1494 plasim randland_0.8_4_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.8_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1495 plasim randland_0.8_4_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.8_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1496 plasim randland_0.8_4_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.8_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1497 plasim randland_0.8_4_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.8_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1498 plasim randland_0.8_4_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.8_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1499 plasim randland_0.8_4_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.8_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1500 plasim randland_0.8_4_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.8_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1501 plasim randland_0.8_4_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.8_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1502 plasim randland_0.8_4_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.8_4_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1503 plasim randland_0.8_5_1.0 2 16 sandyq 1250.0 1.000000 1.0 randland_0.8_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1504 plasim randland_0.8_5_3.6 2 16 sandyq 1250.0 3.593814 1.0 randland_0.8_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1505 plasim randland_0.8_5_12.9 2 16 sandyq 1250.0 12.915497 1.0 randland_0.8_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1506 plasim randland_0.8_5_46.4 2 16 sandyq 1250.0 46.415888 1.0 randland_0.8_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1507 plasim randland_0.8_5_166.8 2 16 sandyq 1250.0 166.810054 1.0 randland_0.8_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1508 plasim randland_0.8_5_599.5 2 16 sandyq 1250.0 599.484250 1.0 randland_0.8_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1509 plasim randland_0.8_5_2154.4 2 16 sandyq 1250.0 2154.434690 1.0 randland_0.8_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1510 plasim randland_0.8_5_7742.6 2 16 sandyq 1250.0 7742.636827 1.0 randland_0.8_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1511 plasim randland_0.8_5_27825.6 2 16 sandyq 1250.0 27825.594022 1.0 randland_0.8_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+1512 plasim randland_0.8_5_100000.0 2 16 sandyq 1250.0 100000.000000 1.0 randland_0.8_5_surf_0172.sra 0.0 0.0 1 30.0 720 super-equil.sh super_relax.py 0 ae {0,}|{Z,} locked
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone gascon naqua obliq eccen nfixorb starspec radius gravity lockedyear MLDEPTH@oceanmod_namelist timestep snapshots script extra alloutput keeprestart notify sbdart
+1513 plasim trap1e_hab1s_spec 2 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 trappist1_2600.dat 0.91 9.12 6.1/0.0 100.0 30.0 720 super-equil.sh super_relax.py 1 1 ae {0,}|{Z,}
+1514 plasim trap1e_hab2s_spec_t42 2 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 trappist1_2600.dat 0.91 9.12 6.1/0.0 100.0 30.0 720 super-equil42.sh super_relax42.py 1 1 ae {0,}|{Z,}
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2b ozone gascon naqua obliq eccen nfixorb starspec radius gravity lockedyear MLDEPTH@oceanmod_namelist ALBSEA@seamod_namelist snowicealbedo timestep snapshots script extra alloutput keeprestart notify sbdart
+1515 plasim trap1e_hab1_spec 2 16 sandyq 900.0 1.0 400.0e-6 0 296.94509 1 0.0 0.0 1 trappist1_2600.dat 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 720 super-equil.sh super_relax.py 1 1 ae {0,}|{Z,}
+1516 plasim trap1e_hab2_spec 2 16 sandyq 900.0 0.0 1.0 0 188.96506 1 0.0 0.0 1 trappist1_2600.dat 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 720 super-equil.sh super_relax.py 1 1 ae {0,}|{Z,}
+1517 plasim trap1e_hab1_spec_t42 2 16 sandyq 900.0 1.0 400.0e-6 0 296.94509 1 0.0 0.0 1 trappist1_2600.dat 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 720 super-equil42.sh super_relax42.py 1 1 ae {0,}|{Z,}
+1518 plasim trap1e_hab2_spec_t42 2 16 sandyq 900.0 0.0 1.0 0 188.96506 1 0.0 0.0 1 trappist1_2600.dat 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 720 super-equil42.sh super_relax42.py 1 1 ae {0,}|{Z,}
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone gascon naqua obliq eccen nfixorb startemp radius gravity lockedyear MLDEPTH@oceanmod_namelist ALBSEA@seamod_namelist snowicealbedo timestep snapshots script extra alloutput keeprestart notify sbdart
+1519 plasim trap1e_hab1 2 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 720 super-equil.sh super_relax.py 1 1 ae {0,}|{Z,}
+1520 plasim trap1e_hab2 2 16 sandyq 900.0 0.0 1.0e6 0 188.96506 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 720 super-equil.sh super_relax.py 1 1 ae {0,}|{Z,}
+1521 plasim trap1e_hab1_t42 2 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 720 super-equil42.sh super_relax42.py 1 1 ae {0,}|{Z,}
+1522 plasim trap1e_hab2_t42 2 16 sandyq 900.0 0.0 1.0e6 0 188.96506 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 720 super-equil42.sh super_relax42.py 1 1 ae {0,}|{Z,}
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone gascon naqua obliq eccen nfixorb startemp radius gravity lockedyear MLDEPTH@oceanmod_namelist timestep snapshots script extra alloutput keeprestart notify sbdart
+1523 plasim trap1e_hab1s 2 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 30.0 720 super-equil.sh super_relax.py 1 1 ae {0,}|{Z,}
+1524 plasim trap1e_hab1s_t42 2 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 30.0 720 super-equil42.sh super_relax42.py 1 1 ae {0,}|{Z,}
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone naqua obliq eccen nfixorb columnmode snowicealbedo timestep snapshots script extra alloutput notify sbdart
+1525 plasim benchmark_g_no3_darkice 2 16 sandyq 1360.0 1.0 376.14143 0 1 0.0 0.0 1 - 0.06 45.0 480 super-equil.sh super_relax.py 1 ae {0,}|{Z,}
+1526 plasim benchmark_g_no3_darkice_t42 2 16 sandyq 1360.0 1.0 376.14143 0 1 0.0 0.0 1 - 0.06 15.0 1440 super-equil42.sh super_relax42.py 1 ae {0,}|{Z,}
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone naqua obliq eccen nfixorb columnmode snowicealbedo timestep snapshots script extra alloutput notify
+1527 plasim benchmark_g_clear_no3_darkice 2 16 sandyq 1360.0 1.0 376.14143 0 1 0.0 0.0 1 clear 0.06 45.0 480 super-equil.sh super_relax.py 1 ae
+1528 plasim benchmark_g_clear_no3_darkice_t42 2 16 sandyq 1360.0 1.0 376.14143 0 1 0.0 0.0 1 clear 0.06 15.0 1440 super-equil42.sh super_relax42.py 1 ae
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone naqua obliq eccen nfixorb columnmode snowicealbedo lockedyear startemp timestep snapshots script extra alloutput notify sbdart
+1529 plasim benchmark_m_no3_darkice 2 16 sandyq 1360.0 1.0 376.14143 0 1 0.0 0.0 1 - 0.06 60.0/0.0 3400.0 30.0 720 super-equil.sh super_relax.py 1 ae {0,}|{Z,}
+1530 plasim benchmark_m_no3_darkice_t42 2 16 sandyq 1360.0 1.0 376.14143 0 1 0.0 0.0 1 - 0.06 60.0/0.0 3400.0 15.0 1440 super-equil42.sh super_relax42.py 1 ae {0,}|{Z,}
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone naqua obliq eccen nfixorb columnmode snowicealbedo lockedyear startemp timestep snapshots script extra alloutput notify
+1531 plasim benchmark_m_clear_no3_darkice 2 16 sandyq 1360.0 1.0 376.14143 0 1 0.0 0.0 1 clear 0.06 60.0/0.0 3400.0 30.0 720 super-equil.sh super_relax.py 1 ae
+1532 plasim benchmark_m_clear_no3_darkice_t42 2 16 sandyq 1360.0 1.0 376.14143 0 1 0.0 0.0 1 clear 0.06 60.0/0.0 3400.0 15.0 720 super-equil42.sh super_relax42.py 1 ae
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2b ozone gascon ndesert obliq eccen nfixorb drycore T0@plasim_namelist startemp radius gravity lockedyear SOILCAP@landmod_namelist soilalbedo timestep snapshots script extra alloutput notify keeprestart
+1533 plasim trap1e_ben1 2 16 sandyq 900.0 1.0 400.0e-6 0 296.94509 1 0.0 0.0 1 1 200.0 2600.0 0.91 9.12 6.1/0.0 2.0e6 0.3 5.0 4320 super-equil.sh super_relax.py 1 ae 1
+1534 plasim trap1e_ben2 2 16 sandyq 900.0 0.0 1.0 0 188.96506 1 0.0 0.0 1 1 100.0 2600.0 0.91 9.12 6.1/0.0 2.0e6 0.3 5.0 4320 super-equil.sh super_relax.py 1 ae 1
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone gascon naqua obliq eccen nfixorb starspec radius gravity lockedyear MLDEPTH@oceanmod_namelist timestep snapshots script restart alloutput notify
+1535 plasim trap1e_hab1s_spec_hc 2 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 trappist1.dat 0.91 9.12 6.1/0.0 100.0 30.0 12 most_plasim_run trap1e_hab1s_spec_restart 0 ae
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone gascon naqua obliq eccen nfixorb starspec radius gravity lockedyear MLDEPTH@oceanmod_namelist ALBSEA@seamod_namelist snowicealbedo timestep snapshots script restart alloutput notify
+1536 plasim trap1e_hab2_spec_hc 2 16 sandyq 900.0 0.0 1.0 0 188.96506 1 0.0 0.0 1 trappist1.dat 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 12 most_plasim_run trap1e_hab2_spec_restart 0 ae
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2b ozone gascon ndesert obliq eccen nfixorb drycore T0@plasim_namelist startemp radius gravity lockedyear SOILCAP@landmod_namelist soilalbedo timestep snapshots script restart alloutput notify
+1537 plasim trap1e_ben1_hc 2 16 sandyq 900.0 1.0 400.0e-6 0 296.94509 1 0.0 0.0 1 1 100.0 2600.0 0.91 9.12 6.1/0.0 2.0e6 0.3 5.0 72 most_plasim_run trap1e_ben1_restart 0 ae
+1538 plasim trap1e_ben2_hc 1 16 sandyq 900.0 0.0 1.0 0 188.96506 1 0.0 0.0 1 1 100.0 2600.0 0.91 9.12 6.1/0.0 2.0e6 0.3 5.0 72 most_plasim_run trap1e_ben2_restart 0 ae
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone gascon naqua obliq eccen nfixorb starspec radius gravity lockedyear MLDEPTH@oceanmod_namelist timestep snapshots script restart alloutput notify
+1539 plasim trap1e_hab2s_spec_t42_hc 1 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 trappist1.dat 0.91 9.12 6.1/0.0 100.0 30.0 12 most_plasim_run42 trap1e_hab2s_spec_t42_restart 0 ae
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2b ozone gascon naqua obliq eccen nfixorb starspec radius gravity lockedyear MLDEPTH@oceanmod_namelist ALBSEA@seamod_namelist snowicealbedo timestep snapshots script restart alloutput notify
+1540 plasim trap1e_hab1_spec_hc 2 16 sandyq 900.0 1.0 400.0e-6 0 296.94509 1 0.0 0.0 1 trappist1.dat 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 12 most_plasim_run trap1e_hab1_spec_restart 0 ae
+1541 plasim trap1e_hab1_spec_t42_hc 1 16 sandyq 900.0 1.0 400.0e-6 0 296.94509 1 0.0 0.0 1 trappist1.dat 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 12 most_plasim_run42 trap1e_hab1_spec_t42_restart 0 ae
+1542 plasim trap1e_hab2_spec_t42_hc 1 16 sandyq 900.0 0.0 1.0 0 188.96506 1 0.0 0.0 1 trappist1.dat 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 12 most_plasim_run42 trap1e_hab2_spec_t42_restart 0 ae
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone gascon naqua obliq eccen nfixorb startemp radius gravity lockedyear MLDEPTH@oceanmod_namelist ALBSEA@seamod_namelist snowicealbedo timestep snapshots script restart alloutput notify
+1543 plasim trap1e_hab1_hc 2 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 12 most_plasim_run trap1e_hab1_restart 0 ae
+1544 plasim trap1e_hab2_hc 2 16 sandyq 900.0 0.0 1.0e6 0 188.96506 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 12 most_plasim_run trap1e_hab2_restart 0 ae
+1545 plasim trap1e_hab1_t42_hc 1 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 12 most_plasim_run42 trap1e_hab1_t42_restart 0 ae
+1546 plasim trap1e_hab2_t42_hc 1 16 sandyq 900.0 0.0 1.0e6 0 188.96506 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 0.06 0.25 30.0 12 most_plasim_run42 trap1e_hab2_t42_restart 0 ae
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u ozone gascon naqua obliq eccen nfixorb startemp radius gravity lockedyear MLDEPTH@oceanmod_namelist timestep snapshots script restart alloutput notify
+1547 plasim trap1e_hab1s_hc 2 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 30.0 12 most_plasim_run trap1e_hab1s_restart 0 ae
+1548 plasim trap1e_hab1s_t42_hc 1 16 sandyq 900.0 1.0 400.0 0 296.94509 1 0.0 0.0 1 2600.0 0.91 9.12 6.1/0.0 100.0 30.0 12 most_plasim_run42 trap1e_hab1s_t42_restart 0 ae
+
+# PID MODEL JOBNAME STATE NCORES QUEUE flux pN2b pCO2u gascon vlog_top vtype timestep snapshots script extra alloutput notify sbdart
+1549 plasim s1600p0010 1 16 sandyq 1600.0 0.1 360.0 287.0 10.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1550 plasim s1600p0020 1 16 sandyq 1600.0 0.2 360.0 287.0 20.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1551 plasim s1600p0030 1 16 sandyq 1600.0 0.3 360.0 287.0 30.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1552 plasim s1600p0040 1 16 sandyq 1600.0 0.4 360.0 287.0 40.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1553 plasim s1600p0050 1 16 sandyq 1600.0 0.5 360.0 287.0 50.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1554 plasim s1600p0060 1 16 sandyq 1600.0 0.6 360.0 287.0 60.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1555 plasim s1600p0070 1 16 sandyq 1600.0 0.7 360.0 287.0 70.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1556 plasim s1600p0080 1 16 sandyq 1600.0 0.8 360.0 287.0 80.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1557 plasim s1600p0090 1 16 sandyq 1600.0 0.9 360.0 287.0 90.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1558 plasim s1600p0100 1 16 sandyq 1600.0 1.0 360.0 287.0 100.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1559 plasim s1600p0200 1 16 sandyq 1600.0 2.0 360.0 287.0 105.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1560 plasim s1600p0300 1 16 sandyq 1600.0 3.0 360.0 287.0 110.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1561 plasim s1600p0400 1 16 sandyq 1600.0 4.0 360.0 287.0 115.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1562 plasim s1600p0500 1 16 sandyq 1600.0 5.0 360.0 287.0 120.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1563 plasim s1600p0600 1 16 sandyq 1600.0 6.0 360.0 287.0 125.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1564 plasim s1600p0700 1 16 sandyq 1600.0 7.0 360.0 287.0 130.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1565 plasim s1600p0800 0 16 sandyq 1600.0 8.0 360.0 287.0 135.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1566 plasim s1600p0900 1 16 sandyq 1600.0 9.0 360.0 287.0 140.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1567 plasim s1600p1000 0 16 sandyq 1600.0 10.0 360.0 287.0 145.0 4 2.5 8640 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1568 plasim s1650p0010 1 16 sandyq 1650.0 0.1 360.0 287.0 10.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1569 plasim s1650p0020 1 16 sandyq 1650.0 0.2 360.0 287.0 20.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1570 plasim s1650p0030 1 16 sandyq 1650.0 0.3 360.0 287.0 30.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1571 plasim s1650p0040 1 16 sandyq 1650.0 0.4 360.0 287.0 40.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1572 plasim s1650p0050 1 16 sandyq 1650.0 0.5 360.0 287.0 50.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1573 plasim s1650p0060 1 16 sandyq 1650.0 0.6 360.0 287.0 60.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1574 plasim s1650p0070 1 16 sandyq 1650.0 0.7 360.0 287.0 70.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1575 plasim s1650p0080 1 16 sandyq 1650.0 0.8 360.0 287.0 80.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1576 plasim s1650p0090 1 16 sandyq 1650.0 0.9 360.0 287.0 90.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1577 plasim s1650p0100 1 16 sandyq 1650.0 1.0 360.0 287.0 100.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1578 plasim s1650p0200 1 16 sandyq 1650.0 2.0 360.0 287.0 105.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1579 plasim s1650p0300 1 16 sandyq 1650.0 3.0 360.0 287.0 110.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1580 plasim s1650p0400 1 16 sandyq 1650.0 4.0 360.0 287.0 115.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1581 plasim s1650p0500 1 16 sandyq 1650.0 5.0 360.0 287.0 120.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1582 plasim s1650p0600 0 16 sandyq 1650.0 6.0 360.0 287.0 125.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1583 plasim s1650p0700 0 16 sandyq 1650.0 7.0 360.0 287.0 130.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1584 plasim s1650p0800 0 16 sandyq 1650.0 8.0 360.0 287.0 135.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1585 plasim s1650p0900 0 16 sandyq 1650.0 9.0 360.0 287.0 140.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1586 plasim s1650p1000 0 16 sandyq 1650.0 10.0 360.0 287.0 145.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1587 plasim s1700p0010 0 16 sandyq 1700.0 0.1 360.0 287.0 10.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1588 plasim s1700p0020 0 16 sandyq 1700.0 0.2 360.0 287.0 20.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1589 plasim s1700p0030 0 16 sandyq 1700.0 0.3 360.0 287.0 30.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1590 plasim s1700p0040 0 16 sandyq 1700.0 0.4 360.0 287.0 40.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1591 plasim s1700p0050 0 16 sandyq 1700.0 0.5 360.0 287.0 50.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1592 plasim s1700p0060 0 16 sandyq 1700.0 0.6 360.0 287.0 60.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1593 plasim s1700p0070 0 16 sandyq 1700.0 0.7 360.0 287.0 70.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1594 plasim s1700p0080 0 16 sandyq 1700.0 0.8 360.0 287.0 80.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1595 plasim s1700p0090 0 16 sandyq 1700.0 0.9 360.0 287.0 90.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1596 plasim s1700p0100 0 16 sandyq 1700.0 1.0 360.0 287.0 100.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1597 plasim s1700p0200 0 16 sandyq 1700.0 2.0 360.0 287.0 105.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1598 plasim s1700p0300 0 16 sandyq 1700.0 3.0 360.0 287.0 110.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1599 plasim s1700p0400 0 16 sandyq 1700.0 4.0 360.0 287.0 115.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1600 plasim s1700p0500 0 16 sandyq 1700.0 5.0 360.0 287.0 120.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1601 plasim s1700p0600 0 16 sandyq 1700.0 6.0 360.0 287.0 125.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1602 plasim s1700p0700 0 16 sandyq 1700.0 7.0 360.0 287.0 130.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1603 plasim s1700p0800 0 16 sandyq 1700.0 8.0 360.0 287.0 135.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1604 plasim s1700p0900 0 16 sandyq 1700.0 9.0 360.0 287.0 140.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1605 plasim s1700p1000 0 16 sandyq 1700.0 10.0 360.0 287.0 145.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1606 plasim s1750p0010 0 16 sandyq 1750.0 0.1 360.0 287.0 10.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1607 plasim s1750p0020 0 16 sandyq 1750.0 0.2 360.0 287.0 20.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1608 plasim s1750p0030 0 16 sandyq 1750.0 0.3 360.0 287.0 30.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1609 plasim s1750p0040 0 16 sandyq 1750.0 0.4 360.0 287.0 40.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1610 plasim s1750p0050 0 16 sandyq 1750.0 0.5 360.0 287.0 50.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1611 plasim s1750p0060 0 16 sandyq 1750.0 0.6 360.0 287.0 60.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1612 plasim s1750p0070 0 16 sandyq 1750.0 0.7 360.0 287.0 70.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1613 plasim s1750p0080 0 16 sandyq 1750.0 0.8 360.0 287.0 80.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1614 plasim s1750p0090 0 16 sandyq 1750.0 0.9 360.0 287.0 90.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1615 plasim s1750p0100 0 16 sandyq 1750.0 1.0 360.0 287.0 100.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1616 plasim s1750p0200 0 16 sandyq 1750.0 2.0 360.0 287.0 105.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1617 plasim s1750p0300 0 16 sandyq 1750.0 3.0 360.0 287.0 110.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1618 plasim s1750p0400 0 16 sandyq 1750.0 4.0 360.0 287.0 115.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1619 plasim s1750p0500 0 16 sandyq 1750.0 5.0 360.0 287.0 120.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1620 plasim s1750p0600 0 16 sandyq 1750.0 6.0 360.0 287.0 125.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1621 plasim s1750p0700 0 16 sandyq 1750.0 7.0 360.0 287.0 130.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1622 plasim s1750p0800 0 16 sandyq 1750.0 8.0 360.0 287.0 135.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1623 plasim s1750p0900 0 16 sandyq 1750.0 9.0 360.0 287.0 140.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1624 plasim s1750p1000 0 16 sandyq 1750.0 10.0 360.0 287.0 145.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1625 plasim s1800p0010 0 16 sandyq 1800.0 0.1 360.0 287.0 10.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1626 plasim s1800p0020 0 16 sandyq 1800.0 0.2 360.0 287.0 20.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1627 plasim s1800p0030 0 16 sandyq 1800.0 0.3 360.0 287.0 30.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1628 plasim s1800p0040 0 16 sandyq 1800.0 0.4 360.0 287.0 40.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1629 plasim s1800p0050 0 16 sandyq 1800.0 0.5 360.0 287.0 50.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1630 plasim s1800p0060 0 16 sandyq 1800.0 0.6 360.0 287.0 60.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1631 plasim s1800p0070 0 16 sandyq 1800.0 0.7 360.0 287.0 70.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1632 plasim s1800p0080 0 16 sandyq 1800.0 0.8 360.0 287.0 80.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1633 plasim s1800p0090 0 16 sandyq 1800.0 0.9 360.0 287.0 90.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1634 plasim s1800p0100 0 16 sandyq 1800.0 1.0 360.0 287.0 100.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1635 plasim s1800p0200 0 16 sandyq 1800.0 2.0 360.0 287.0 105.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1636 plasim s1800p0300 0 16 sandyq 1800.0 3.0 360.0 287.0 110.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1637 plasim s1800p0400 0 16 sandyq 1800.0 4.0 360.0 287.0 115.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1638 plasim s1800p0500 0 16 sandyq 1800.0 5.0 360.0 287.0 120.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1639 plasim s1800p0600 0 16 sandyq 1800.0 6.0 360.0 287.0 125.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1640 plasim s1800p0700 0 16 sandyq 1800.0 7.0 360.0 287.0 130.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1641 plasim s1800p0800 0 16 sandyq 1800.0 8.0 360.0 287.0 135.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1642 plasim s1800p0900 0 16 sandyq 1800.0 9.0 360.0 287.0 140.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1643 plasim s1800p1000 0 16 sandyq 1800.0 10.0 360.0 287.0 145.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1644 plasim s1850p0010 0 16 sandyq 1850.0 0.1 360.0 287.0 10.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1645 plasim s1850p0020 0 16 sandyq 1850.0 0.2 360.0 287.0 20.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1646 plasim s1850p0030 0 16 sandyq 1850.0 0.3 360.0 287.0 30.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1647 plasim s1850p0040 0 16 sandyq 1850.0 0.4 360.0 287.0 40.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1648 plasim s1850p0050 0 16 sandyq 1850.0 0.5 360.0 287.0 50.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1649 plasim s1850p0060 0 16 sandyq 1850.0 0.6 360.0 287.0 60.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1650 plasim s1850p0070 0 16 sandyq 1850.0 0.7 360.0 287.0 70.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1651 plasim s1850p0080 0 16 sandyq 1850.0 0.8 360.0 287.0 80.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1652 plasim s1850p0090 0 16 sandyq 1850.0 0.9 360.0 287.0 90.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1653 plasim s1850p0100 0 16 sandyq 1850.0 1.0 360.0 287.0 100.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1654 plasim s1850p0200 0 16 sandyq 1850.0 2.0 360.0 287.0 105.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1655 plasim s1850p0300 0 16 sandyq 1850.0 3.0 360.0 287.0 110.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1656 plasim s1850p0400 0 16 sandyq 1850.0 4.0 360.0 287.0 115.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1657 plasim s1850p0500 0 16 sandyq 1850.0 5.0 360.0 287.0 120.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1658 plasim s1850p0600 0 16 sandyq 1850.0 6.0 360.0 287.0 125.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1659 plasim s1850p0700 0 16 sandyq 1850.0 7.0 360.0 287.0 130.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1660 plasim s1850p0800 0 16 sandyq 1850.0 8.0 360.0 287.0 135.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1661 plasim s1850p0900 0 16 sandyq 1850.0 9.0 360.0 287.0 140.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1662 plasim s1850p1000 0 16 sandyq 1850.0 10.0 360.0 287.0 145.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1663 plasim s1900p0010 0 16 sandyq 1900.0 0.1 360.0 287.0 10.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1664 plasim s1900p0020 0 16 sandyq 1900.0 0.2 360.0 287.0 20.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1665 plasim s1900p0030 0 16 sandyq 1900.0 0.3 360.0 287.0 30.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1666 plasim s1900p0040 0 16 sandyq 1900.0 0.4 360.0 287.0 40.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1667 plasim s1900p0050 0 16 sandyq 1900.0 0.5 360.0 287.0 50.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1668 plasim s1900p0060 0 16 sandyq 1900.0 0.6 360.0 287.0 60.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1669 plasim s1900p0070 0 16 sandyq 1900.0 0.7 360.0 287.0 70.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1670 plasim s1900p0080 0 16 sandyq 1900.0 0.8 360.0 287.0 80.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1671 plasim s1900p0090 0 16 sandyq 1900.0 0.9 360.0 287.0 90.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1672 plasim s1900p0100 0 16 sandyq 1900.0 1.0 360.0 287.0 100.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1673 plasim s1900p0200 0 16 sandyq 1900.0 2.0 360.0 287.0 105.0 4 45.0 480 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1674 plasim s1900p0300 0 16 sandyq 1900.0 3.0 360.0 287.0 110.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1675 plasim s1900p0400 0 16 sandyq 1900.0 4.0 360.0 287.0 115.0 4 30.0 720 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1676 plasim s1900p0500 0 16 sandyq 1900.0 5.0 360.0 287.0 120.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1677 plasim s1900p0600 0 16 sandyq 1900.0 6.0 360.0 287.0 125.0 4 20.0 1080 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1678 plasim s1900p0700 0 16 sandyq 1900.0 7.0 360.0 287.0 130.0 4 15.0 1440 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1679 plasim s1900p0800 0 16 sandyq 1900.0 8.0 360.0 287.0 135.0 4 10.0 2160 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1680 plasim s1900p0900 0 16 sandyq 1900.0 9.0 360.0 287.0 140.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}
+1681 plasim s1900p1000 0 16 sandyq 1900.0 10.0 360.0 287.0 145.0 4 5.0 4320 long-equil.sh long_relax.py 0 ae {0,}|{Z,}

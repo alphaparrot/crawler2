@@ -6,7 +6,8 @@ from identity import USER, SCRATCH
 from batch_system import BATCHSCRIPT, SUB, HOLD
 from crawldefs import Job
 
-def write_input_earth(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,surface,pCO2,p0,
+def write_input_earth(workdir,nview,ntime,lon_maxzen,cszenith,azimuth,
+                      latitude,longitude,surface,pCO2,p0,
                 tsurf,altz,flux,wmin=0.55,wmax=19.0,albedo=0.35,smooth=False,flat=True,sic=0.0,
                 spec=False,iout=5,zout=(0,100),icefile='seaice.dat',waterfile='seawater.dat'):
   template =("&INPUT                                                     \n"+ #0
@@ -176,7 +177,10 @@ def write_input_earth(workdir,nview,ntime,cszenith,azimuth,latitude,longitude,su
   #hours = np.linspace(0,84.375,num=16)*np.pi/180.0
   # cos(p)cos(l) = cos(z)
   
-  faces = [28.125,118.125,196.875,275.625]
+  faces = [lon_maxzen,(lon_maxzen+90.0)%360,(lon_maxzen+180.0)%360,(lon_maxzen+270.0)%360]
+  
+  
+  
   
   # 12pm, E, W, N, S
   hours = longitude - faces[ntime] + np.array([0,-90,90,0,0])[nview]
@@ -1303,7 +1307,13 @@ def _prep_lmdz(job):
       os.system("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
       os.system("cp -r "+job.top+"/sbdart_earth/"+source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
       if star:
-          os.system("cp -r "+job.top+"/sbdart_earth/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
+          #os.system("cp -r "+job.top+"/sbdart_earth/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
+          w,f = np.loadtxt(job.top+"/sbdart_earth/"+star,unpack=True)
+          ffac = flux/np.trapz(f,x=w)
+          f*=ffac
+          data = np.array([w,f])
+          data = data.T
+          np.savetxt(workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon),data,fmt=['%f','%f'])
   
   role = "dom"
   if "ROLE" in job.parameters:
@@ -1579,7 +1589,7 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   if "notify" in job.parameters:
       notify = job.parameters["notify"]
       
-  istep=12
+  istep=7
   if "istep" in job.parameters:
       istep = int(job.parameters["istep"])
       
@@ -1614,7 +1624,13 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   os.system("tar xvzf "+workdir+"/source/source.tar.gz -C "+workdir+"/source/")
   os.system("rm "+workdir+"/source/source.tar.gz")
   if star:
-      os.system("cp -r "+job.top+"/sbdart_earth/"+star+" "+workdir+"/source/solar.dat")
+      #os.system("cp -r "+job.top+"/sbdart_earth/"+star+" "+workdir+"/source/solar.dat")
+      w,f = np.loadtxt(job.top+"/sbdart_earth/"+star,unpack=True)
+      ffac = flux/np.trapz(f,x=w)
+      f*=ffac
+      data = np.array([w,f])
+      data = data.T
+      np.savetxt(workdir+"/source/solar.dat",data,fmt=['%f','%f'])
   
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
@@ -1888,7 +1904,10 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   os.system("cp "+job.top+"/crawldefs.py "+workdir+"/")
   os.system("cp "+job.top+"/identity.py "+workdir+"/")
   
-  views = [28.125,118.125,196.875,275.625]
+  czen = data.variables['czen'][istep,:,:]
+  imxz = np.argmax(np.nanmax(czen,axis=0))
+  lmxz = data.variables['lon'][imxz]
+  views = [lmxz,(lmxz+90.0)%360.0,(lmxz+180.0)%360.0,(lmxz+270.0)%360.0]
   
   for jlon in range(lons[0],lons[1]):
     for jlat in range(lats[0],lats[1]):
@@ -1907,7 +1926,8 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
         for vv in range(0,len(vws)):
             nv = viewdict[vws[vv]]
             write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
-                              nv,nang,csz,azm,latitude,longitude,surf,pCO2,p0,tsurf,altz,flux,
+                              nv,nang,lmxz,csz,azm,
+                              latitude,longitude,surf,pCO2,p0,tsurf,altz,flux,
                               wmin=wmin,wmax=wmax,albedo=unialb,flat=flat,sic=sic,spec=star,
                               smooth=smooth,iout=iout,zout=zout,waterfile=waterfile,
                               icefile=icefile)
@@ -2029,7 +2049,13 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       os.system("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
       os.system("cp -r "+job.top+"/sbdart_earth/"+source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
       if star:
-          os.system("cp -r "+job.top+"/sbdart_earth/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
+          #os.system("cp -r "+job.top+"/sbdart_earth/"+star+" "+workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon))
+          w,f = np.loadtxt(job.top+"/sbdart_earth/"+star,unpack=True)
+          ffac = flux/np.trapz(f,x=w)
+          f*=ffac
+          data = np.array([w,f])
+          data = data.T
+          np.savetxt(workdir+"/sbdart-%02d_%02d/solar.dat"%(jlat,jlon),data,fmt=['%f','%f'])
   
   
   role = "dom"
@@ -2271,7 +2297,7 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
     
   notify = 'ae'
       
-  istep=12
+  istep=7
       
   uniform=False     
   unialb = 0.35
@@ -2293,7 +2319,13 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   os.system("tar xvzf "+workdir+"/source/source.tar.gz -C "+workdir+"/source/")
   os.system("rm "+workdir+"/source/source.tar.gz")
   if star:
-      os.system("cp -r "+finaldest+"/"+star+" "+workdir+"/source/solar.dat")
+      #os.system("cp -r "+finaldest+"/"+star+" "+workdir+"/source/solar.dat")
+      w,f = np.loadtxt(finaldest+"/"+star,unpack=True)
+      ffac = flux/np.trapz(f,x=w)
+      f*=ffac
+      data = np.array([w,f])
+      data = data.T
+      np.savetxt(workdir+"/source/solar.dat",data,fmt=['%f','%f'])
   
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
@@ -2360,6 +2392,12 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   rs.write(jobscript)
   rs.close()
   
+  
+  czen = data.variables['czen'][istep,:,:]
+  imxz = np.argmax(np.nanmax(czen,axis=0))
+  lmxz = data.variables['lon'][imxz]
+  views = [lmxz,(lmxz+90.0)%360.0,(lmxz+180.0)%360.0,(lmxz+270.0)%360.0]
+  
   jobtag = ' '.join(job)
   dummyjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%d pipeline pfix_%s 0 %d %s"%(-9999,jobname,jobncores,jobqueue),-1)
   fixscript = (BATCHSCRIPT(dummyjob,'ae')+
@@ -2375,7 +2413,7 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
                "python -B buildsbdart.py FIX %s  \n"%jobtag+
                "cd "+top+"                    \n"+
                "python -B setpostprocess_earth.py "+top+"/sbdart_earth/"+jobname+" "+
-                jobname+" "+'^'.join(ntimes[1:-1].split(','))+" "+'^'.join(lviews[1:-1].split(','))+" "+jobqueue+" \n")
+                jobname+" "+'^'.join(ntimes[1:-1].split(','))+" "+'^'.join(lviews[1:-1].split(','))+" %d "%imxz+jobqueue+" \n")
   with open(finaldest+"/runfix","w") as fixf:
       fixf.write(fixscript)
   
@@ -2385,7 +2423,7 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   os.system("cp "+top+"/identity.py "+workdir+"/")
   
   
-  views = [28.125,118.125,196.875,275.625]
+  #views = [28.125,118.125,196.875,275.625]
   
   for jlon in range(lons[0],lons[1]):
     for jlat in range(lats[0],lats[1]):
@@ -2403,7 +2441,8 @@ def _prep(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
         for vv in range(0,len(vws)):
             nv = viewdict[vws[vv]]
             write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
-                              nv,nang,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
+                              nv,nang,lmxz,csz,azm,
+                              latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
                               wmin=wmin,wmax=wmax,albedo=unialb,flat=flat,sic=sic,spec=star,
                               smooth=smooth,iout=iout,zout=zout,waterfile=waterfile,
                               icefile=icefile)
@@ -2752,7 +2791,13 @@ def batch_plasim_earth(jid,job):
   os.system("rm "+workdir+"/source/source.tar.gz")
 
   if star:
-      os.system("cp -r "+top+"/sbdart_earth/%s/"%jobname+star+" "+workdir+"/source/solar.dat")
+      #os.system("cp -r "+top+"/sbdart_earth/%s/"%jobname+star+" "+workdir+"/source/solar.dat")
+      w,f = np.loadtxt(top+"/sbdart_earth/%s/"%jobname+star,unpack=True)
+      ffac = flux/np.trapz(f,x=w)
+      f*=ffac
+      data = np.array([w,f])
+      data = data.T
+      np.savetxt(workdir+"/source/solar.dat",data,fmt=['%f','%f'])
   
       
      
@@ -2782,7 +2827,14 @@ def batch_plasim_earth(jid,job):
       rf.write(jobscript)
   os.system("chmod a+x "+top+"/sbdart_earth/%s/subjob_%d.sh"%(name,jid))
   
-  views = [28.125,118.125,196.875,275.625]
+  
+  czen = data.variables['czen'][istep,:,:]
+  imxz = np.argmax(np.nanmax(czen,axis=0))
+  lmxz = data.variables['lon'][imxz]
+  views = [lmxz,(lmxz+90.0)%360.0,(lmxz+180.0)%360.0,(lmxz+270.0)%360.0]
+  
+  
+  #views = [28.125,118.125,196.875,275.625]
   
   
   #Prepare the boundary data for each cell
@@ -2812,7 +2864,7 @@ def batch_plasim_earth(jid,job):
     #vws = ['Z','N','E','S','W']
     nv = viewdict[vw]
     write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw),
-                    nv,nang,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
+                    nv,nang,lmxz,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
                     wmin=0.35,wmax=80.0,sic=sic,flat=flat,spec=star)
     print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
 
@@ -2866,7 +2918,13 @@ def do_plasim_earth(job,vws,nang,lons,lats):
   os.system("tar xvzf "+workdir+"/source/source.tar.gz -C "+workdir+"/source/")
   os.system("rm "+workdir+"/source/source.tar.gz")
   if star:
-      os.system("cp -r "+top+"/sbdart_earth/%s/"%jobname+star+" "+workdir+"/source/solar.dat")
+      #os.system("cp -r "+top+"/sbdart_earth/%s/"%jobname+star+" "+workdir+"/source/solar.dat")
+      w,f = np.loadtxt(top+"/sbdart_earth/%s/"%jobname+star,unpack=True)
+      ffac = flux/np.trapz(f,x=w)
+      f*=ffac
+      data = np.array([w,f])
+      data = data.T
+      np.savetxt(workdir+"/source/solar.dat",data,fmt=['%f','%f'])
   
       
      
@@ -2899,7 +2957,11 @@ def do_plasim_earth(job,vws,nang,lons,lats):
   os.system("chmod a+x "+top+"/sbdart_earth/%s/fixsbdart.sh"%name)
   
   
-  views = [28.125,118.125,196.875,275.625]
+  czen = data.variables['czen'][istep,:,:]
+  imxz = np.argmax(np.nanmax(czen,axis=0))
+  lmxz = data.variables['lon'][imxz]
+  views = [lmxz,(lmxz+90.0)%360.0,(lmxz+180.0)%360.0,(lmxz+270.0)%360.0]
+  #views = [28.125,118.125,196.875,275.625]
   
   n=0
   for jlon in lons:
@@ -2926,7 +2988,7 @@ def do_plasim_earth(job,vws,nang,lons,lats):
     #vws = ['Z','N','E','S','W']
     nv = viewdict[vw]
     write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw),
-                    nv,nang,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
+                    nv,nang,lmxz,csz,azm,latitude,longitude,surf,pco2,p0,tsurf,altz,flux,
                     wmin=0.35,wmax=80.0,sic=sic,spec=star,flat=flat)
     print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
 
