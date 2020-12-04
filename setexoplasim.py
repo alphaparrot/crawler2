@@ -55,20 +55,20 @@ def prep(job):
   args=job.args
   fields=job.fields
   
-  workdir = "exoplasim/job"+jid
+  workdir = "%s/exoplasim/job"%job.top+jid
   
   if "source" in job.parameters:
-    source = job.parameters["source"]
+    source = "%s/exoplasim/%s"%(job.top,job.parameters["source"])
   else:
-    source = "clean"
+    source = "%s/exoplasim/clean"%job.top
 
   if "westeros" in job.parameters:
-    source = "westeros"
+    source = "%s/exoplasim/westeros"%job.top
     
   if "source" in job.parameters:
     source = job.parameters["source"]
   
-  print "Setting stuff for job "+sig+" in plasim/job"+jid+" which is task number "+pid
+  print "Setting stuff for job "+sig+" in exoplasim/job"+jid+" which is task number "+pid
   print "Arguments are:",fields[2:]
   
   notify = 'ae'
@@ -81,7 +81,7 @@ def prep(job):
   #os.system("rm -rf plasim/job"+jid+"/*")
   #os.system("cp exoplasim/"+source+"/* plasim/job"+jid+"/")
   #os.system("rm plasim/job"+jid+"/plasim_restart")
-  #os.system("cp exoplasim/"+scriptfile+" plasim/job"+jid+"/")
+  os.system("cp exoplasim/"+scriptfile+" exoplasim/job"+jid+"/")
   
   nlevs = 10
   if "nlevs" in job.parameters:
@@ -92,7 +92,8 @@ def prep(job):
       val = job.parameters["mars"]
       if val=="True" or val=="1":
           mars=True
-          
+  
+  yearini = 0
   if "year_init" in job.parameters:
       yearini = int(job.parameters["year_init"])
   
@@ -120,6 +121,8 @@ def prep(job):
         resolutions="170"
         nlats=256
   
+  print("Will look for executable in %s"%source)
+  
   if "lockedyear" in job.parameters or "locked" in job.parameters:
     model = exo.TLmodel(workdir=workdir,ncpus=job.ncores,modelname=job.name,
                         layers=nlevs,source=source,mars=mars,inityear=yearini,
@@ -130,15 +133,15 @@ def prep(job):
   
   model.configure()
   
-  os.system("cp exoplasim/synthoutput.py %s/"%model.workdir)
-  os.system("cp crawldefs.py %s/"%model.workdir)
-  os.system("cp identity.py %s/"%model.workdir)
+  os.system("cp %s/exoplasim/synthoutput.py %s/"%(job.top,model.workdir))
+  os.system("cp %s/crawldefs.py %s/"%(job.top,model.workdir))
+  os.system("cp %s/identity.py %s/"%(job.top,model.workdir))
   
   if "cleanup" in job.parameters:
     cleanup = job.parameters["cleanup"]
   else:
     cleanup = 'release-plasim.py'
-  os.system("cp exoplasim/"+cleanup+" plasim/job"+jid+"/")
+  os.system("cp %s/exoplasim/"%job.top+cleanup+" plasim/job"+jid+"/")
   
   tag = 'all'
   
@@ -221,79 +224,81 @@ def prep(job):
       hcout=True
       ntimes = "{0,}"
       lviews = val
-      
+    
+    if name=="resolution":
+      found=True
       
     if name=='pH2u': #in ubars
       found=True
-      model.modify(pH2=float(val)*1.0e-6
+      model.modify(pH2=float(val)*1.0e-6)
             
     if name=='pH2b': #in bars
       found=True
-      model.modify(pH2=float(val)
+      model.modify(pH2=float(val))
       
     if name=='pHeu': #in ubars
       found=True
-      model.modify(pHe=float(val)*1.0e-6
+      model.modify(pHe=float(val)*1.0e-6)
             
     if name=='pHeb': #in bars
       found=True
-      model.modify(pHe=float(val)
+      model.modify(pHe=float(val))
           
     if name=='pN2u': #in ubars
       found=True
-      model.modify(pN2=float(val)*1.0e-6
+      model.modify(pN2=float(val)*1.0e-6)
             
     if name=='pN2b': #in bars
       found=True
-      model.modify(pN2=float(val)
+      model.modify(pN2=float(val))
       
     if name=='pO2u': #in ubars
       found=True
-      model.modify(pO2=float(val)*1.0e-6
+      model.modify(pO2=float(val)*1.0e-6)
             
     if name=='pO2b': #in bars
       found=True
-      model.modify(pO2=float(val)
+      model.modify(pO2=float(val))
     
     if name=='pCO2u': #in ubars
       found=True
-      model.modify(pCO2=float(val)*1.0e-6
+      model.modify(pCO2=float(val)*1.0e-6)
             
     if name=='pCO2b': #in bars
       found=True
-      model.modify(pCO2=float(val)
+      model.modify(pCO2=float(val))
       
     if name=='pAru': #in ubars
       found=True
-      model.modify(pAr=float(val)*1.0e-6
+      model.modify(pAr=float(val)*1.0e-6)
             
     if name=='pArb': #in bars
       found=True
-      model.modify(pAr=float(val)
+      model.modify(pAr=float(val))
       
     if name=='pNeu': #in ubars
       found=True
-      model.modify(pNe=float(val)*1.0e-6
+      model.modify(pNe=float(val)*1.0e-6)
             
     if name=='pNeb': #in bars
       found=True
-      model.modify(pNe=float(val)
+      model.modify(pNe=float(val))
       
     if name=='pKru': #in ubars
       found=True
-      model.modify(pKr=float(val)*1.0e-6
+      model.modify(pKr=float(val)*1.0e-6)
             
     if name=='pKrb': #in bars
       found=True
-      model.modify(pKr=float(val)
+      model.modify(pKr=float(val))
       
     if name=='pH2Ou': # NOTE this will ONLY change the mmw--no affect on moist processes
       found=True
-      model.modify(pH2O=float(val)*1.0e-6
+      model.modify(pH2O=float(val)*1.0e-6)
       
     if name=='pH2Ob': # NOTE this will ONLY change the mmw--no affect on moist processes
       found=True
-      model.modify(pH2O=float(val)
+      model.modify(pH2O=float(val))
     
     #if name=='xH2': # mass fraction
       #found=True
@@ -474,7 +479,7 @@ def prep(job):
     
     if name=="nseaice": #Toggle whether sea ice and snow are allowed (1=yes,0=no, 1 is default)
       found=True
-      model.modify(seaice=bool(int(val))
+      model.modify(seaice=bool(int(val)))
     
     if name=="ncarbon":
       found=True
@@ -969,6 +974,7 @@ def prep(job):
   rs = open(workdir+"/runexoplasim","w")
   rs.write(jobscript)
   rs.close()
+  os.chdir(job.top)
   
 def submit(job):
   if "DEPENDENCIES" in job.parameters:
@@ -978,10 +984,10 @@ def submit(job):
          with open(d+".id","r") as f:
              priorjobs.append(f.read().split('\n')[0].split()[0])
          os.system("echo %s >> "%job.pid+d+".id") #indicate that we depend on this job
-     os.system("cd exoplasim/job"+str(job.home)+" && "+HOLD(priorjobs)+" runexoplasim > %s/%s.id && cd "%(job.top,job.pid)+job.top)
+     os.system("cd %s/exoplasim/job"%job.top+str(job.home)+" && "+HOLD(priorjobs)+" runexoplasim > %s/%s.id && cd "%(job.top,job.pid)+job.top)
 
   else:
-     os.system("cd exoplasim/job"+str(job.home)+" && "+SUB+" runexoplasim > %s/%s.id && cd "%(job.top,job.pid)+job.top)
+     os.system("cd %s/exoplasim/job"%job.top+str(job.home)+" && "+SUB+" runexoplasim > %s/%s.id && cd "%(job.top,job.pid)+job.top)
   time.sleep(1.0)
   tag = job.getID()
   job.write()

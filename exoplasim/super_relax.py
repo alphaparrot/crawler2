@@ -23,7 +23,10 @@ if __name__=="__main__":
   os.system("echo 'SURFACE      TOA'>balance.log")
   os.system("echo 'SURFACE      TOA'>slopes.log")
   
-  model = np.load("model.npy",allow_pickle=True).item()
+  try:
+    model = np.load("model.npy",allow_pickle=True).item()
+  except:
+    model = np.load("model.npy").item()
   modelodir = model.workdir
   model.workdir = os.getcwd()
   
