@@ -76,9 +76,9 @@ def prep(job):
   
   #PlaSim
   #os.system("rm plasim/job"+jid+"/*.sh")
-  #os.system("mkdir plasim/errorlogs/")
-  #os.system("cp exoplasim/job"+jid+"/*.e* plasim/errorlogs/")
-  #os.system("rm -rf plasim/job"+jid+"/*")
+  os.system("mkdir exoplasim/errorlogs/")
+  os.system("cp exoplasim/job"+jid+"/*.e* exoplasim/errorlogs/")
+  os.system("rm -rf exoplasim/job"+jid+"/*")
   #os.system("cp exoplasim/"+source+"/* plasim/job"+jid+"/")
   #os.system("rm plasim/job"+jid+"/plasim_restart")
   os.system("cp exoplasim/"+scriptfile+" exoplasim/job"+jid+"/")
@@ -141,7 +141,7 @@ def prep(job):
     cleanup = job.parameters["cleanup"]
   else:
     cleanup = 'release-plasim.py'
-  os.system("cp %s/exoplasim/"%job.top+cleanup+" plasim/job"+jid+"/")
+  os.system("cp %s/exoplasim/"%job.top+cleanup+" exoplasim/job"+jid+"/")
   
   tag = 'all'
   
@@ -964,7 +964,7 @@ def prep(job):
       
   jobscript += ("   [ -e balance.log ] && cp balance.log ../output/"+job.name+"_balance.log    \n"+
                 "   [ -e slopes.log ] && cp slopes.log ../output/"+job.name+"_slopes.log    \n"+
-                "   python synthoutput.py MOST 1                                      \n"+
+                "   python synthoutput.py MOST 0                                      \n"+
                 "   cp MOST_history.npy ../output/"+job.name+"_history.npy            \n"+
                 '   python '+cleanup+' '+job.name+' '+tag+'                           \n'+
                 transittag+
