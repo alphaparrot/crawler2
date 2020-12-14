@@ -12,7 +12,7 @@ if __name__=="__main__":
     try:
         end = int(sys.argv[3])    
     except:
-        end = len(glob.glob(prefix+"*.nc"))
+        end = len(glob.glob(prefix+"*.nc"))-1
     
     keys = ["clt" ,
             "hfls",

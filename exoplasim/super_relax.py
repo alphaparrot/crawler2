@@ -20,8 +20,8 @@ if __name__=="__main__":
   os.system("rm keepgoing")
   
   os.system("rm -f Abort_Message")
-  os.system("echo 'SURFACE      TOA'>balance.log")
-  os.system("echo 'SURFACE      TOA'>slopes.log")
+  os.system("[ ! -e balance.log ] && echo 'SURFACE      TOA'>balance.log")
+  os.system("[ ! -e slopes.log ] && echo 'SURFACE      TOA'>slopes.log")
   
   try:
     model = np.load("model.npy",allow_pickle=True).item()
@@ -33,7 +33,7 @@ if __name__=="__main__":
   equilibrium = model.runtobalance(threshold = model.threshold,
                                    timelimit = TIMELIMIT)
 
-  model.workdir = modelodir
   model.save()
+  model.workdir = modelodir
   if not equilibrium:
       os.system("touch keepgoing")

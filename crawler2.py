@@ -97,12 +97,13 @@ if __name__=="__main__":
         f.close()
         header=False
         for i in range(mark,-1,-1): #Find header for the task
-          if tasks[i][0]=="#":
-            header = tasks[i]
-            if (len(header.split())-1)==(len(task)): #first header with the right number of args
-              break
-            else:
-              header=False
+          if tasks[i]!='':
+            if tasks[i][0]=="#":
+                header = tasks[i]
+                if (len(header.split())-1)==(len(task)): #first header with the right number of args
+                    break
+                else:
+                    header=False
         if not header:                #None match!
           f=open("tasklog.crwl","a")
           f.write("\nTask "+str(qpid)+" header mismatch; skipping")

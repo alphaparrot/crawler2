@@ -776,6 +776,9 @@ def prep(job):
           stormdict[keys[0]]=float(keys[1])
       model.modify(stormcapture=stormdict)
     
+    if name=="landmap":
+      found=True
+    
     if name=="topomap":
       found=True
       
@@ -794,7 +797,7 @@ def prep(job):
       tmapname = None
       if "topomap" in job.fields:
         tmapname = job.parameters["topomap"]
-        model.modify(landmap=lmapname,topomap=tmapname)
+      model.modify(landmap=lmapname,topomap=tmapname)
       
   print "Arguments set"
   
@@ -824,10 +827,10 @@ def prep(job):
         
       transitjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%s transit transit_%s 0 1 sandyq"%(job.pid,job.name),-1)
       transitfw =(BATCHSCRIPT(transitjob,"abe")+
-                   "mkdir "+SCRATCH+"/transit_%s   \n"%job.name+
-                   "cp %s/exoplasim/output/%s_snapshot.nc /mnt/node_scratch/"%(job.top,job.name)+USER+"/transit_%s/  \n"%job.name+
-                   "cp %s/exoplasim/plasimtransit.py /mnt/node_scratch/"%job.top+USER+"/transit_%s/   \n"%job.name+
-                   "cd "+SCRATCH+"/transit_%s   \n"%job.name+
+                   "mkdir "+SCRATCH+"/exoplasimtransit_%s   \n"%job.name+
+                   "cp %s/exoplasim/output/%s_snapshot.nc /mnt/node_scratch/"%(job.top,job.name)+USER+"/exoplasimtransit_%s/  \n"%job.name+
+                   "cp %s/exoplasim/plasimtransit.py /mnt/node_scratch/"%job.top+USER+"/exoplasimtransit_%s/   \n"%job.name+
+                   "cd "+SCRATCH+"/exoplasimtransit_%s   \n"%job.name+
                    "python plasimtransit.py %s_snapshot.nc %s   \n"%(job.name,transitparams)+
                    "cp *.png %s/exoplasim/output/   \n"%job.top+
                    "cp *.pdf %s/exoplasim/output/   \n"%job.top+
@@ -931,13 +934,13 @@ def prep(job):
   # You may have to change this part
   jobscript =(BATCHSCRIPT(job,notify)+
               "rm keepgoing                                                     \n"+
-              "mkdir "+SCRATCH+"/job"+jid+"            \n")
-  jobscript+=("mkdir "+SCRATCH+"/job"+jid+"/snapshots         \n"+
-              "mkdir "+SCRATCH+"/job"+jid+"/highcadence         \n"+
+              "mkdir "+SCRATCH+"/exoplasimjob"+jid+"            \n")
+  jobscript+=("mkdir "+SCRATCH+"/exoplasimjob"+jid+"/snapshots         \n"+
+              "mkdir "+SCRATCH+"/exoplasimjob"+jid+"/highcadence         \n"+
                   "tar cvzf stuff.tar.gz --exclude='*_OUT*' --exclude='*_REST*' --exclude='*.nc' --exclude='snapshots/' --exclude='highcadence/' ./* \n")
-  jobscript +=("rsync -avzhur stuff.tar.gz "+SCRATCH+"/job"+jid+"/         \n"+
+  jobscript +=("rsync -avzhur stuff.tar.gz "+SCRATCH+"/exoplasimjob"+jid+"/         \n"+
               "rm -rf stuff.tar.gz                     \n"+
-              "cd "+SCRATCH+"/job"+jid+"/              \n"+
+              "cd "+SCRATCH+"/exoplasimjob"+jid+"/              \n"+
               "tar xvzf stuff.tar.gz                   \n"+
               "rm stuff.tar.gz          \n"+
               runprefix+scriptfile+" "+str(job.ncores)+" "+str(nlevs)+" "+histargs+"   \n"+
