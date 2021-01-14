@@ -71,10 +71,12 @@ if __name__=="__main__":
     f=open("priority.crwl","r")
     tasks=f.read().split('\n')
     f.close()
+    while tasks[-1]=="":
+        tasks = tasks[:-1]
     queued=False
     ready=False
     while not ready:       #Search for a job to run 
-      for i in range(0,len(tasks)-1):
+      for i in range(0,len(tasks)):
         if tasks[i]!='':
           if tasks[i][0]!="#":
             task = tasks[i].split()
@@ -191,14 +193,16 @@ if __name__=="__main__":
         tasks = tasks[:-1]
     queued=False
     ready=False
+    print(tasks[-3:])
     while not ready:       #Search for a job to run 
-      for i in range(0,len(tasks)-1):
+      for i in range(0,len(tasks)):
         if tasks[i]!='':
           #print tasks[i]
           if tasks[i][0]!="#":
             task = tasks[i].split()
             if int(task[3])==0:
               queued=int(task[0])
+              print("Queued job ",queued)
               taskmodel = task[1]
               if running+(1.0/8.0)<=nnodes:  #MODELS[taskmodel] #We might be at 1 cpu less than capacity,
                 mark=i                                     #so a plasim job might put us over the limit.

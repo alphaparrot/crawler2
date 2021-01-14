@@ -97,7 +97,7 @@ def prep(job):
   if "year_init" in job.parameters:
       yearini = int(job.parameters["year_init"])
   
-  resolution = "21"
+  resolutions = "21"
   nlats = 32
   
   if "resolution" in job.fields[2:]:
@@ -712,6 +712,9 @@ def prep(job):
     if name=="source":
       found=True #We already took care of it
       
+    if name=="nlevs":
+      found=True
+      
     if name=='cleanup':
       found=True #We already took care of it
       
@@ -757,11 +760,12 @@ def prep(job):
       
     if name=="storms":
       found=True
-      stormclim=True
       if val=="True" or val=="true" or val=="1":
+          stormclim=True
           model.modify(stormclim=True)
       else:
           model.modify(stormclim=False)
+          stormclim=False
     
     if name=="nstorms":
       found=True
@@ -948,7 +952,7 @@ def prep(job):
               "tar cvzf stuff.tar.gz *                                          \n"+
               "rsync -avzhur stuff.tar.gz $PBS_O_WORKDIR/                                          \n"+
               "cd ../ \n"+
-              "rm -rf job"+jid+"                                                         \n"+
+              "rm -rf exoplasimjob"+jid+"                                                         \n"+
               "cd $PBS_O_WORKDIR                                                \n"+
               "tar xvzf stuff.tar.gz                                \n"+
               "rm stuff.tar.gz          \n"+
