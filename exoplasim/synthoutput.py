@@ -39,7 +39,7 @@ if __name__=="__main__":
         history[k] = np.zeros(nrecs)
     
     for n in range(start,end+1):
-        ncd = nc.Dataset(prefix+".%04d.nc"%n,"r")
+        ncd = nc.Dataset(prefix+".%05d.nc"%n,"r")
         lat = ncd.variables['lat'][:]
         lon = ncd.variables['lon'][:]
         for k in keys:
