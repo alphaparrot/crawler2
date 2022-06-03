@@ -66,7 +66,7 @@ if __name__=="__main__":
             for m in range(0,12):
                 output[k,-1,n*12+m] = spatialmath(lat,lon,dvar[m,:,:])
         ncd.close()
-        print n
+        print(n)
         
     np.save(name+".npy",output)
     

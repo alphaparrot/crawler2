@@ -76,7 +76,7 @@ def getslope(key="ts",mean=True,radius=6.371e6,baseline=13):
     #slope. Default is to track surface temperature. Threshhold is the maximum slope we'll allow.
   files = sorted(glob.glob("*.nc"))
   if len(files) < baseline+2:
-    print len(files),baseline
+    print(len(files),baseline)
     return False
   else:
     dd=np.zeros(len(files))

@@ -68,8 +68,8 @@ def prep(job):
   if "source" in job.parameters:
     source = job.parameters["source"]
   
-  print "Setting stuff for job "+sig+" in exoplasim/job"+jid+" which is task number "+pid
-  print "Arguments are:",fields[2:]
+  print("Setting stuff for job "+sig+" in exoplasim/job"+jid+" which is task number "+pid)
+  print("Arguments are:",fields[2:])
   
   notify = 'ae'
   scriptfile = "super_relax.py"
@@ -121,15 +121,25 @@ def prep(job):
         resolutions="170"
         nlats=256
   
-  print("Will look for executable in %s"%source)
+  crashtolerant = False
+  if "crashtolerant" in job.fields and job.parameters["crashtolerant"]=="True" or \
+      job.parameters["crashtolerant"]=="1":
+    crashtolerant=True
+  
+  extension = ".nc"
+  if "extension" in job.fields:
+      extension = job.parameters["extension"]
+  
+  print(("Will look for executable in %s"%source))
   
   if "lockedyear" in job.parameters or "locked" in job.parameters:
     model = exo.TLmodel(workdir=workdir,ncpus=job.ncores,modelname=job.name,
                         layers=nlevs,source=source,mars=mars,inityear=yearini,
-                        resolution="T%s"%resolutions)
+                        resolution="T%s"%resolutions,outputtype=extension,crashtolerant=crashtolerant)
   else:
     model = exo.Model(workdir=workdir,ncpus=job.ncores,modelname=job.name,layers=nlevs,
-                    source=source,mars=mars,inityear=yearini,resolution="T%s"%resolutions)
+                    source=source,mars=mars,inityear=yearini,resolution="T%s"%resolutions,
+                    outputtype=extension,crashtolerant=crashtolerant)
   
   model.configure()
   
@@ -161,6 +171,8 @@ def prep(job):
   setglacier = False
   alloutput = False
   
+  numyears = 50
+  
   sbdvar = "earth"
   plarad = 1.0
   grav = 9.80665
@@ -180,26 +192,28 @@ def prep(job):
   au = 1.496e11
   adjfac = 3.1011857558763545
   
+  argdict = {"otherargs":{}}
+  
   for name in job.fields[2:]:
     val = job.parameters[name]
     found=False    
         
     if name=="noutput":
-      model.modify(noutput=bool(int(val)))
+      argdict["noutput"]=bool(int(val))
       found=True
       
     if name=="flux":
-      model.modify(flux=float(val))
+      argdict["flux"]=float(val)
       flux = float(val)
       found=True
       
     if name=="startemp":
-      model.modify(startemp=float(val))
+      argdict["startemp"]=float(val)
       startemp = float(val)
       found=True
       
     if name=="starspec":
-      model.modify(starspec=val)
+      argdict["starspec"]=val
       starfile = val[:-4]+"_hr.dat"
       found=True
       
@@ -230,75 +244,75 @@ def prep(job):
       
     if name=='pH2u': #in ubars
       found=True
-      model.modify(pH2=float(val)*1.0e-6)
+      argdict["pH2"]=float(val)*1.0e-6
             
     if name=='pH2b': #in bars
       found=True
-      model.modify(pH2=float(val))
+      argdict["pH2"]=float(val)
       
     if name=='pHeu': #in ubars
       found=True
-      model.modify(pHe=float(val)*1.0e-6)
+      argdict["pHe"]=float(val)*1.0e-6
             
     if name=='pHeb': #in bars
       found=True
-      model.modify(pHe=float(val))
+      argdict["pHe"]=float(val)
           
     if name=='pN2u': #in ubars
       found=True
-      model.modify(pN2=float(val)*1.0e-6)
+      argdict["pN2"]=float(val)*1.0e-6
             
     if name=='pN2b': #in bars
       found=True
-      model.modify(pN2=float(val))
+      argdict["pN2"]=float(val)
       
     if name=='pO2u': #in ubars
       found=True
-      model.modify(pO2=float(val)*1.0e-6)
+      argdict["pO2"]=float(val)*1.0e-6
             
     if name=='pO2b': #in bars
       found=True
-      model.modify(pO2=float(val))
+      argdict["pO2"]=float(val)
     
     if name=='pCO2u': #in ubars
       found=True
-      model.modify(pCO2=float(val)*1.0e-6)
+      argdict["pCO2"]=float(val)*1.0e-6
             
     if name=='pCO2b': #in bars
       found=True
-      model.modify(pCO2=float(val))
+      argdict["pCO2"]=float(val)
       
     if name=='pAru': #in ubars
       found=True
-      model.modify(pAr=float(val)*1.0e-6)
+      argdict["pAr"]=float(val)*1.0e-6
             
     if name=='pArb': #in bars
       found=True
-      model.modify(pAr=float(val))
+      argdict["pAr"]=float(val)
       
     if name=='pNeu': #in ubars
       found=True
-      model.modify(pNe=float(val)*1.0e-6)
+      argdict["pNe"]=float(val)*1.0e-6
             
     if name=='pNeb': #in bars
       found=True
-      model.modify(pNe=float(val))
+      argdict["pNe"]=float(val)
       
     if name=='pKru': #in ubars
       found=True
-      model.modify(pKr=float(val)*1.0e-6)
+      argdict["pKr"]=float(val)*1.0e-6
             
     if name=='pKrb': #in bars
       found=True
-      model.modify(pKr=float(val))
+      argdict["pKr"]=float(val)
       
     if name=='pH2Ou': # NOTE this will ONLY change the mmw--no affect on moist processes
       found=True
-      model.modify(pH2O=float(val)*1.0e-6)
+      argdict["pH2O"]=float(val)*1.0e-6
       
     if name=='pH2Ob': # NOTE this will ONLY change the mmw--no affect on moist processes
       found=True
-      model.modify(pH2O=float(val))
+      argdict["pH2O"]=float(val)
     
     #if name=='xH2': # mass fraction
       #found=True
@@ -367,9 +381,13 @@ def prep(job):
       #gasesx['CO2'] = pCO2*1e-6     #volumefraction
       #edit_namelist(jid,"radmod_namelist","CO2",str(pCO2))      
       
+    if name=="timestep":
+      found=True
+      argdict["timestep"]=float(val)
+      
     if name=="pressure": #in bars
       found=True
-      model.modify(pressure=float(val))
+      argdict["pressure"]=float(val)
        
     if name=="alloutput":
       found=True
@@ -387,27 +405,33 @@ def prep(job):
           
     if name=="pressurebroaden":
       found=True
-      model.modify(pressurebroaden=bool(int(val)))
+      argdict["pressurebroaden"]=bool(int(val))
       
     if name=="year": #In days
       found=True
-      model.modify(year=float(val))
+      argdict["year"]=float(val)
       
     if name=="vtype":
       found=True
-      model.modify(vtype=int(val))
+      argdict["vtype"]=int(val)
      
     if name=="rotationperiod":
       found=True
-      model.modify(rotationperiod=float(val))
+      argdict["rotationperiod"]=float(val)
       
     if name=="lockedyear": #Year length in days for a tidally-locked planet_namelist, and lon0.
       found=True
       sbdvar="locked"
       val0 = val.split('/')[0]
       val1 = val.split('/')[1]
-      model.modify(rotationperiod=float(val0))
-      model.modify(substellarlon=float(val1))
+      argdict["rotationperiod"]=float(val0)
+      argdict["substellarlon"]=float(val1)
+      
+    if name=="desyncperiod": #period in years for the substellar point to drift a full circle
+      found=True
+      desyncp = float(val)*360.0*1440.0  #Convert to minutes
+      desync = 360.0 / desyncp #degrees per minute
+      argdict["desync"]=desync
       
     if name=="sbdart_type": #Whether to use SBDART in tidally-locked or Earth configuration
       found=True
@@ -415,7 +439,7 @@ def prep(job):
       
     if name=="restart":
       found=True
-      model.modify(restartfile=val)
+      argdict["restartfile"]=val
         
     if name=="hweathering":
       found=True
@@ -425,37 +449,37 @@ def prep(job):
       
     if name=="balance":
       found=True
-      model.modify(threshold=float(val))
+      argdict["threshold"]=float(val)
      
     if name=="gravity":
       found=True
       grav = float(val)
-      model.modify(gravity=float(val))
+      argdict["gravity"]=float(val)
        
     if name=="radius":
       found=True
       plarad=float(val)
-      model.modify(radius=float(val))
+      argdict["radius"]=float(val)
      
     if name=="eccen":
       found=True
-      model.modify(eccentricity=float(val))
+      argdict["eccentricity"]=float(val)
      
     if name=="obliq":
       found=True
-      model.modify(obliquity=float(val))
+      argdict["obliquity"]=float(val)
        
     if name=="vernlon":
       found=True
-      model.modify(lonvernaleq=float(val))
+      argdict["lonvernaleq"]=float(val)
            
     if name=="nfixorb":
       found=True
-      model.modify(fixedorbit=bool(int(val)))
+      argdict["fixedorbit"]=bool(int(val))
       
     if name=="oroscale":
       found=True
-      model.modify(orography=float(val))
+      argdict["orography"]=float(val)
        
     if name=="nglacier":
       found=True
@@ -479,177 +503,179 @@ def prep(job):
     
     if name=="nseaice": #Toggle whether sea ice and snow are allowed (1=yes,0=no, 1 is default)
       found=True
-      model.modify(seaice=bool(int(val)))
+      argdict["seaice"]=bool(int(val))
     
     if name=="ncarbon":
       found=True
-      model.modify(co2weathering=bool(int(val)))
+      argdict["co2weathering"]=bool(int(val))
       
     if name=="co2evolve":
       found=True
-      model.modify(evolveco2=bool(int(val)))
+      argdict["evolveco2"]=bool(int(val))
           
     if name=="filterpower": ##will work with physfilter and 'exp'
       found=True
-      model.modify(filterpower = int(val))
+      argdict["filterpower"] = int(val)
         
     if name=="filterkappa": ##will work with physfilter and 'exp'
       found=True
-      model.modify(filterkappa = float(val))
+      argdict["filterkappa"] = float(val)
         
     if name=="filterLHN0": ##will work with physfilter and 'lh'
       found=True
-      model.modify(filterLHN0 = float(val))
+      argdict["filterLHN0"] = float(val)
         
     if name=="physfilter":
       found=True
-      model.modify(physicsfilter = val)
+      argdict["physicsfilter"] = val
         
     if name=="frictionmod":
       found=True
-      model.modify(otherargs={"FRCMOD@plasim_namelist":val})
+      argdict["otherargs"]["FRCMOD@plasim_namelist"]=val
       
     if name=="qdiff": #spec humiditiy diffusion timescale in days (default=0.1)
       found=True
-      model.modify(qdiffusion=float(val))
+      argdict["qdiffusion"]=float(val)
         
     if name=="tdiff": #temperature diffusion timescale in days (default=5.6)
       found=True
-      model.modify(tdiffusion=float(val))
+      argdict["tdiffusion"]=float(val)
         
     if name=="zdiff": #vorticity diffusion timescale in days (default=1.1)
       found=True
-      model.modify(zdiffusion=float(val))
+      argdict["zdiffusion"]=float(val)
         
     if name=="ddiff": #divergence diffusion timescale in days (default=0.2)
       found=True
-      model.modify(ddiffusion=float(val))
+      argdict["ddiffusion"]=float(val)
       
     if name=="diffpower": #power for wavelength cutoff diffusion (default=2 for T21, 4 for T42)
       found=True
-      model.modify(diffusionpower=int(val))
+      argdict["diffusionpower"]=int(val)
       
     if name=="nhdiff": #Critical wavenumber for diffusion
       found=True
-      model.modify(diffusionwaven=int(val))
+      argdict["diffusionwaven"]=int(val)
         
     if name=="nsupply" or name=="wmax":
       found=True
-      model.modify(erosionsupplylimit=float(val)) 
+      argdict["erosionsupplylimit"]=float(val)
       
     if name=="volcanCO2":
       found=True
-      model.modify(outgassing=float(val))
+      argdict["outgassing"]=float(val)
     
     if name=="snowicealbedo":
       found=True
-      model.modify(snowicealbedo=float(val))
+      argdict["snowicealbedo"]=float(val)
       
     if name=="nbandalbedo":
       found=True
-      model.modify(twobandalbedo=bool(int(val)))
+      argdict["twobandalbedo"]=bool(int(val))
       
     if name=="snowmax":
       found=True
-      model.modify(maxsnow=float(val))
+      argdict["maxsnow"]=float(val)
       
     if name=="soilalbedo":
       found=True
-      model.modify(soilalbedo=float(val))
+      argdict["soilalbedo"]=float(val)
       
     if name=="oceanalbedo":
       found=True
-      model.modify(oceanalbedo=float(val))
+      argdict["oceanalbedo"]=float(val)
       
     if name=="oceanalbzad": #zenith-angle dependence for the ocean direct beam reflectivity
       found=True
-      model.modify(oceanzenith=val)
+      argdict["oceanzenith"]=val
           
     if name=="wetsoil":
       found=True
-      model.modify(wetsoil=bool(int(val)))
+      argdict["wetsoil"]=bool(int(val))
       
     if name=="soilh2o":
       found=True
-      model.modify(soilwatercap=float(val))
+      argdict["soilwatercap"]=float(val)
       
     if name=="naqua":
       found=True
-      model.modify(aquaplanet=bool(int(val)))
+      argdict["aquaplanet"]=bool(int(val))
       
     if name=="ndesert":
       found=True
-      model.modify(desertplanet=bool(int(val)))
+      argdict["desertplanet"]=bool(int(val))
       
     if name=="soilwetness":
       found=True
-      model.modify(soilsaturation=float(val))
+      argdict["soilsaturation"]=float(val)
       
     if name=="drycore":
       found=True
-      model.modify(drycore=bool(int(val)))
+      argdict["drycore"]=bool(int(val))
         
     if name=="ozone":
       found=True
-      model.modify(ozone=bool(int(val)))
+      argdict["ozone"]=bool(int(val))
       
     if name=="soilheat": # 0.001 J/m^3/K = 1 J/kg/K. Ocean = 4180 J/kg/K = 4.18e6 J/m^3/K
       found=True
-      model.modify(cpsoil=float(val))
+      argdict["cpsoil"]=float(val)
       
     if name=="soildepth":
       found=True
-      model.modify(soildepth=float(val))
+      argdict["soildepth"]=float(val)
       
     if name=="mixedlayer":
       found=True
-      model.modify(mldepth=float(val))
+      argdict["mldepth"]=float(val)
       
     if name=="nwpd":
       found=True
-      model.modify(writefrequency=int(val))
+      argdict["writefrequency"]=int(val)
       
     if name=="months":
       found=True
-      model.modify(otherargs={"N_RUN_MONTHS@plasim_namelist":val})
+      argdict["otherargs"]["N_RUN_MONTHS@plasim_namelist"]=val
       
     if name=="rhum_c":
       found=True
-      model.modify(otherargs={"RCRITMOD@rainmod_namelist":val})
+      argdict["otherargs"]["RCRITMOD@rainmod_namelist"]=val
       
     if name=="rhum_m":
       found=True
-      model.modify(otherargs={"RCRITSLOPE@rainmod_namelist":val})
+      argdict["otherargs"]["RCRITSLOPE@rainmod_namelist"]=val
       #if negative, cloud formation will be suppressed at high altitudes
       #if positive, cloud formation will be encouraged at high altitudes
       
     if name=="rcrit":
       found=True
-      model.modify(ortherargs={"RCRIT@rainmod_namelist":val})
+      argdict["otherargs"]["RCRIT@rainmod_namelist"]=val
       
     if name=="days":
       found=True
-      model.modify(otherargs={"N_RUN_DAYS@plasim_namelist":val})
+      argdict["otherargs"]["N_RUN_DAYS@plasim_namelist"]=val
       
     if name=="steps":
       found=True
-      model.modify(otherargs={"N_RUN_STEPS@plasim_namelist":val})
+      argdict["otherargs"]["N_RUN_STEPS@plasim_namelist"]=val
       
     if name=="o3":
       found=True
-      model.modify(ozone=bool(int(val)))
+      argdict["ozone"]=bool(int(val))
       
     if name=="ptop":
       found=True
-      model.modify(modeltop=float(val))
+      argdict["modeltop"]=float(val)
       
     if name=="vlin_top":
       found=True
-      model.modify(vtype=4,modeltop=float(val))
+      argdict["vtype"]=4
+      argdict["modeltop"]=float(val)
       
     if name=="vlog_top":
       found=True
-      model.modify(vtype=3,modeltop=float(val))
+      argdict["vtype"]=3
+      argdict["modeltop"]=float(val)
       
     if name=="stratosphere":
       found=True
@@ -657,15 +683,13 @@ def prep(job):
       ptop2 = np.array(ptop2).astype(float)
       ptop = min(ptop2)
       ptop2 = max(ptop2)
-      model.modify(stratosphere=True,tropopause=float(ptop),modeltop=float(ptop2))
-      
-    if name=="timestep":
-      found=True
-      model.modify(timestep=float(val))
+      argdict["stratosphere"]=True
+      argdict["tropopause"]=float(ptop)
+      argdict["modeltop"]=float(ptop2)
       
     if name=="rayleigh":
       found=True
-      model.modify(otherargs={"NEWRSC@radmod_namelist":val})
+      argdict["otherargs"]["NEWRSC@radmod_namelist"]=val
       
     if name=="script":
       found=True
@@ -688,26 +712,35 @@ def prep(job):
       hcend   = vals[1]
       hcint   = vals[2]
       hc = {"toggle":1,"start":hcstart,"end":hcend,"interval":hcint}
-      model.modify(highcadence=hc)
+      argdict["highcadence"]=hc
       
     if name=="columnmode":
       found=True
       if val=="-":
           val=None
-      model.modify(columnmode=val)
+      argdict["columnmode"]=val
       
     if name=="snapshots":
       found=True
-      model.modify(snapshots=int(val))
+      argdict["snapshots"]=int(val)
       nsn = True
+      
+    if name=="runyears":
+      found=True
+      numyears=int(val)
+      
+    if name=="stepsperyear":
+      found=True
+      argdict["runsteps"]=int(val)
       
     if name=="extra":
       found=True
-      model.modify(resources=[val,])
+      argdict["resources"]=[val,]
       
     if name=="fixedlon":
       found=True
-      model.modify(sychronous=True,substellarlon=float(val))
+      argdict["sychronous"]=True
+      argdict["substellarlon"]=float(val)
       
     if name=="source":
       found=True #We already took care of it
@@ -756,20 +789,20 @@ def prep(job):
       
     if name=="gascon":
       found=True
-      model.modify(gascon=float(val))
+      argdict["gascon"]=float(val)
       
     if name=="storms":
       found=True
       if val=="True" or val=="true" or val=="1":
           stormclim=True
-          model.modify(stormclim=True)
+          argdict["stormclim"]=True
       else:
-          model.modify(stormclim=False)
+          argdict["stormclim"]=False
           stormclim=False
     
     if name=="nstorms":
       found=True
-      model.modify(nstorms=int(val))
+      argdict["nstorms"]=int(val)
       
     if name=="stormtrigger":
       found=True
@@ -778,7 +811,7 @@ def prep(job):
       for v in vals:
           keys = v.split("=")
           stormdict[keys[0]]=float(keys[1])
-      model.modify(stormcapture=stormdict)
+      argdict["stormcapture"]=stormdict
     
     if name=="landmap":
       found=True
@@ -790,20 +823,23 @@ def prep(job):
       found=True
       args = name.split('@')
       if len(args)>1:
-        model.modify(otherargs={name:val})
+        argdict["otherargs"][name]=val
       else:
-        print "Unknown parameter "+name+"! Submit unsupported parameters as KEY@NAMELIST in the header!"
+        print("Unknown parameter "+name+"! Submit unsupported parameters as KEY@NAMELIST in the header!")
     
   if setglacier:
-      model.modify(glaciers=glaciers)
+      argdict["glaciers"]=glaciers
   if "landmap" in job.fields:
       lmapname = job.parameters["landmap"]
       tmapname = None
       if "topomap" in job.fields:
         tmapname = job.parameters["topomap"]
-      model.modify(landmap=lmapname,topomap=tmapname)
+      argdict["landmap"]=lmapname
+      argdict["topomap"]=tmapname
       
-  print "Arguments set"
+  model.modify(**argdict)
+  
+  print("Arguments set")
   
   gasesvx = {"H2":0,"He":0,"CO2":0,"N2":0,"O2":0}
   for gas in model.pgases:
@@ -821,13 +857,13 @@ def prep(job):
       transitparams+="%f"%model.gascon
       
       
-      print "CONFIGURING POST-RUN TRANSIT SPECTROSCOPY..."
+      print("CONFIGURING POST-RUN TRANSIT SPECTROSCOPY...")
       txs = transitparams.split()[3:]
       txsn = ['H2','He','CO2',"N2",'O2']
       for ntt in range(len(txsn)):
-          print "\t... %s mass fraction = \t %s"%(txsn[ntt],txs[ntt])
+          print("\t... %s mass fraction = \t %s"%(txsn[ntt],txs[ntt]))
       if len(txs)>len(txsn):
-          print "\t... gas constant R manually set to %s"%(txs[-1])
+          print("\t... gas constant R manually set to %s"%(txs[-1]))
         
       transitjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%s transit transit_%s 0 1 sandyq"%(job.pid,job.name),-1)
       transitfw =(BATCHSCRIPT(transitjob,"abe")+
@@ -864,14 +900,14 @@ def prep(job):
           _pco2 = 0.0
       sbdparams.append(_pco2)
       sbdparams.append(flux)
-      print model.pressure*1.0e3, _pco2
+      print(model.pressure*1.0e3, _pco2)
       sbdparams.append(model.pressure*1.0e3-_pco2)
       sbdparams.append(grav)
       sbdparams.append('^'.join(ntimes[1:-1].split(',')))
       sbdparams.append('^'.join(lviews[1:-1].split(',')))
       sbdparams.append(str(highcadence))
       
-      print tuple(sbdparams),sbdvar
+      print(tuple(sbdparams),sbdvar)
       os.system("mkdir "+job.top+"/sbdart_%s/%s"%(sbdvar,job.name))
       
       sbd_specfile = ""
@@ -921,7 +957,7 @@ def prep(job):
                    "   cd $PBS_O_WORKDIR             \n")
       os.system("cp "+job.top+"/release.py "+job.top+"/sbdart_%s/"%sbdvar+job.name+"/")
 
-  histargs = ''
+  histargs = '%d'%numyears
   #if weathrestart:
       #histargs = wfile+" "+str(yearini)
   #if nwesteros:
@@ -938,7 +974,8 @@ def prep(job):
   # You may have to change this part
   jobscript =(BATCHSCRIPT(job,notify)+
               "rm keepgoing                                                     \n"+
-              "mkdir "+SCRATCH+"/exoplasimjob"+jid+"            \n")
+              "mkdir "+SCRATCH+"/exoplasimjob"+jid+"            \n"+
+              "rm -rf "+SCRATCH+"/exoplasimjob"+jid+"/*   \n")
   jobscript+=("mkdir "+SCRATCH+"/exoplasimjob"+jid+"/snapshots         \n"+
               "mkdir "+SCRATCH+"/exoplasimjob"+jid+"/highcadence         \n"+
                   "tar cvzf stuff.tar.gz --exclude='*_OUT*' --exclude='*_REST*' --exclude='*.nc' --exclude='snapshots/' --exclude='highcadence/' ./* \n")

@@ -72,15 +72,15 @@ if __name__=="__main__":
     if "notime" in sys.argv[:]:
         ntimes=[3,]
     else:
-        ntimes=range(ps.shape[0])
+        ntimes=list(range(ps.shape[0]))
     alltransits = np.zeros((len(ntimes)*len(lt)*2,2708))
     snaptransits = np.zeros((len(ntimes),2708))
     nx=0
     lon=16
     for lat in range(len(lt)):
-        print "Latitude %d"%(lat+1)
+        print("Latitude %d"%(lat+1))
         for nt in ntimes:
-            print "Time %d"%(nt+1)
+            print("Time %d"%(nt+1))
             p_sim=ps[nt,lat,lon]*lev
             t_sim=ta[nt,:,lat,lon]
             h2o_spechum_sim=hus[nt,:,lat,lon]
@@ -128,13 +128,13 @@ if __name__=="__main__":
             gasesx['O2'] = xO2*(1-new_q)
             gasesx['H2O'] = new_q
             totalfrac = np.zeros(new_q.shape)
-            for z in gasesx.keys():
+            for z in list(gasesx.keys()):
                 totalfrac += gasesx[z]
             if totalfrac.min()==0. or np.isnan(totalfrac.min()):
-                print totalfrac
-                print gasesx
+                print(totalfrac)
+                print(gasesx)
             #totalfrac = np.nansum([gasesx[z] for z in gasesx.keys()],axis=0)
-            for z in gasesx.keys():
+            for z in list(gasesx.keys()):
                 if not (gasesx[z].max()==gasesx[z].min()==0.):
                     gasesx[z] = gasesx[z]/totalfrac
             abundances = {}
@@ -162,7 +162,7 @@ if __name__=="__main__":
                 MMW = np.ones_like(temperature)
                 for k in range(len(MMW)):
                     mmwd = 0
-                    for x in gasesx.keys():
+                    for x in list(gasesx.keys()):
                         mmwd += gasesx[x][k]/smws['m'+x]
                     mmwt = 1.0/mmwd
                     MMW[k] = mmwt
@@ -183,9 +183,9 @@ if __name__=="__main__":
 
     lon=48
     for lat in range(len(lt))[::-1]:
-        print "Latitude %d"%(lat+1)
+        print("Latitude %d"%(lat+1))
         for nt in ntimes:
-            print "Time %d"%(nt+1)
+            print("Time %d"%(nt+1))
             p_sim=ps[nt,lat,lon]*lev
             t_sim=ta[nt,:,lat,lon]
             h2o_spechum_sim=hus[nt,:,lat,lon]
@@ -234,13 +234,13 @@ if __name__=="__main__":
             gasesx['O2'] = xO2*(1-new_q)
             gasesx['H2O'] = new_q
             totalfrac = np.zeros(new_q.shape)
-            for z in gasesx.keys():
+            for z in list(gasesx.keys()):
                 totalfrac += gasesx[z]
             if totalfrac.min()==0. or np.isnan(totalfrac.min()):
-                print totalfrac
-                print gasesx
+                print(totalfrac)
+                print(gasesx)
             #totalfrac = np.nansum([gasesx[z] for z in gasesx.keys()],axis=0)
-            for z in gasesx.keys():
+            for z in list(gasesx.keys()):
                 if not (gasesx[z].max()==gasesx[z].min()==0.):
                     gasesx[z] = gasesx[z]/totalfrac
             abundances = {}
@@ -268,7 +268,7 @@ if __name__=="__main__":
                 MMW = np.ones_like(temperature)
                 for k in range(len(MMW)):
                     mmwd = 0
-                    for x in gasesx.keys():
+                    for x in list(gasesx.keys()):
                         mmwd += gasesx[x][k]/smws['m'+x]
                     mmwt = 1.0/mmwd
                     MMW[k] = mmwt

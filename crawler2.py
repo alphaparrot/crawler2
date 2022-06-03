@@ -55,11 +55,11 @@ if __name__=="__main__":
       resources = getjobs(rude=rude)  
     
       running = 0
-      for r in resources.keys():
+      for r in list(resources.keys()):
     #for n in range(0,len(resources[r])):
       #running+=int(resources[r][n])*1.0/MODELS[r]
           running += np.sum(resources[r])  
-  print str(running)+" of "+str(nnodes)+" nodes used"
+  print(str(running)+" of "+str(nnodes)+" nodes used")
   
   priority = True
   
@@ -118,7 +118,7 @@ if __name__=="__main__":
       else:                           #We didn't find an available task
         f=open("tasklog.crwl","a")
         f.write("\nNo open jobs in priority queue; all done!")
-        print "No open jobs in priority queue"
+        print("No open jobs in priority queue")
         f.close()
         #running=nnodes
         priority = False
@@ -126,35 +126,35 @@ if __name__=="__main__":
 
     #Engage next task
     if ready:
-      print "Engaging a priority task"
+      print("Engaging a priority task")
       
       goahead = False
-      print "Creating a Job with header\n",header,"\n and arguments \n",' '.join(task) 
+      print("Creating a Job with header\n",header,"\n and arguments \n",' '.join(task)) 
       newjob = Job(header,' '.join(task),-1)       #Collect and organize the job parameters
       
       for i in range(0,len(resources[taskmodel])):
         if float(resources[taskmodel][i])==0.0:
           rid = i
-          print resources[taskmodel]
+          print(resources[taskmodel])
           resources[taskmodel][i]=newjob.ncores/8.0#float(MODELS[taskmodel])
-          print resources[taskmodel]
+          print(resources[taskmodel])
           newjob.home = rid
           goahead = True
           break
       if not goahead:                 #No open slot found for this model
         if running+float(newjob.ncores)/8.0 <= nnodes: #MODELS[taskmodel] #We do have space for one more though
-          print resources[taskmodel]
+          print(resources[taskmodel])
           tmp = np.zeros(len(resources[taskmodel])+100)
           tmp[:len(resources[taskmodel])] = resources[taskmodel][:]
           n0 = len(resources[taskmodel])
           resources[taskmodel] = tmp
           resources[taskmodel][n0] = newjob.ncores/8.0#float(MODELS[taskmodel])
-          print resources[taskmodel]
+          print(resources[taskmodel])
           rid = n0
           newjob.home = rid
           goahead = True
         else:                                       #Nope, pack up and go home
-          print "At capacity."
+          print("At capacity.")
           priority = False
       if goahead:                           #Found a job slot
         task[3] = '1'
@@ -178,8 +178,8 @@ if __name__=="__main__":
         running += float(newjob.ncores)/8.0#MODELS[taskmodel]    #Note that we are *that* much closer to the limit.
   
   
-  print "Moving on to normal tasks"
-  print running,nnodes
+  print("Moving on to normal tasks")
+  print(running,nnodes)
   capacityflag = False
   nsofar = 0
   while running < nnodes: #We are using less than our full allocation, and the priority list is empty.
@@ -193,7 +193,7 @@ if __name__=="__main__":
         tasks = tasks[:-1]
     queued=False
     ready=False
-    print(tasks[-3:])
+    print((tasks[-3:]))
     while not ready:       #Search for a job to run 
       for i in range(0,len(tasks)):
         if tasks[i]!='':
@@ -202,7 +202,7 @@ if __name__=="__main__":
             task = tasks[i].split()
             if int(task[3])==0:
               queued=int(task[0])
-              print("Queued job ",queued)
+              print(("Queued job ",queued))
               taskmodel = task[1]
               if running+(1.0/8.0)<=nnodes:  #MODELS[taskmodel] #We might be at 1 cpu less than capacity,
                 mark=i                                     #so a plasim job might put us over the limit.
@@ -239,7 +239,7 @@ if __name__=="__main__":
         f.write("\nNo open jobs in task queue; all done!")
         f.close()
         running=nnodes
-        print "No open jobs in task queue; all done!"
+        print("No open jobs in task queue; all done!")
         capacityflag = True
         break
 
@@ -247,34 +247,34 @@ if __name__=="__main__":
     if ready:
       
       goahead = False
-      print "Creating a Job with header\n",header,"\n and arguments \n",' '.join(task) 
+      print("Creating a Job with header\n",header,"\n and arguments \n",' '.join(task)) 
       newjob = Job(header,' '.join(task),-1)       #Collect and organize the job parameters
       
       for i in range(0,len(resources[taskmodel])):
         if float(resources[taskmodel][i])==0.0:
           rid = i
-          print resources[taskmodel]
-          print newjob.ncores,MODELS[taskmodel]
+          print(resources[taskmodel])
+          print(newjob.ncores,MODELS[taskmodel])
           resources[taskmodel][i]=newjob.ncores/8.0#float(MODELS[taskmodel])
-          print resources[taskmodel]
+          print(resources[taskmodel])
           newjob.home = rid
           goahead = True
           break
       if not goahead:                 #No open slot found for this model
         if running+float(newjob.ncores)/8.0 <= nnodes: #MODELS[taskmodel] #We do have space for one more though
-          print resources[taskmodel]
-          print newjob.ncores,MODELS[taskmodel]
+          print(resources[taskmodel])
+          print(newjob.ncores,MODELS[taskmodel])
           tmp = np.zeros(len(resources[taskmodel])+100)
           tmp[:len(resources[taskmodel])] = resources[taskmodel][:]
           n0 = len(resources[taskmodel])
           resources[taskmodel] = tmp
           resources[taskmodel][n0] = newjob.ncores/8.0#float(MODELS[taskmodel])
-          print resources[taskmodel]
+          print(resources[taskmodel])
           rid = n0
           newjob.home = rid
           goahead = True
         else:                                       #Nope, pack up and go home
-          print "At capacity."
+          print("At capacity.")
           capacityflag = True
       if goahead:                           #Found a job slot
         task[3] = '1'
@@ -305,7 +305,7 @@ if __name__=="__main__":
     
         if not rude:
             running = 0
-            for r in resources.keys():
+            for r in list(resources.keys()):
                 running += np.sum(resources[r]) 
     
     

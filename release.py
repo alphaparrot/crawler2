@@ -31,7 +31,7 @@ def sweep(top):
         os.system("echo 'Job "+name+" assuming control'>>"+top+"/inuse.log")
         os.system("echo '1'>"+top+"/inuse.crwl")
         for jobf in waitlist:
-            print jobf
+            print(jobf)
             job = np.load(jobf).item()
             sig = job.name
             jid = job.home

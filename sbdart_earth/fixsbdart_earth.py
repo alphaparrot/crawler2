@@ -774,7 +774,7 @@ def analyzecell_plasim_earth(data,views,lat,lon,workdir,grav=9.80665,sol_dec=0.0
   hus = data.variables['hus'][istep,:,lat,lon]
   rhoh2o = hus*rhohum
   
-  print "Writing atms.dat"
+  print("Writing atms.dat")
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
   for vw in views:
     writecolumn_single_plasim(zs,pa,ta,rhoh2o*1000.0,np.zeros(len(lvs)),workdir+"_%s"%vw)
@@ -799,7 +799,7 @@ def analyzecell_plasim_earth(data,views,lat,lon,workdir,grav=9.80665,sol_dec=0.0
   if not clouds:
     cld[:] = 0.0
     
-  print "Writing usrcld.dat"
+  print("Writing usrcld.dat")
   #Need to implement a cloud-free option
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
   
@@ -904,7 +904,7 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False,clouds=Tru
   hus = np.mean(data.variables['hus'][:,:,lat,lon],axis=0)
   rhoh2o = hus*rhohum
   
-  print "Writing atms.dat"
+  print("Writing atms.dat")
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
   writecolumn_single_plasim(zs,pa,ta,rhoh2o*1000.0,np.zeros(len(lvs)),workdir)
   
@@ -927,7 +927,7 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False,clouds=Tru
     cld[:] = 0.0
     dql[:] = 0.0
     
-  print "Writing usrcld.dat"
+  print("Writing usrcld.dat")
   #Need to implement a cloud-free option
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
   cloudcolumn_single(dql,cld,workdir)
@@ -994,7 +994,7 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   #lsm = data['lsm'][-1,lat,lon]
   lsm = 0.0
   if lsm < 0.5: #sea
-    if 'pctsrf_sic' in data.keys():
+    if 'pctsrf_sic' in list(data.keys()):
       sic = data['pctsrf_sic'][lat,lon]
     else:
       sic = min(data['h2o_ice_surf'][lat,lon],1.0)
@@ -1046,7 +1046,7 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   if smooth:
       rhoh2o = np.zeros(hus.shape)
   
-  print "Writing atms.dat"
+  print("Writing atms.dat")
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
   writecolumn_single_lmdz(zs,pa,ta,rhoh2o*1000.0,np.zeros(len(zs)),workdir)
   
@@ -1080,7 +1080,7 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   if not clouds:
       cld[:] = 0.0
   
-  print "Writing usrcld.dat"
+  print("Writing usrcld.dat")
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
   cloudcolumn_single_lmdz(dql,dqi,np.zeros(len(cld))+8,rei,cld,workdir)
   
@@ -1128,7 +1128,7 @@ def do_plasim_earth(name,vws,nang,pCO2,p0,flux,lons,lats): #data,lats,lons,pCO2,
               'N':3,
               'S':4}    
       
-  print "Setting up for times ",nang,"and views",vws
+  print("Setting up for times ",nang,"and views",vws)
   
   os.system("cp /mnt/scratch-lustre/paradise/crawler2/hopper/"+name+"_snapshot.nc "+workdir+"/"+name+"_snapshot.nc")
   data = nc.Dataset(workdir+"/"+name+"_snapshot.nc","r")  
@@ -1189,7 +1189,7 @@ def do_plasim_earth(name,vws,nang,pCO2,p0,flux,lons,lats): #data,lats,lons,pCO2,
     write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[0]),
                       nv,nang,csz,azm,latitude,longitude,surf,pCO2,p0,tsurf,altz,flux,
                       wmin=0.35,wmax=80.0)
-    print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[0])
+    print("Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[0]))
 
   os.system("bash /mnt/scratch-lustre/paradise/crawler2/sbdart_earth/%s/fixsbdart.sh"%name) 
 
@@ -1214,7 +1214,7 @@ def getbroken(name):
             lons.append(int(parts[1]))
             angs.append(int(parts[2]))
             vws.append(parts[3])
-            print "Found broken output file: sbout_%02d_%02d_%d_%s"%(lats[-1],lons[-1],angs[-1],vws[-1])
+            print("Found broken output file: sbout_%02d_%02d_%d_%s"%(lats[-1],lons[-1],angs[-1],vws[-1]))
         else:
             os.system("rm /mnt/scratch-lustre/paradise/crawler2/sbdart_earth/%s/%s"%(name,b))
     return lons,lats,angs[-1],vws[-1]

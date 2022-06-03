@@ -52,7 +52,7 @@ if __name__=="__main__":
             if "notime" in sys.argv[:]:
                 ntimes=[3,]
             else:
-                ntimes=range(ps.shape[0])
+                ntimes=list(range(ps.shape[0]))
             alltransits = np.zeros((len(ntimes)*len(lt)*2,2708))
             nx=0
             prefix = output[:-3]
@@ -289,7 +289,7 @@ if __name__=="__main__":
             if "notime" in sys.argv[:]:
                 ntimes=[3,]
             else:
-                ntimes=range(ps.shape[0])
+                ntimes=list(range(ps.shape[0]))
             alltransits = np.zeros((len(ntimes)*len(lt)*2,2708))
             nx=0
             prefix = output[:-3]
@@ -522,14 +522,14 @@ if __name__=="__main__":
         if "notime" in sys.argv[:]:
             ntimes=[3,]
         else:
-            ntimes=range(ps.shape[0])
+            ntimes=list(range(ps.shape[0]))
         alltransits = np.zeros((len(ntimes)*len(lt)*2,2708))
         nx=0
         for lon in [16,48]:
             for lat in range(len(lt)):
-                print "Latitude %d"%(lat+1)
+                print("Latitude %d"%(lat+1))
                 for nt in ntimes:
-                    print "Time %d"%(nt+1)
+                    print("Time %d"%(nt+1))
                     p_sim=ps[nt,lat,lon]*lev
                     t_sim=ta[nt,:,lat,lon]
                     h2o_spechum_sim=hus[nt,:,lat,lon]
@@ -645,7 +645,7 @@ if __name__=="__main__":
                         MMW = np.ones_like(temperature)
 			for k in range(len(MMW)):
 	                        mmwd = 0
-        	                for x in gasesx.keys():
+        	                for x in list(gasesx.keys()):
                                         mmwd += gasesx[x][k]/smws['m'+x]
       				mmwt = 1.0/mmwd
                         	MMW[k] = mmwt

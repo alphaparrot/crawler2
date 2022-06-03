@@ -59,8 +59,8 @@ def prep(job):
     else:
         template = "proxima"
   
-    print "Setting stuff for job "+sig+" in lmdz/job"+jid+" which is task number "+pid
-    print "Arguments are:",fields    
+    print("Setting stuff for job "+sig+" in lmdz/job"+jid+" which is task number "+pid)
+    print("Arguments are:",fields)    
   
     scriptfile = "lmdz_loop.sh"
   
@@ -160,7 +160,7 @@ def prep(job):
     if "nruns" in job.parameters:
         nruns = int(job.parameters["nruns"])
         
-    print "Arguments and boundary conditions set."
+    print("Arguments and boundary conditions set.")
     
     jobscript = (BATCHSCRIPT(job,notify)+
               "module load gcc/4.9.1                                          \n"+

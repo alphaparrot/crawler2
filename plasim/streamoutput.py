@@ -5,7 +5,7 @@ def readchunk(f,nrows,ncols):
     data = np.zeros((nrows,ncols))
     for n in range(nrows):
         try:
-            line = f.next()
+            line = next(f)
             line = line.split()
             for k in range(ncols):
                 data[n,k] = float(line[k])

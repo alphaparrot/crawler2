@@ -67,52 +67,52 @@ def prep(job):
                 ptop = 10.0
             dps = -np.diff(np.geomspace(ptop,p0,num=NLEV+1)[::-1])
     if not edit_data(workdir+"/data","PARM01","atm_Po",p0):
-        print "WARNING: Unable to set atm_Po in data/&PARM01!"
+        print("WARNING: Unable to set atm_Po in data/&PARM01!")
     if not edit_data(workdir+"/data","PARM04","delR",dps,form='list'):
-        print "WARNING: Unable to set delR in data/&PARM04!"
+        print("WARNING: Unable to set delR in data/&PARM04!")
     
   if "flux" in job.parameters: #in W/m^2
     solc = float(job.parameters["flux"])/1367.0 * 342.0 #Normalize to MITgcm standards
     if not edit_data(workdir+"/data.aimphys","AIM_PAR_FOR","SOLC",solc):
-        print "WARNING: Unable to set SOLC in data.aimphys/&AIM_PAR_FOR!"
+        print("WARNING: Unable to set SOLC in data.aimphys/&AIM_PAR_FOR!")
         
   if "obliq" in job.parameters: #in degrees
     obliq = float(job.parameters["obliq"])
     if not edit_data(workdir+"/data.aimphys","AIM_PAR_FOR","OBLIQ",obliq):
-        print "WARNING: Unable to set OBLIQ in data.aimphys/&AIM_PAR_FOR!"
+        print("WARNING: Unable to set OBLIQ in data.aimphys/&AIM_PAR_FOR!")
     
   if "pCO2" in job.parameters: #in bars
     pCO2 = float(job.parameters["pCO2"])
     if not edit_data(workdir+"/data.aimphys","AIM_PARAMS","aim_select_pCO2",1):
-        print "WARNING: Unable to set CO2 type in data.aimphys/&AIM_PARAMS!"
+        print("WARNING: Unable to set CO2 type in data.aimphys/&AIM_PARAMS!")
     if not edit_data(workdir+"/data.aimphys","AIM_PARAMS","aim_fixed_pCO2",pCO2):
-        print "WARNING: Unable to set pCO2 in data.aimphys/&AIM_PARAMS!"
+        print("WARNING: Unable to set pCO2 in data.aimphys/&AIM_PARAMS!")
     
   if "grav" in job.parameters: #in m/s^2
     grav = float(job.parameters["grav"])
     if not edit_data(workdir+"/data","PARM01","gravity",grav):
-        print "WARNING: Unable to set gravity in data/&PARM01!"
+        print("WARNING: Unable to set gravity in data/&PARM01!")
     
   if "radius" in job.parameters: #in Rearth
     radius = float(job.parameters["radius"])*6370.0e3
     if not edit_data(workdir+"/data","PARM04","radius_fromHorizGrid",radius):
-        print "WARNING: Unable to set radius_fromHorizGrid in data/&PARM04!"
+        print("WARNING: Unable to set radius_fromHorizGrid in data/&PARM04!")
 
   if "timestep" in job.parameters: #in seconds
     dt = float(job.parameters["timestep"])
     if not edit_data(workdir+"/data","PARM03","deltaT",dt):
-        print "WARNING: Unable to set deltaT in data/&PARM03!"
+        print("WARNING: Unable to set deltaT in data/&PARM03!")
   
   if "runtime" in job.parameters: #in days
     tt = float(job.parameters["runtime"])*86400.0 #convert to seconds
     if not edit_data(workdir+"/data","PARM03","endTime",tt):
-        print "WARNING: Unable to set endTime in data/&PARM03!"
+        print("WARNING: Unable to set endTime in data/&PARM03!")
         
   
   if "rotation" in job.parameters: #in days
     rt = float(job.parameters["rotation"])*86400.0 #convert to seconds
     if not edit_data(workdir+"/data","PARM01","rotationPeriod",rt):
-        print "WARNING: Unable to set rotationPeriod in data/&PARM01!"
+        print("WARNING: Unable to set rotationPeriod in data/&PARM01!")
     
   notify = 'a'
   if "notify" in job.parameters:

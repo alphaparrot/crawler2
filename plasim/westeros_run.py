@@ -44,7 +44,7 @@ def hasnans():
     files = sorted(glob.glob("*.nc"))
     if len(files)<1:
         return False
-    print "NetCDF  files:",files
+    print("NetCDF  files:",files)
     if type(files)!=type([1,2,3]):
         files = [files,]
     ncd = nc.Dataset(files[-1],"r") #Should be most recent

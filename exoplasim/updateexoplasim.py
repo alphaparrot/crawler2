@@ -5,7 +5,7 @@ if __name__=="__main__":
     os.system('python -c "import exoplasim as exo; print(exo.__path__)" | tail -c +3 | head -c -3 > tmppath')
     with open('tmppath',"r") as spf:
         sourcedir = spf.read().strip()
-        print("Found ExoPlaSim in %s"%sourcedir)
+        print(("Found ExoPlaSim in %s"%sourcedir))
     os.system("rm tmppath")
     os.system("python -m pip install --user --upgrade --upgrade-strategy only-if-needed exoplasim")
     with open("%s/__init__.py"%sourcedir,"r") as sourcef:
@@ -19,7 +19,7 @@ if __name__=="__main__":
         cwd = os.getcwd()
         os.chdir(sourcedir)
         os.system("source ~/.bashrc && prep_plasim && module load netcdf && module list "+
-                  "&& ./configure.sh && cd postprocessor && ./build_init.sh")
+                  "&& ./configure.sh && cd postprocessor && ./build_init.sh || ./build_init_compatibility.sh")
         #os.system("./configure.sh")
         #os.system("cd postprocessor && ./build_init.sh")
         os.chdir(cwd)

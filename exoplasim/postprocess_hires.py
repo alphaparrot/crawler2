@@ -109,7 +109,7 @@ def gethistory(key="ts",mean=True,radius=6.371e6):
   
 def hasnans():
     files = sorted(glob.glob("*.nc"))
-    print "NetCDF  files:",files
+    print("NetCDF  files:",files)
     if type(files)!=type([1,2,3]):
         files = [files,]
     ncd = nc.Dataset(files[-1],"r") #Should be most recent
@@ -169,7 +169,7 @@ def energybalanced(cyear,threshhold = 1.0e-4,baseline=50): #Takes an average of 
         savgslope = abs(np.mean(sslopes[-30:])) #30-year average of 5-year slopes  
         tavgslope = abs(np.mean(tslopes[-30:]))
         os.system("echo '%02.8f  %02.8f'>>slopes.log"%(savgslope,tavgslope))
-        print "%02.8f %02.8f"%(savgslope,tavgslope)
+        print("%02.8f %02.8f"%(savgslope,tavgslope))
         if savgslope<threshhold and tavgslope<threshhold: #Both TOA and Surface are changing at average 
             return True                                  # of <0.1 mW/m^2/yr on 45-year baselines
         else:
@@ -208,7 +208,7 @@ def rpvorticity(name,daylen):
     #ln,lt,lev = gt.parse(name,"lev")
     #ln,lt,ps = gt.parse(name,"ps")
     
-    print "Bunch 1 loaded"
+    print("Bunch 1 loaded")
     
     nlevs = len(lev)
     ntimes = ta.shape[0]
@@ -220,37 +220,37 @@ def rpvorticity(name,daylen):
         #print k,type(k),ps.shape,pa.shape
         pa[:,k,:,:] = ps*100*lev[k]
     
-    print "pa"
+    print("pa")
     
     pvap = 6.1078*10**(7.5*(ta-273.15)/(ta-273.15+237.3))
     
-    print "psat"
+    print("psat")
     
     hur = ncd.variables['hur'][:]
     
     pvap = hur*pvap
     del hur
     
-    print "pvap"
+    print("pvap")
     
     pdry = pa-pvap
     rho = (pdry*0.0289654+pvap*0.018016)/(8.314*ta)
     del pdry
     del pvap
     
-    print "rho",np.nanmin(rho),np.nanmax(rho)
+    print("rho",np.nanmin(rho),np.nanmax(rho))
     
     rr = -8.314*ta/9.80665*np.log(pa*0.01/ps[:,np.newaxis,:,:])
     rr = 6371e6+rr
     del ps
     
-    print "rr",np.nanmin(rr),np.nanmax(rr)
+    print("rr",np.nanmin(rr),np.nanmax(rr))
     
     theta = ta*(1e5/pa)**0.286
     del pa
     del ta
     
-    print "theta"
+    print("theta")
         
     #lt = 90.0-lt #polar angle starts at the north pole
         
@@ -314,7 +314,7 @@ def rpvorticity(name,daylen):
                 dwdlon[t,j,k,:] = np.gradient(wa[t,j,k,:],ln)
     del wa
     
-    print "bunch 2"
+    print("bunch 2")
     
 
     va = ncd.variables['va'][:]
@@ -325,16 +325,16 @@ def rpvorticity(name,daylen):
     drvdr = np.zeros(rr.shape)
     drudr = np.zeros(rr.shape)
     dthetadr = np.zeros(rr.shape)
-    print "Starting gradients"
+    print("Starting gradients")
     for t in range(ntimes):
-        print "Time ",t
+        print("Time ",t)
         for j in range(nlats):
             for k in range(nlons):
                 drvdr[t,:,j,k] = np.gradient(rr[t,:,j,k]*va[t,:,j,k], rr[t,:,j,k])
                 drudr[t,:,j,k] = np.gradient(rr[t,:,j,k]*ua[t,:,j,k], rr[t,:,j,k])
                 dthetadr[t,:,j,k] = np.gradient(theta[t,:,j,k],rr[t,:,j,k])
 
-    print "3D Gradients finished"
+    print("3D Gradients finished")
     
     dvdlon = np.zeros(va.shape)
     for t in range(ntimes):
@@ -343,13 +343,13 @@ def rpvorticity(name,daylen):
                 dvdlon[t,j,k,:] = np.gradient(va[t,j,k,:],ln)
     del va
     
-    print "bunch 3"
+    print("bunch 3")
     
     thing = dwdlat-drvdr
     del dwdlat
     del drvdr
     
-    print "bunch 4"
+    print("bunch 4")
     
     dthetadlon = np.zeros(theta.shape)
     for t in range(ntimes):
@@ -359,7 +359,7 @@ def rpvorticity(name,daylen):
     thing = thing*dthetadlon
     del dthetadlon
     
-    print "bunch 5"
+    print("bunch 5")
     
     clats = clt[np.newaxis,np.newaxis,:,np.newaxis]*np.ones(ua.shape)
     
@@ -373,7 +373,7 @@ def rpvorticity(name,daylen):
             for k in range(nlons):
                 duclatdlat[t,j,:,k] = np.gradient(ua[t,j,:,k]*clt,lt)
     del ua
-    print "bunch 6"
+    print("bunch 6")
     
     dthetadlat = np.zeros(theta.shape)
     for t in range(ntimes):
@@ -381,7 +381,7 @@ def rpvorticity(name,daylen):
             for k in range(nlons):
                 dthetadlat[t,j,:,k] = np.gradient(theta[t,j,:,k],lt)
     del theta
-    print "bunch 7"
+    print("bunch 7")
     
     #thing = thing + 2*omega*clats
     thyng = dwdlon/clats
@@ -392,7 +392,7 @@ def rpvorticity(name,daylen):
     del dthetadlat
     thing = thing + thyng
     del thyng
-    print "bunch 8"
+    print("bunch 8")
     
     
     thyng = dvdlon - duclatdlat
@@ -411,12 +411,12 @@ def rpvorticity(name,daylen):
     del rho
     #thing = pvort
     
-    print np.nanmin(thing)
-    print np.nanmax(thing)
+    print(np.nanmin(thing))
+    print(np.nanmax(thing))
     
     latvort = np.nanmean(thing,axis=(0,3))
     
-    print "potential vorticity"
+    print("potential vorticity")
     
     #print "De-trending...."
     #for k in range(nlevs):
@@ -426,21 +426,21 @@ def rpvorticity(name,daylen):
     del slats    
         
     ncd = nc.Dataset(name,"r+")
-    print "Opening variable"
+    print("Opening variable")
     try:
         pv = ncd.createVariable("pvort",thing.dtype,["time","lev","lat","lon"])
     except:
         pv = ncd.variables["pvort"]
-    print "masking...."
+    print("masking....")
     pv.set_auto_mask(False)
-    print "Filling...."
+    print("Filling....")
     pv[:] = thing[:]#/latvort[np.newaxis,np.newaxis,:,np.newaxis]
-    print "Syncing...."
+    print("Syncing....")
     ncd.sync()
-    print "Closing!"
+    print("Closing!")
     ncd.close()
                 
-    print "Modified original file in place; we have reached the end"
+    print("Modified original file in place; we have reached the end")
     
 
 if __name__=="__main__":

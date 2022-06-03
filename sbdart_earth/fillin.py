@@ -65,7 +65,7 @@ if __name__=="__main__":
         for jlon in range(lon1,lon2):
             sfile = outputdir+"/sbout.%02d_%02d"%(jlat,jlon)
             if sfile not in spectra:
-                print "Missing sbout.%02d_%02d"%(jlat,jlon)
+                print("Missing sbout.%02d_%02d"%(jlat,jlon))
                 addtopriority(top,outputdir,jlat,jlon)
                 complete = False
                 

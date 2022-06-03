@@ -29,11 +29,23 @@ if __name__=="__main__":
     model = np.load("model.npy").item()
   modelodir = model.workdir
   model.workdir = os.getcwd()
-  
-  equilibrium = model.runtobalance(threshold = model.threshold,
-                                   timelimit = TIMELIMIT)
+  model.secondarydir = modelodir
+  try:
+    equilibrium = model.runtobalance(threshold = model.threshold,
+                                    timelimit = TIMELIMIT)
 
-  model.save()
-  model.workdir = modelodir
+    model.save()
+    model.workdir = modelodir
+    model.secondarydir = None
+  except Exception as e:
+    try:    #We have to wrap in a try-except clause, because the emergency abort will raise an error
+        print(e)
+        model.emergencyabort()
+    except RuntimeError:
+        model.workdir = modelodir
+        model.secondarydir = None
+        model.save()
+        raise
+        
   if not equilibrium:
       os.system("touch keepgoing")

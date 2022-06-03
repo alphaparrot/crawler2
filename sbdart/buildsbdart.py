@@ -746,7 +746,7 @@ def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   hus = np.mean(data.variables['hus'][:,:,lat,lon],axis=0)
   rhoh2o = hus*rhohum
   
-  print "Writing atms.dat"
+  print("Writing atms.dat")
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
   for vw in ['Z','N','E','S','W']:
     writecolumn_single_plasim(zs,pa,ta,rhoh2o*1000.0,np.zeros(len(lvs)),workdir+"_%s"%vw)
@@ -769,7 +769,7 @@ def analyzecell_plasim_earth(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   if not clouds:
     cld[:] = 0.0
     
-  print "Writing usrcld.dat"
+  print("Writing usrcld.dat")
   #Need to implement a cloud-free option
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
   for vw in ['Z','N','E','S','W']:
@@ -859,7 +859,7 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False,clouds=Tru
   hus = np.mean(data.variables['hus'][:,:,lat,lon],axis=0)
   rhoh2o = hus*rhohum
   
-  print "Writing atms.dat"
+  print("Writing atms.dat")
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
   writecolumn_single_plasim(zs,pa,ta,rhoh2o*1000.0,np.zeros(len(lvs)),workdir)
   
@@ -881,7 +881,7 @@ def analyzecell_plasim(data,lat,lon,workdir,grav=9.80665,smooth=False,clouds=Tru
   if not clouds:
     cld[:] = 0.0
     
-  print "Writing usrcld.dat"
+  print("Writing usrcld.dat")
   #Need to implement a cloud-free option
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
   cloudcolumn_single(dql,cld,workdir)
@@ -948,7 +948,7 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   #lsm = data['lsm'][-1,lat,lon]
   lsm = 0.0
   if lsm < 0.5: #sea
-    if 'pctsrf_sic' in data.keys():
+    if 'pctsrf_sic' in list(data.keys()):
       sic = data['pctsrf_sic'][lat,lon]
     else:
       sic = min(data['h2o_ice_surf'][lat,lon],1.0)
@@ -1000,7 +1000,7 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   if smooth:
       rhoh2o = np.zeros(hus.shape)
   
-  print "Writing atms.dat"
+  print("Writing atms.dat")
   #write atms.dat, which contains the atmosphere profile--height, pressure, temp, water vapor, and ozone
   writecolumn_single_lmdz(zs,pa,ta,rhoh2o*1000.0,np.zeros(len(zs)),workdir)
   
@@ -1034,7 +1034,7 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
   if not clouds:
       cld[:] = 0.0
   
-  print "Writing usrcld.dat"
+  print("Writing usrcld.dat")
   #Write usrcld.dat, which has level data on cloud water content and coverage fraction
   cloudcolumn_single_lmdz(dql,dqi,np.zeros(len(cld))+8,rei,cld,workdir)
   
@@ -1073,7 +1073,7 @@ def analyzecell_lmdz(data,lat,lon,workdir,grav=9.80665,sol_dec=0.0,
     
 def prep(job):
   if "type" not in job.parameters:
-      print "Warning: need to specify which GCM produced this data!"
+      print("Warning: need to specify which GCM produced this data!")
   else:
       if "ROLE" in job.parameters:
           if "outhopper" in job.parameters:
@@ -1093,9 +1093,9 @@ def prep(job):
           os.system("touch "+dest+"/running/token"+job.pid+".crwl")
           _prep_lmdz(job)
       elif job.parameters["type"]=="mit":
-          print "MITGCM-SBDART interface not yet implemented."
+          print("MITGCM-SBDART interface not yet implemented.")
       else:
-          print "Model not recognized."
+          print("Model not recognized.")
           
     
 def _prep_lmdz(job):    
@@ -1209,8 +1209,8 @@ def _prep_lmdz(job):
   nlats = len(data['latitude'][:])
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
-      print "Lat %02d Lon %02d"%(jlat,jlon)
-      print "mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon)
+      print("Lat %02d Lon %02d"%(jlat,jlon))
+      print("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
       os.system("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
       os.system("cp -r "+job.top+"/sbdart/"+source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
       if star:
@@ -1303,7 +1303,7 @@ def _prep_lmdz(job):
       latitude = data['latitude'][jlat]
       write_input(workdir+"/sbdart-%02d_%02d"%(jlat,jlon),csz,azm,latitude,surf,pCO2,p0,tsurf,altz,
                   flux,wmin=wmin,albedo=unialb,flat=flat,sic=sic,spec=star,smooth=smooth)
-      print "Prepped lat %02d lon %02d"%(jlat,jlon)
+      print("Prepped lat %02d lon %02d"%(jlat,jlon))
 
     
 def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
@@ -1428,8 +1428,8 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
     for jlon in range(lons[0],lons[1]):
       for nang in range(0,4):
         for vw in ['Z','N','E','S','W']:
-            print "Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw)
-            print "mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw)
+            print("Lat %02d Lon %02d Angle %1d View %s"%(jlat,jlon,nang,vw))
+            print("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
             os.system("mkdir "+workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vw))
             os.system("cp -r "+job.top+"/sbdart/"+source+"/* "+workdir+"/sbdart-%02d_%02d_%1d_%s/"%(jlat,jlon,nang,vw))
             if star:
@@ -1547,7 +1547,7 @@ def _prep_plasim_earth(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
             write_input_earth(workdir+"/sbdart-%02d_%02d_%1d_%s"%(jlat,jlon,nang,vws[vv]),
                               vv,csz,azm,latitude,longitude,surf,pCO2,p0,tsurf,altz,flux,
                               wmin=wmin,albedo=unialb,flat=flat,sic=sic,spec=star,smooth=smooth)
-        print "Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[vv])
+        print("Prepped lat %02d lon %02d Angle %1d View %s"%(jlat,jlon,nang,vws[vv]))
       
 def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   workdir = job.top+"/sbdart/job"+str(job.home)
@@ -1660,8 +1660,8 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
   nlats = len(data.variables['lat'][:])
   for jlat in range(lats[0],lats[1]):
     for jlon in range(lons[0],lons[1]):
-      print "Lat %02d Lon %02d"%(jlat,jlon)
-      print "mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon)
+      print("Lat %02d Lon %02d"%(jlat,jlon))
+      print("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
       os.system("mkdir "+workdir+"/sbdart-%02d_%02d"%(jlat,jlon))
       os.system("cp -r "+job.top+"/sbdart/"+source+"/* "+workdir+"/sbdart-%02d_%02d/"%(jlat,jlon))
       if star:
@@ -1755,7 +1755,7 @@ def _prep_plasim(job): #data,lats,lons,pCO2,p0,flux,grav=9.80665
       latitude = data.variables['lat'][jlat]
       write_input(workdir+"/sbdart-%02d_%02d"%(jlat,jlon),csz,azm,latitude,surf,pCO2,p0,tsurf,altz,
                   flux,wmin=wmin,albedo=unialb,flat=flat,sic=sic,spec=star,smooth=smooth)
-      print "Prepped lat %02d lon %02d"%(jlat,jlon)
+      print("Prepped lat %02d lon %02d"%(jlat,jlon))
 
 def submit(job):
   workdir = job.top+"/sbdart/job"+str(job.home)

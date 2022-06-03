@@ -151,8 +151,8 @@ def prep(job):
   if "source" in job.parameters:
     source = job.parameters["source"]
   
-  print "Setting stuff for job "+sig+" in plasim/job"+jid+" which is task number "+pid
-  print "Arguments are:",fields[2:]
+  print("Setting stuff for job "+sig+" in plasim/job"+jid+" which is task number "+pid)
+  print("Arguments are:",fields[2:])
   
   notify = 'ae'
   scriptfile = "run.sh"
@@ -495,7 +495,7 @@ def prep(job):
           edit_namelist(jid,"radmod_namelist","CO2",str(360.0/p0*1.0e6))
           gases['pCO2'] = 360.0*1.0e-6
           gasesx['CO2'] = 360.0/p0 # volumefraction
-          print gasesx['CO2']
+          print(gasesx['CO2'])
       edit_namelist(jid,"plasim_namelist","PSURF",str(p0*0.1))
        
     if name=="alloutput":
@@ -1052,7 +1052,7 @@ def prep(job):
       for v in vals:
           keys = v.split("=")
           triggers[keys[0]]=keys[1]
-      for k in triggers.keys():
+      for k in list(triggers.keys()):
           edit_namelist(jid,"hurricane_namelist",k.upper(),triggers[k])
     
     if name=="topomap":
@@ -1066,7 +1066,7 @@ def prep(job):
         name=args[0]
         edit_namelist(jid,namelist,name,val)
       else:
-        print "Unknown parameter "+name+"! Submit unsupported parameters as KEY@NAMELIST in the header!"
+        print("Unknown parameter "+name+"! Submit unsupported parameters as KEY@NAMELIST in the header!")
     
   if ("landmap" in job.fields) or ("topomap" in job.fields):
       os.system("rm plasim/job"+jid+"/*.sra")
@@ -1081,18 +1081,18 @@ def prep(job):
   if setgas:
       p0 = 0
       gasesvx = {}
-      for k in gases.keys():
+      for k in list(gases.keys()):
           p0 += gases[k]
-      for k in gases.keys():
+      for k in list(gases.keys()):
           gasesvx[k[1:]] = gases[k]/p0
       mmw = 0
-      for x in gasesvx.keys():
+      for x in list(gasesvx.keys()):
           mmw += gasesvx[x]*smws['m'+x]
-      print 'Mean Molecular Weight set to %1.4f g/mol'%mmw
+      print('Mean Molecular Weight set to %1.4f g/mol'%mmw)
       gascon = 8314.46261815324 / mmw
       if prescgascon:
           gascon = float(job.parameters["gascon"])
-      print "Gas Constant set to %1.1f"%gascon
+      print("Gas Constant set to %1.1f"%gascon)
       edit_namelist(jid,"plasim_namelist","PSURF",str(p0*1.0e5))
       edit_namelist(jid,"radmod_namelist","CO2",str(gasesvx['CO2']*1e6))
       edit_namelist(jid,"planet_namelist","GASCON",str(gascon))
@@ -1100,19 +1100,19 @@ def prep(job):
   if setgasx: #We assume here that surface pressure is set separately
       mmw = 0
       mmwd = 0
-      for x in gasesx.keys():
+      for x in list(gasesx.keys()):
           mmwd += gasesx[x]/smws['m'+x]
       mmw = 1.0/mmwd
-      print 'Mean Molecular Weight set to %1.4f g/mol'%mmw
+      print('Mean Molecular Weight set to %1.4f g/mol'%mmw)
       gascon = 8314.46261815324 / mmw
       if prescgascon:
           gascon = job.parameters["gascon"]
-      print "Gas Constant set to %1.1f"%gascon
+      print("Gas Constant set to %1.1f"%gascon)
       edit_namelist(jid,"planet_namelist","GASCON",str(gascon))
       edit_namelist(jid,"radmod_namelist","CO2",str(gasesx['CO2']/smws['mCO2']*mmw*1e6))
       
       
-  print "Arguments set"
+  print("Arguments set")
   
   transittag = ''
   if maketransit:
@@ -1140,13 +1140,13 @@ def prep(job):
       if prescgascon:
           transitparams+=" %f"%job.parameters['gascon']
       
-      print "CONFIGURING POST-RUN TRANSIT SPECTROSCOPY..."
+      print("CONFIGURING POST-RUN TRANSIT SPECTROSCOPY...")
       txs = transitparams.split()[3:]
       txsn = ['H2','He','CO2',"N2",'O2']
       for ntt in range(len(txsn)):
-          print "\t... %s mass fraction = \t %s"%(txsn[ntt],txs[ntt])
+          print("\t... %s mass fraction = \t %s"%(txsn[ntt],txs[ntt]))
       if len(txs)>len(txsn):
-          print "\t... gas constant R manually set to %s"%(txs[-1])
+          print("\t... gas constant R manually set to %s"%(txs[-1]))
         
       transitjob = Job("# PID MODEL JOBNAME STATE NCORES QUEUE","%s transit transit_%s 0 1 sandyq"%(job.pid,job.name),-1)
       transitfw =(BATCHSCRIPT(transitjob,"abe")+
@@ -1187,14 +1187,14 @@ def prep(job):
           _pco2 = gases['pCO2']*1.0e3
           sbdparams.append(gases['pCO2']*1.0e3)
       sbdparams.append(flux)
-      print p0*1.0e3, _pco2
+      print(p0*1.0e3, _pco2)
       sbdparams.append(p0*1.0e3-_pco2)
       sbdparams.append(grav)
       sbdparams.append('^'.join(ntimes[1:-1].split(',')))
       sbdparams.append('^'.join(lviews[1:-1].split(',')))
       sbdparams.append(str(highcadence))
       
-      print tuple(sbdparams),sbdvar
+      print(tuple(sbdparams),sbdvar)
       os.system("mkdir "+job.top+"/sbdart_%s/%s"%(sbdvar,job.name))
       
       sbd_specfile = ""

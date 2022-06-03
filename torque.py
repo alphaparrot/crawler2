@@ -42,14 +42,14 @@ MODELS = {"plasim":1,                #tasks per node (1 workq node on Sunnyvale 
           "pipeline":8}             
 
 def getjobs(rude=False):
-    print "Checking jobs"
+    print("Checking jobs")
     os.system("qstat -u "+USER+" > cjobs.tmp")
     cjf = open("cjobs.tmp","r")
     joblist = cjf.read().split('\n')[5:-1]
     cjf.close()
     os.system("rm cjobs.tmp")
     resources={}
-    for m in MODELS.keys():
+    for m in list(MODELS.keys()):
         resources[m] = np.zeros(256)
     running = 0
     statuses = []
@@ -63,7 +63,7 @@ def getjobs(rude=False):
         statuses.append(job[-2])
     nt = 0
     for t in tags:
-        print "Looking up "+t
+        print("Looking up "+t)
         os.system("qstat -f "+t+" > jinfo.tmp")
         jf = open("jinfo.tmp","r")
         jinfo = jf.read().split('\n')[1:-2]
